@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { X, CheckCircle, AlertCircle, Info } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-type ToastType = 'success' | 'error' | 'info';
+type ToastType = "success" | "error" | "info";
 
 interface Toast {
   id: string;
@@ -25,11 +25,17 @@ const ToastContext = React.createContext<{
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = React.useState<Toast[]>([]);
 
-  const addToast = React.useCallback((message: string, type: ToastType = 'info') => {
-    const id = Math.random().toString(36).slice(2);
-    setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 4000);
-  }, []);
+  const addToast = React.useCallback(
+    (message: string, type: ToastType = "info") => {
+      const id = Math.random().toString(36).slice(2);
+      setToasts((prev) => [...prev, { id, message, type }]);
+      setTimeout(
+        () => setToasts((prev) => prev.filter((t) => t.id !== id)),
+        4000,
+      );
+    },
+    [],
+  );
 
   const removeToast = React.useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -56,14 +62,17 @@ const icons: Record<ToastType, React.ReactNode> = {
 function ToastContainer() {
   const { toasts, removeToast } = React.useContext(ToastContext);
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2" aria-live="polite">
+    <div
+      className="fixed bottom-4 right-4 z-50 flex flex-col gap-2"
+      aria-live="polite"
+    >
       {toasts.map((toast) => (
         <div
           key={toast.id}
           role="alert"
           className={cn(
-            'flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-3 shadow-lg text-sm max-w-sm',
-            'animate-in slide-in-from-bottom-2'
+            "flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-3 shadow-lg text-sm max-w-sm",
+            "animate-in slide-in-from-bottom-2",
           )}
         >
           {icons[toast.type]}

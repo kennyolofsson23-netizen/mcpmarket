@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { ChevronDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
@@ -10,12 +10,18 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, helperText, id, options, children, ...props }, ref) => {
-    const selectId = id ?? label?.toLowerCase().replace(/\s+/g, '-');
+  (
+    { className, label, error, helperText, id, options, children, ...props },
+    ref,
+  ) => {
+    const selectId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
     return (
       <div className="w-full">
         {label && (
-          <label htmlFor={selectId} className="block text-sm font-medium mb-1.5">
+          <label
+            htmlFor={selectId}
+            className="block text-sm font-medium mb-1.5"
+          >
             {label}
           </label>
         )}
@@ -23,11 +29,11 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <select
             id={selectId}
             className={cn(
-              'flex h-10 w-full appearance-none rounded-md border border-input bg-background px-3 py-2 pr-8 text-sm',
-              'ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-              'disabled:cursor-not-allowed disabled:opacity-50',
-              error && 'border-destructive',
-              className
+              "flex h-10 w-full appearance-none rounded-md border border-input bg-background px-3 py-2 pr-8 text-sm",
+              "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "disabled:cursor-not-allowed disabled:opacity-50",
+              error && "border-destructive",
+              className,
             )}
             aria-invalid={!!error}
             ref={ref}
@@ -53,8 +59,8 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         )}
       </div>
     );
-  }
+  },
 );
-Select.displayName = 'Select';
+Select.displayName = "Select";
 
 export { Select };

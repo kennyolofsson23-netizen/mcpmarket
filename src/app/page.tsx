@@ -1,17 +1,24 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { CheckCircle2, Zap, Shield, TrendingUp, Code2, Wallet } from 'lucide-react';
+import { Metadata } from "next";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  CheckCircle2,
+  Zap,
+  Shield,
+  TrendingUp,
+  Code2,
+  Wallet,
+} from "lucide-react";
 
 export const metadata: Metadata = {
-  title: 'MCPmarket | MCP Server Marketplace with Billing',
+  title: "MCPmarket | MCP Server Marketplace with Billing",
   description:
-    'MCPmarket is a free AI tool that lets developers monetize MCP servers and users discover paid tools. The Shopify for MCP servers with 20% revenue share.',
+    "MCPmarket is a free AI tool that lets developers monetize MCP servers and users discover paid tools. The Shopify for MCP servers with 20% revenue share.",
   openGraph: {
-    title: 'MCPmarket | MCP Server Marketplace with Billing',
+    title: "MCPmarket | MCP Server Marketplace with Billing",
     description:
-      'The Shopify for MCP servers. Developers list paid MCP tools, users subscribe, we handle hosting and billing.',
-    type: 'website',
+      "The Shopify for MCP servers. Developers list paid MCP tools, users subscribe, we handle hosting and billing.",
+    type: "website",
   },
 };
 
@@ -26,10 +33,10 @@ export default function Home() {
               The Marketplace for Paid MCP Servers
             </h1>
             <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl">
-              MCPmarket is a free AI tool that enables developers to monetize MCP
-              servers and helps users discover and subscribe to premium tools.
-              Built-in billing, hosting, and discovery — all with a 20% revenue
-              share for creators.
+              MCPmarket is a free AI tool that enables developers to monetize
+              MCP servers and helps users discover and subscribe to premium
+              tools. Built-in billing, hosting, and discovery — all with a 20%
+              revenue share for creators.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <Button size="lg" asChild>
@@ -217,7 +224,8 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-lg mb-4">Managed Hosting</h3>
               <p className="text-3xl font-bold mb-6">
-                $9<span className="text-sm text-gray-600">/month per server</span>
+                $9
+                <span className="text-sm text-gray-600">/month per server</span>
               </p>
               <ul className="space-y-3 text-sm text-gray-600">
                 <li className="flex items-center gap-2">
@@ -303,7 +311,8 @@ export default function Home() {
               </h3>
               <p className="text-gray-600">
                 Monthly payouts via Stripe Connect to your bank account. Payouts
-                happen on the 1st of each month for the previous month's revenue.
+                happen on the 1st of each month for the previous month's
+                revenue.
               </p>
             </div>
             <div>

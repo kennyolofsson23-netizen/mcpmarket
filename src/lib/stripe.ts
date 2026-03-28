@@ -1,11 +1,11 @@
-import Stripe from 'stripe';
+import Stripe from "stripe";
 
 if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not set');
+  throw new Error("STRIPE_SECRET_KEY is not set");
 }
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
+  apiVersion: "2024-06-20",
   typescript: true,
 });
 
@@ -24,13 +24,13 @@ export async function createStripePrice(opts: {
   productId: string;
   unitAmount: number;
   currency?: string;
-  interval?: 'month' | 'year';
+  interval?: "month" | "year";
 }) {
   return stripe.prices.create({
     product: opts.productId,
     unit_amount: opts.unitAmount,
-    currency: opts.currency ?? 'usd',
-    recurring: { interval: opts.interval ?? 'month' },
+    currency: opts.currency ?? "usd",
+    recurring: { interval: opts.interval ?? "month" },
   });
 }
 
@@ -45,7 +45,7 @@ export async function createCheckoutSession(opts: {
 }) {
   const params: Stripe.Checkout.SessionCreateParams = {
     customer: opts.customerId,
-    mode: 'subscription',
+    mode: "subscription",
     line_items: [{ price: opts.priceId, quantity: 1 }],
     success_url: opts.successUrl,
     cancel_url: opts.cancelUrl,
@@ -74,7 +74,7 @@ export async function createBillingPortalSession(opts: {
 
 export async function createConnectAccount(email: string) {
   return stripe.accounts.create({
-    type: 'express',
+    type: "express",
     email,
     capabilities: {
       card_payments: { requested: true },
@@ -92,14 +92,14 @@ export async function createConnectOnboardingLink(opts: {
     account: opts.accountId,
     refresh_url: opts.refreshUrl,
     return_url: opts.returnUrl,
-    type: 'account_onboarding',
+    type: "account_onboarding",
   });
 }
 
 export function constructWebhookEvent(
   payload: string | Buffer,
   signature: string,
-  secret: string
+  secret: string,
 ) {
   return stripe.webhooks.constructEvent(payload, signature, secret);
 }

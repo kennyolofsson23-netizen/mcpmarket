@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface DropdownMenuProps {
   children: React.ReactNode;
@@ -21,14 +21,23 @@ function DropdownMenu({ children }: DropdownMenuProps) {
   );
 }
 
-function DropdownMenuTrigger({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) {
+function DropdownMenuTrigger({
+  children,
+  asChild,
+}: {
+  children: React.ReactNode;
+  asChild?: boolean;
+}) {
   const { open, setOpen } = React.useContext(DropdownMenuContext);
   const handleClick = () => setOpen(!open);
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<{ onClick?: () => void }>, {
-      onClick: handleClick,
-    });
+    return React.cloneElement(
+      children as React.ReactElement<{ onClick?: () => void }>,
+      {
+        onClick: handleClick,
+      },
+    );
   }
   return (
     <button onClick={handleClick} aria-expanded={open} aria-haspopup="menu">
@@ -37,10 +46,14 @@ function DropdownMenuTrigger({ children, asChild }: { children: React.ReactNode;
   );
 }
 
-function DropdownMenuContent({ className, children, align = 'end' }: {
+function DropdownMenuContent({
+  className,
+  children,
+  align = "end",
+}: {
   className?: string;
   children: React.ReactNode;
-  align?: 'start' | 'end';
+  align?: "start" | "end";
 }) {
   const { open, setOpen } = React.useContext(DropdownMenuContext);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -51,8 +64,8 @@ function DropdownMenuContent({ className, children, align = 'end' }: {
         setOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setOpen]);
 
   if (!open) return null;
@@ -61,9 +74,9 @@ function DropdownMenuContent({ className, children, align = 'end' }: {
       ref={ref}
       role="menu"
       className={cn(
-        'absolute z-50 mt-1 min-w-[160px] rounded-md border border-border bg-background shadow-md',
-        align === 'end' ? 'right-0' : 'left-0',
-        className
+        "absolute z-50 mt-1 min-w-[160px] rounded-md border border-border bg-background shadow-md",
+        align === "end" ? "right-0" : "left-0",
+        className,
       )}
     >
       {children}
@@ -71,18 +84,26 @@ function DropdownMenuContent({ className, children, align = 'end' }: {
   );
 }
 
-function DropdownMenuItem({ className, children, onClick, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function DropdownMenuItem({
+  className,
+  children,
+  onClick,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   const { setOpen } = React.useContext(DropdownMenuContext);
   return (
     <div
       role="menuitem"
       tabIndex={0}
       className={cn(
-        'px-3 py-2 text-sm cursor-pointer hover:bg-muted focus:bg-muted outline-none',
-        className
+        "px-3 py-2 text-sm cursor-pointer hover:bg-muted focus:bg-muted outline-none",
+        className,
       )}
-      onClick={() => { onClick?.({} as React.MouseEvent<HTMLDivElement>); setOpen(false); }}
-      onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.click()}
+      onClick={() => {
+        onClick?.({} as React.MouseEvent<HTMLDivElement>);
+        setOpen(false);
+      }}
+      onKeyDown={(e) => e.key === "Enter" && e.currentTarget.click()}
       {...props}
     >
       {children}
@@ -91,7 +112,13 @@ function DropdownMenuItem({ className, children, onClick, ...props }: React.HTML
 }
 
 function DropdownMenuSeparator({ className }: { className?: string }) {
-  return <div className={cn('my-1 h-px bg-border', className)} />;
+  return <div className={cn("my-1 h-px bg-border", className)} />;
 }
 
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator };
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+};

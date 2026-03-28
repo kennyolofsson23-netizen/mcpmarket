@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DialogProps {
   open?: boolean;
@@ -37,8 +37,8 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
     <div
       ref={ref}
       className={cn(
-        'bg-background rounded-lg border border-border shadow-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto',
-        className
+        "bg-background rounded-lg border border-border shadow-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto",
+        className,
       )}
       {...props}
     >
@@ -53,24 +53,52 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       )}
       {children}
     </div>
-  )
+  ),
 );
-DialogContent.displayName = 'DialogContent';
+DialogContent.displayName = "DialogContent";
 
-function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex flex-col space-y-1.5 mb-4', className)} {...props} />;
+function DialogHeader({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn("flex flex-col space-y-1.5 mb-4", className)}
+      {...props}
+    />
+  );
 }
 
-function DialogTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={cn('text-lg font-semibold', className)} {...props} />;
+function DialogTitle({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
+  return <h2 className={cn("text-lg font-semibold", className)} {...props} />;
 }
 
-function DialogDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cn('text-sm text-muted-foreground', className)} {...props} />;
+function DialogDescription({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+  return (
+    <p className={cn("text-sm text-muted-foreground", className)} {...props} />
+  );
 }
 
-function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex justify-end gap-2 mt-4', className)} {...props} />;
+function DialogFooter({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("flex justify-end gap-2 mt-4", className)} {...props} />
+  );
 }
 
-export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter };
+export {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+};

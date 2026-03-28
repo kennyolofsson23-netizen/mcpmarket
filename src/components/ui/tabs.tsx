@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface TabsContextValue {
   value: string;
@@ -12,7 +12,7 @@ const TabsContext = React.createContext<TabsContextValue | null>(null);
 
 function useTabs() {
   const ctx = React.useContext(TabsContext);
-  if (!ctx) throw new Error('useTabs must be used within Tabs');
+  if (!ctx) throw new Error("useTabs must be used within Tabs");
   return ctx;
 }
 
@@ -24,8 +24,14 @@ interface TabsProps {
   className?: string;
 }
 
-function Tabs({ value, defaultValue, onValueChange, children, className }: TabsProps) {
-  const [internalValue, setInternalValue] = React.useState(defaultValue ?? '');
+function Tabs({
+  value,
+  defaultValue,
+  onValueChange,
+  children,
+  className,
+}: TabsProps) {
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? "");
   const controlled = value !== undefined;
   const current = controlled ? value : internalValue;
 
@@ -34,21 +40,26 @@ function Tabs({ value, defaultValue, onValueChange, children, className }: TabsP
       if (!controlled) setInternalValue(v);
       onValueChange?.(v);
     },
-    [controlled, onValueChange]
+    [controlled, onValueChange],
   );
 
   return (
-    <TabsContext.Provider value={{ value: current, onValueChange: handleChange }}>
+    <TabsContext.Provider
+      value={{ value: current, onValueChange: handleChange }}
+    >
       <div className={className}>{children}</div>
     </TabsContext.Provider>
   );
 }
 
-function TabsList({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function TabsList({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       role="tablist"
-      className={cn('flex gap-1 border-b border-border', className)}
+      className={cn("flex gap-1 border-b border-border", className)}
       {...props}
     />
   );
@@ -58,7 +69,12 @@ interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   value: string;
 }
 
-function TabsTrigger({ value, className, children, ...props }: TabsTriggerProps) {
+function TabsTrigger({
+  value,
+  className,
+  children,
+  ...props
+}: TabsTriggerProps) {
   const { value: current, onValueChange } = useTabs();
   const isActive = current === value;
   return (
@@ -67,11 +83,11 @@ function TabsTrigger({ value, className, children, ...props }: TabsTriggerProps)
       aria-selected={isActive}
       onClick={() => onValueChange(value)}
       className={cn(
-        'px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px',
+        "px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px",
         isActive
-          ? 'border-foreground text-foreground'
-          : 'border-transparent text-muted-foreground hover:text-foreground',
-        className
+          ? "border-foreground text-foreground"
+          : "border-transparent text-muted-foreground hover:text-foreground",
+        className,
       )}
       {...props}
     >
@@ -87,7 +103,7 @@ interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
 function TabsContent({ value, className, ...props }: TabsContentProps) {
   const { value: current } = useTabs();
   if (current !== value) return null;
-  return <div role="tabpanel" className={cn('mt-4', className)} {...props} />;
+  return <div role="tabpanel" className={cn("mt-4", className)} {...props} />;
 }
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };

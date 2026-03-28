@@ -1,4 +1,9 @@
-import type { McpServerWithOwner, SubscriptionWithServer, ReviewWithUser, ApiKeyPublic } from './index';
+import type {
+  McpServerWithOwner,
+  SubscriptionWithServer,
+  ReviewWithUser,
+  ApiKeyPublic,
+} from "./index";
 
 export type ApiResponse<T> = {
   data?: T;
@@ -14,7 +19,9 @@ export type PaginatedResponse<T> = {
 };
 
 export type ServersListResponse = PaginatedResponse<McpServerWithOwner>;
-export type SubscriptionsListResponse = { subscriptions: SubscriptionWithServer[] };
+export type SubscriptionsListResponse = {
+  subscriptions: SubscriptionWithServer[];
+};
 export type ReviewsListResponse = { reviews: ReviewWithUser[] };
 export type ApiKeysListResponse = { keys: ApiKeyPublic[] };
 
@@ -32,10 +39,13 @@ export type VerifyKeyResponse = {
 
 export type ConfigSnippetResponse = {
   config: {
-    mcpServers: Record<string, {
-      url: string;
-      headers: { Authorization: string };
-    }>;
+    mcpServers: Record<
+      string,
+      {
+        url: string;
+        headers: { Authorization: string };
+      }
+    >;
   };
 };
 

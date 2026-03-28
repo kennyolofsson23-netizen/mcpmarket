@@ -1,6 +1,6 @@
-import * as React from 'react';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
+import * as React from "react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string | null;
@@ -9,21 +9,28 @@ interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-function Avatar({ className, src, alt, fallback, size = 40, ...props }: AvatarProps) {
+function Avatar({
+  className,
+  src,
+  alt,
+  fallback,
+  size = 40,
+  ...props
+}: AvatarProps) {
   const initials = fallback
     ? fallback
-        .split(' ')
+        .split(" ")
         .map((n) => n[0])
-        .join('')
+        .join("")
         .toUpperCase()
         .slice(0, 2)
-    : '?';
+    : "?";
 
   return (
     <div
       className={cn(
-        'relative flex shrink-0 overflow-hidden rounded-full bg-muted',
-        className
+        "relative flex shrink-0 overflow-hidden rounded-full bg-muted",
+        className,
       )}
       style={{ width: size, height: size }}
       {...props}
@@ -31,7 +38,7 @@ function Avatar({ className, src, alt, fallback, size = 40, ...props }: AvatarPr
       {src ? (
         <Image
           src={src}
-          alt={alt ?? 'Avatar'}
+          alt={alt ?? "Avatar"}
           fill
           sizes={`${size}px`}
           className="object-cover"
@@ -39,7 +46,7 @@ function Avatar({ className, src, alt, fallback, size = 40, ...props }: AvatarPr
       ) : (
         <span
           className="flex h-full w-full items-center justify-center text-xs font-medium text-muted-foreground"
-          aria-label={alt ?? 'Avatar'}
+          aria-label={alt ?? "Avatar"}
         >
           {initials}
         </span>

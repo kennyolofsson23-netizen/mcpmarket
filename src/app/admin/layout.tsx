@@ -1,16 +1,20 @@
-import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
-import { Sidebar } from '@/components/sidebar';
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { Sidebar } from "@/components/sidebar";
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const session = await auth();
   if (!session?.user) {
-    redirect('/auth/signin?callbackUrl=/admin');
+    redirect("/auth/signin?callbackUrl=/admin");
   }
 
-  const role = (session.user as { role?: string }).role ?? 'USER';
-  if (role !== 'ADMIN') {
-    redirect('/dashboard');
+  const role = (session.user as { role?: string }).role ?? "USER";
+  if (role !== "ADMIN") {
+    redirect("/dashboard");
   }
 
   return (

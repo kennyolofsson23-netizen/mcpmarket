@@ -2,19 +2,19 @@
 
 ## 1. Tech Stack
 
-| Layer | Technology | Rationale |
-|---|---|---|
-| **Framework** | Next.js 15 (App Router) | SSR + API routes in one repo, React Server Components for performance |
-| **Language** | TypeScript 5.3 | Type safety across full stack |
-| **Database** | SQLite (dev) / PostgreSQL (prod) | Prisma makes switching trivial; SQLite for zero-config local dev |
-| **ORM** | Prisma 5.7 | Type-safe queries, migrations, schema-as-code |
-| **Auth** | NextAuth.js v5 (beta) | OAuth providers (GitHub, Google), session management, Prisma adapter |
-| **Payments** | Stripe (Checkout, Connect, Customer Portal, Webhooks) | Industry standard; handles subscriptions, payouts, invoicing |
-| **Styling** | Tailwind CSS 3.4 + Radix UI primitives | Utility-first CSS with accessible component primitives |
-| **Charts** | Recharts 2.10 | Lightweight React charting for developer dashboards |
-| **Forms** | React Hook Form + Zod | Performant forms with schema-based validation |
-| **Data Fetching** | TanStack React Query 5 | Client-side caching, mutation management, optimistic updates |
-| **Deployment** | Vercel | Zero-config Next.js hosting, edge functions, preview deploys |
+| Layer             | Technology                                            | Rationale                                                             |
+| ----------------- | ----------------------------------------------------- | --------------------------------------------------------------------- |
+| **Framework**     | Next.js 15 (App Router)                               | SSR + API routes in one repo, React Server Components for performance |
+| **Language**      | TypeScript 5.3                                        | Type safety across full stack                                         |
+| **Database**      | SQLite (dev) / PostgreSQL (prod)                      | Prisma makes switching trivial; SQLite for zero-config local dev      |
+| **ORM**           | Prisma 5.7                                            | Type-safe queries, migrations, schema-as-code                         |
+| **Auth**          | NextAuth.js v5 (beta)                                 | OAuth providers (GitHub, Google), session management, Prisma adapter  |
+| **Payments**      | Stripe (Checkout, Connect, Customer Portal, Webhooks) | Industry standard; handles subscriptions, payouts, invoicing          |
+| **Styling**       | Tailwind CSS 3.4 + Radix UI primitives                | Utility-first CSS with accessible component primitives                |
+| **Charts**        | Recharts 2.10                                         | Lightweight React charting for developer dashboards                   |
+| **Forms**         | React Hook Form + Zod                                 | Performant forms with schema-based validation                         |
+| **Data Fetching** | TanStack React Query 5                                | Client-side caching, mutation management, optimistic updates          |
+| **Deployment**    | Vercel                                                | Zero-config Next.js hosting, edge functions, preview deploys          |
 
 ---
 
@@ -253,12 +253,13 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### Auth Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET/POST | `/api/auth/[...nextauth]` | Public | NextAuth.js catch-all (OAuth callbacks, session) |
-| POST | `/api/auth/upgrade-role` | Session (USER) | Upgrade user role to DEVELOPER |
+| Method   | Path                      | Auth           | Description                                      |
+| -------- | ------------------------- | -------------- | ------------------------------------------------ |
+| GET/POST | `/api/auth/[...nextauth]` | Public         | NextAuth.js catch-all (OAuth callbacks, session) |
+| POST     | `/api/auth/upgrade-role`  | Session (USER) | Upgrade user role to DEVELOPER                   |
 
 **POST `/api/auth/upgrade-role`**
+
 ```ts
 // Request: empty body (uses session user)
 // Response: { success: true, role: "DEVELOPER" }
@@ -267,22 +268,24 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### Server Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/api/servers` | Public | Browse/search servers (paginated) |
-| GET | `/api/servers/[slug]` | Public | Get server detail |
-| POST | `/api/servers` | Session (DEVELOPER) | Create new server listing |
-| PUT | `/api/servers/[slug]` | Session (owner) | Update server listing |
-| DELETE | `/api/servers/[slug]` | Session (owner/ADMIN) | Delete/suspend server |
-| GET | `/api/servers/featured` | Public | Get featured servers |
+| Method | Path                    | Auth                  | Description                       |
+| ------ | ----------------------- | --------------------- | --------------------------------- |
+| GET    | `/api/servers`          | Public                | Browse/search servers (paginated) |
+| GET    | `/api/servers/[slug]`   | Public                | Get server detail                 |
+| POST   | `/api/servers`          | Session (DEVELOPER)   | Create new server listing         |
+| PUT    | `/api/servers/[slug]`   | Session (owner)       | Update server listing             |
+| DELETE | `/api/servers/[slug]`   | Session (owner/ADMIN) | Delete/suspend server             |
+| GET    | `/api/servers/featured` | Public                | Get featured servers              |
 
 **GET `/api/servers`**
+
 ```ts
 // Query params: ?q=search&category=developer-tools&pricing=SUBSCRIPTION&sort=popular|newest|rating&page=1&limit=20
 // Response: { servers: McpServer[], total: number, page: number, totalPages: number }
 ```
 
 **POST `/api/servers`**
+
 ```ts
 // Request:
 {
@@ -309,14 +312,15 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### Subscription Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/api/subscriptions` | Session | List user's subscriptions |
-| POST | `/api/subscriptions/checkout` | Session | Create Stripe Checkout session |
-| POST | `/api/subscriptions/[id]/cancel` | Session (owner) | Cancel subscription at period end |
-| GET | `/api/subscriptions/[id]/config` | Session (owner) | Get MCP client config snippet |
+| Method | Path                             | Auth            | Description                       |
+| ------ | -------------------------------- | --------------- | --------------------------------- |
+| GET    | `/api/subscriptions`             | Session         | List user's subscriptions         |
+| POST   | `/api/subscriptions/checkout`    | Session         | Create Stripe Checkout session    |
+| POST   | `/api/subscriptions/[id]/cancel` | Session (owner) | Cancel subscription at period end |
+| GET    | `/api/subscriptions/[id]/config` | Session (owner) | Get MCP client config snippet     |
 
 **POST `/api/subscriptions/checkout`**
+
 ```ts
 // Request: { serverId: string }
 // Response: { checkoutUrl: string }
@@ -324,6 +328,7 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 ```
 
 **GET `/api/subscriptions/[id]/config`**
+
 ```ts
 // Response:
 {
@@ -340,14 +345,15 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### Billing Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| POST | `/api/billing/portal` | Session | Create Stripe Customer Portal session |
-| POST | `/api/billing/connect/onboard` | Session (DEVELOPER) | Create Stripe Connect onboarding link |
-| GET | `/api/billing/connect/status` | Session (DEVELOPER) | Check Connect onboarding status |
-| POST | `/api/webhooks/stripe` | Stripe signature | Handle all Stripe webhooks |
+| Method | Path                           | Auth                | Description                           |
+| ------ | ------------------------------ | ------------------- | ------------------------------------- |
+| POST   | `/api/billing/portal`          | Session             | Create Stripe Customer Portal session |
+| POST   | `/api/billing/connect/onboard` | Session (DEVELOPER) | Create Stripe Connect onboarding link |
+| GET    | `/api/billing/connect/status`  | Session (DEVELOPER) | Check Connect onboarding status       |
+| POST   | `/api/webhooks/stripe`         | Stripe signature    | Handle all Stripe webhooks            |
 
 **POST `/api/webhooks/stripe`**
+
 ```ts
 // Handled events:
 // - checkout.session.completed     → Create Subscription + ApiKey, record Transaction
@@ -361,12 +367,13 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### Review Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/api/servers/[slug]/reviews` | Public | List reviews for a server |
-| POST | `/api/servers/[slug]/reviews` | Session (subscriber) | Create/update review |
+| Method | Path                          | Auth                 | Description               |
+| ------ | ----------------------------- | -------------------- | ------------------------- |
+| GET    | `/api/servers/[slug]/reviews` | Public               | List reviews for a server |
+| POST   | `/api/servers/[slug]/reviews` | Session (subscriber) | Create/update review      |
 
 **POST `/api/servers/[slug]/reviews`**
+
 ```ts
 // Request: { rating: number (1-5), comment?: string }
 // Response: { review: Review }
@@ -376,13 +383,14 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### API Key Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/api/keys` | Session | List user's API keys (shows prefix only) |
-| POST | `/api/keys` | Session | Generate new API key for a server |
-| DELETE | `/api/keys/[id]` | Session (owner) | Revoke an API key |
+| Method | Path             | Auth            | Description                              |
+| ------ | ---------------- | --------------- | ---------------------------------------- |
+| GET    | `/api/keys`      | Session         | List user's API keys (shows prefix only) |
+| POST   | `/api/keys`      | Session         | Generate new API key for a server        |
+| DELETE | `/api/keys/[id]` | Session (owner) | Revoke an API key                        |
 
 **POST `/api/keys`**
+
 ```ts
 // Request: { serverId: string, name?: string }
 // Response: { apiKey: { id, name, key: "mcpm_...", prefix, serverId, createdAt } }
@@ -392,13 +400,14 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### Developer Analytics Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/api/developer/stats` | Session (DEVELOPER) | Aggregate stats across all servers |
-| GET | `/api/developer/servers/[id]/analytics` | Session (owner) | Per-server analytics (30-day) |
-| GET | `/api/developer/transactions` | Session (DEVELOPER) | Transaction history with payout details |
+| Method | Path                                    | Auth                | Description                             |
+| ------ | --------------------------------------- | ------------------- | --------------------------------------- |
+| GET    | `/api/developer/stats`                  | Session (DEVELOPER) | Aggregate stats across all servers      |
+| GET    | `/api/developer/servers/[id]/analytics` | Session (owner)     | Per-server analytics (30-day)           |
+| GET    | `/api/developer/transactions`           | Session (DEVELOPER) | Transaction history with payout details |
 
 **GET `/api/developer/stats`**
+
 ```ts
 // Response:
 {
@@ -419,15 +428,16 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### Admin Routes
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| GET | `/api/admin/stats` | Session (ADMIN) | Platform-wide stats |
-| GET | `/api/admin/servers/pending` | Session (ADMIN) | List pending server approvals |
-| POST | `/api/admin/servers/[id]/approve` | Session (ADMIN) | Approve a server listing |
-| POST | `/api/admin/servers/[id]/reject` | Session (ADMIN) | Reject with reason |
-| GET | `/api/admin/users` | Session (ADMIN) | Search/list users |
+| Method | Path                              | Auth            | Description                   |
+| ------ | --------------------------------- | --------------- | ----------------------------- |
+| GET    | `/api/admin/stats`                | Session (ADMIN) | Platform-wide stats           |
+| GET    | `/api/admin/servers/pending`      | Session (ADMIN) | List pending server approvals |
+| POST   | `/api/admin/servers/[id]/approve` | Session (ADMIN) | Approve a server listing      |
+| POST   | `/api/admin/servers/[id]/reject`  | Session (ADMIN) | Reject with reason            |
+| GET    | `/api/admin/users`                | Session (ADMIN) | Search/list users             |
 
 **POST `/api/admin/servers/[id]/reject`**
+
 ```ts
 // Request: { reason: string }
 // Response: { server: McpServer }
@@ -436,11 +446,12 @@ All API routes live under `src/app/api/`. Auth is via NextAuth session (cookie-b
 
 ### API Key Authentication (for MCP clients)
 
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| POST | `/api/verify-key` | API Key (Bearer) | Verify an API key and return access info |
+| Method | Path              | Auth             | Description                              |
+| ------ | ----------------- | ---------------- | ---------------------------------------- |
+| POST   | `/api/verify-key` | API Key (Bearer) | Verify an API key and return access info |
 
 **POST `/api/verify-key`**
+
 ```ts
 // Headers: Authorization: Bearer mcpm_xxxxx
 // Response: { valid: true, userId: string, serverId: string, permissions: string[] }
@@ -455,46 +466,46 @@ All pages use the Next.js App Router under `src/app/`.
 
 ### Public Pages (no auth)
 
-| URL | File | Data Requirements | Description |
-|---|---|---|---|
-| `/` | `src/app/page.tsx` | None (static) | Landing page with hero, pricing, FAQ |
-| `/servers` | `src/app/servers/page.tsx` | `GET /api/servers` | Browse & search marketplace |
-| `/servers/[slug]` | `src/app/servers/[slug]/page.tsx` | `GET /api/servers/[slug]`, `GET /api/servers/[slug]/reviews` | Server detail page |
-| `/pricing` | `src/app/pricing/page.tsx` | None (static) | Detailed pricing page |
+| URL               | File                              | Data Requirements                                            | Description                          |
+| ----------------- | --------------------------------- | ------------------------------------------------------------ | ------------------------------------ |
+| `/`               | `src/app/page.tsx`                | None (static)                                                | Landing page with hero, pricing, FAQ |
+| `/servers`        | `src/app/servers/page.tsx`        | `GET /api/servers`                                           | Browse & search marketplace          |
+| `/servers/[slug]` | `src/app/servers/[slug]/page.tsx` | `GET /api/servers/[slug]`, `GET /api/servers/[slug]/reviews` | Server detail page                   |
+| `/pricing`        | `src/app/pricing/page.tsx`        | None (static)                                                | Detailed pricing page                |
 
 ### Auth Pages
 
-| URL | File | Data Requirements | Description |
-|---|---|---|---|
+| URL            | File                           | Data Requirements  | Description                |
+| -------------- | ------------------------------ | ------------------ | -------------------------- |
 | `/auth/signin` | `src/app/auth/signin/page.tsx` | NextAuth providers | Sign in with GitHub/Google |
-| `/auth/error` | `src/app/auth/error/page.tsx` | Error params | Auth error display |
+| `/auth/error`  | `src/app/auth/error/page.tsx`  | Error params       | Auth error display         |
 
 ### Dashboard Pages (auth required: any role)
 
-| URL | File | Data Requirements | Description |
-|---|---|---|---|
-| `/dashboard` | `src/app/dashboard/page.tsx` | `GET /api/subscriptions` | User home — active subscriptions |
+| URL                        | File                                       | Data Requirements        | Description                       |
+| -------------------------- | ------------------------------------------ | ------------------------ | --------------------------------- |
+| `/dashboard`               | `src/app/dashboard/page.tsx`               | `GET /api/subscriptions` | User home — active subscriptions  |
 | `/dashboard/subscriptions` | `src/app/dashboard/subscriptions/page.tsx` | `GET /api/subscriptions` | All subscriptions with management |
-| `/dashboard/api-keys` | `src/app/dashboard/api-keys/page.tsx` | `GET /api/keys` | API key management |
-| `/dashboard/settings` | `src/app/dashboard/settings/page.tsx` | Session user | Account settings, role upgrade |
+| `/dashboard/api-keys`      | `src/app/dashboard/api-keys/page.tsx`      | `GET /api/keys`          | API key management                |
+| `/dashboard/settings`      | `src/app/dashboard/settings/page.tsx`      | Session user             | Account settings, role upgrade    |
 
 ### Developer Pages (auth required: DEVELOPER role)
 
-| URL | File | Data Requirements | Description |
-|---|---|---|---|
-| `/dashboard/developer` | `src/app/dashboard/developer/page.tsx` | `GET /api/developer/stats` | Developer analytics overview |
-| `/dashboard/developer/servers/new` | `src/app/dashboard/developer/servers/new/page.tsx` | None | Create new server listing form |
-| `/dashboard/developer/servers/[id]` | `src/app/dashboard/developer/servers/[id]/page.tsx` | `GET /api/developer/servers/[id]/analytics` | Per-server analytics |
-| `/dashboard/developer/servers/[id]/edit` | `src/app/dashboard/developer/servers/[id]/edit/page.tsx` | `GET /api/servers/[slug]` | Edit server listing |
-| `/dashboard/developer/payouts` | `src/app/dashboard/developer/payouts/page.tsx` | `GET /api/developer/transactions`, `GET /api/billing/connect/status` | Payout history & Connect setup |
+| URL                                      | File                                                     | Data Requirements                                                    | Description                    |
+| ---------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------ |
+| `/dashboard/developer`                   | `src/app/dashboard/developer/page.tsx`                   | `GET /api/developer/stats`                                           | Developer analytics overview   |
+| `/dashboard/developer/servers/new`       | `src/app/dashboard/developer/servers/new/page.tsx`       | None                                                                 | Create new server listing form |
+| `/dashboard/developer/servers/[id]`      | `src/app/dashboard/developer/servers/[id]/page.tsx`      | `GET /api/developer/servers/[id]/analytics`                          | Per-server analytics           |
+| `/dashboard/developer/servers/[id]/edit` | `src/app/dashboard/developer/servers/[id]/edit/page.tsx` | `GET /api/servers/[slug]`                                            | Edit server listing            |
+| `/dashboard/developer/payouts`           | `src/app/dashboard/developer/payouts/page.tsx`           | `GET /api/developer/transactions`, `GET /api/billing/connect/status` | Payout history & Connect setup |
 
 ### Admin Pages (auth required: ADMIN role)
 
-| URL | File | Data Requirements | Description |
-|---|---|---|---|
-| `/admin` | `src/app/admin/page.tsx` | `GET /api/admin/stats` | Admin dashboard overview |
-| `/admin/servers` | `src/app/admin/servers/page.tsx` | `GET /api/admin/servers/pending` | Server approval queue |
-| `/admin/users` | `src/app/admin/users/page.tsx` | `GET /api/admin/users` | User management |
+| URL              | File                             | Data Requirements                | Description              |
+| ---------------- | -------------------------------- | -------------------------------- | ------------------------ |
+| `/admin`         | `src/app/admin/page.tsx`         | `GET /api/admin/stats`           | Admin dashboard overview |
+| `/admin/servers` | `src/app/admin/servers/page.tsx` | `GET /api/admin/servers/pending` | Server approval queue    |
+| `/admin/users`   | `src/app/admin/users/page.tsx`   | `GET /api/admin/users`           | User management          |
 
 ---
 
@@ -554,6 +565,7 @@ src/components/
 ### Page Components
 
 Each page file (`page.tsx`) is a thin orchestrator that:
+
 1. Fetches data (server component) or sets up React Query hooks (client component)
 2. Composes shared components
 3. Handles page-level state (search params, filters)
@@ -644,6 +656,7 @@ MCP Client (Claude, Cursor, etc.) makes a tool call
 ## 7. Security Checklist
 
 ### Authentication & Authorization
+
 - [x] OAuth-only auth (GitHub, Google) — no password storage
 - [x] NextAuth.js session with secure, httpOnly cookies
 - [x] Role-based access control: USER, DEVELOPER, ADMIN
@@ -651,6 +664,7 @@ MCP Client (Claude, Cursor, etc.) makes a tool call
 - [x] Server-side session verification on every API route (no client-only checks)
 
 ### API Security
+
 - [x] Stripe webhook signature verification (`stripe.webhooks.constructEvent`)
 - [x] API keys hashed with SHA-256 before storage — plaintext never persisted
 - [x] API key prefix system (`mcpm_`) for identification without exposing the key
@@ -659,12 +673,14 @@ MCP Client (Claude, Cursor, etc.) makes a tool call
 - [x] SQL injection prevented by Prisma parameterized queries
 
 ### Data Protection
+
 - [x] No plaintext secrets in database (API keys hashed, Stripe tokens managed by Stripe)
 - [x] Environment variables for all secrets (DATABASE_URL, STRIPE_SECRET_KEY, NEXTAUTH_SECRET)
 - [x] `.env` in `.gitignore` — never committed
 - [x] Stripe Customer Portal for PCI-compliant payment method management (card data never touches our servers)
 
 ### Web Security
+
 - [x] CSRF: NextAuth.js CSRF token on all auth mutations
 - [x] XSS: Markdown rendered with sanitization (strip `<script>`, `onclick`, etc.)
 - [x] Content-Security-Policy headers (configured in `next.config.js`)
@@ -673,6 +689,7 @@ MCP Client (Claude, Cursor, etc.) makes a tool call
 - [x] HTTPS-only in production (enforced by Vercel)
 
 ### Billing Security
+
 - [x] Stripe Checkout for payment collection — PCI SAQ-A compliance
 - [x] Idempotency keys on webhook processing to prevent duplicate charges
 - [x] Webhook event deduplication via `stripePaymentIntentId` unique check
@@ -680,6 +697,7 @@ MCP Client (Claude, Cursor, etc.) makes a tool call
 - [x] `application_fee_percent` set on Stripe Connect, enforced by Stripe
 
 ### Infrastructure
+
 - [x] Database backups (Vercel Postgres automatic daily backups in production)
 - [x] Error monitoring via Next.js built-in error boundaries + logging
 - [x] No stack traces or internal paths in API error responses

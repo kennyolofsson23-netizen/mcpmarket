@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const paginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -8,8 +8,8 @@ export const paginationSchema = z.object({
 export const searchSchema = z.object({
   q: z.string().optional(),
   category: z.string().optional(),
-  pricing: z.enum(['FREE', 'SUBSCRIPTION', 'USAGE', 'all']).optional(),
-  sort: z.enum(['popular', 'newest', 'rating']).optional().default('popular'),
+  pricing: z.enum(["FREE", "SUBSCRIPTION", "USAGE", "all"]).optional(),
+  sort: z.enum(["popular", "newest", "rating"]).optional().default("popular"),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
 });

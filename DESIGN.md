@@ -25,13 +25,13 @@
 
 ### Principles
 
-| Principle | Rationale |
-|-----------|-----------|
-| **Developer-first clarity** | Primary users are technical. UI should be information-dense yet scannable. Avoid decorative elements that obscure data. |
-| **Trust through transparency** | Pricing, revenue split (80/20), and platform fees must be immediately visible. Never hide costs. |
-| **Progressive disclosure** | Show essential actions first; advanced settings (webhooks, usage billing) are revealed after onboarding. |
-| **Speed over polish** | Perceived performance > animations. Skeleton loaders, optimistic UI, prefetch on hover for server cards. |
-| **Accessible by default** | Every interactive element must be keyboard navigable and screen-reader annotated. No color-only communication. |
+| Principle                      | Rationale                                                                                                               |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| **Developer-first clarity**    | Primary users are technical. UI should be information-dense yet scannable. Avoid decorative elements that obscure data. |
+| **Trust through transparency** | Pricing, revenue split (80/20), and platform fees must be immediately visible. Never hide costs.                        |
+| **Progressive disclosure**     | Show essential actions first; advanced settings (webhooks, usage billing) are revealed after onboarding.                |
+| **Speed over polish**          | Perceived performance > animations. Skeleton loaders, optimistic UI, prefetch on hover for server cards.                |
+| **Accessible by default**      | Every interactive element must be keyboard navigable and screen-reader annotated. No color-only communication.          |
 
 ### Visual Style
 
@@ -52,63 +52,63 @@ All tokens are defined in `globals.css` and extended in `tailwind.config.js` as 
 
 #### Light Mode
 
-| Token | CSS Variable | Hex | Usage |
-|-------|-------------|-----|-------|
-| `background` | `--background: 0 0% 100%` | `#FFFFFF` | Page background |
-| `foreground` | `--foreground: 0 0% 3.6%` | `#090909` | Body text |
-| `card` | `--card: 0 0% 100%` | `#FFFFFF` | Card surfaces |
-| `card-foreground` | `--card-foreground: 0 0% 3.6%` | `#090909` | Card text |
-| `muted` | `--muted: 0 0% 96.1%` | `#F5F5F5` | Muted backgrounds (alternate rows, code blocks) |
-| `muted-foreground` | `--muted-foreground: 0 0% 45.1%` | `#737373` | Secondary/helper text |
-| `border` | `--border: 0 0% 89.8%` | `#E5E5E5` | All borders |
-| `input` | `--input: 0 0% 89.8%` | `#E5E5E5` | Input borders |
-| `primary` | `--primary: 0 0% 9%` | `#171717` | Primary button bg, heading emphasis |
-| `primary-foreground` | `--primary-foreground: 0 0% 100%` | `#FFFFFF` | Text on primary button |
-| `secondary` | `--secondary: 0 0% 96.1%` | `#F5F5F5` | Ghost/secondary button bg |
-| `secondary-foreground` | `--secondary-foreground: 0 0% 9%` | `#171717` | Text on secondary button |
-| `accent` | `--accent: 0 84.2% 60.2%` | `#EF4444` | Destructive actions, alerts |
-| `destructive` | `--destructive: 0 84.2% 60.2%` | `#EF4444` | Errors, delete states |
-| `ring` | `--ring: 0 0% 3.6%` | `#090909` | Focus rings |
+| Token                  | CSS Variable                      | Hex       | Usage                                           |
+| ---------------------- | --------------------------------- | --------- | ----------------------------------------------- |
+| `background`           | `--background: 0 0% 100%`         | `#FFFFFF` | Page background                                 |
+| `foreground`           | `--foreground: 0 0% 3.6%`         | `#090909` | Body text                                       |
+| `card`                 | `--card: 0 0% 100%`               | `#FFFFFF` | Card surfaces                                   |
+| `card-foreground`      | `--card-foreground: 0 0% 3.6%`    | `#090909` | Card text                                       |
+| `muted`                | `--muted: 0 0% 96.1%`             | `#F5F5F5` | Muted backgrounds (alternate rows, code blocks) |
+| `muted-foreground`     | `--muted-foreground: 0 0% 45.1%`  | `#737373` | Secondary/helper text                           |
+| `border`               | `--border: 0 0% 89.8%`            | `#E5E5E5` | All borders                                     |
+| `input`                | `--input: 0 0% 89.8%`             | `#E5E5E5` | Input borders                                   |
+| `primary`              | `--primary: 0 0% 9%`              | `#171717` | Primary button bg, heading emphasis             |
+| `primary-foreground`   | `--primary-foreground: 0 0% 100%` | `#FFFFFF` | Text on primary button                          |
+| `secondary`            | `--secondary: 0 0% 96.1%`         | `#F5F5F5` | Ghost/secondary button bg                       |
+| `secondary-foreground` | `--secondary-foreground: 0 0% 9%` | `#171717` | Text on secondary button                        |
+| `accent`               | `--accent: 0 84.2% 60.2%`         | `#EF4444` | Destructive actions, alerts                     |
+| `destructive`          | `--destructive: 0 84.2% 60.2%`    | `#EF4444` | Errors, delete states                           |
+| `ring`                 | `--ring: 0 0% 3.6%`               | `#090909` | Focus rings                                     |
 
 #### Extended Brand Colors (Tailwind utilities — use directly in JSX)
 
 These are not in CSS variables; use Tailwind utility classes directly.
 
-| Color | Tailwind Class | Hex | Usage |
-|-------|---------------|-----|-------|
-| Brand Blue | `blue-600` | `#2563EB` | Primary CTAs, feature icons, active states, links |
-| Brand Blue Light | `blue-50` | `#EFF6FF` | CTA section background, selected filter pill bg |
-| Brand Blue Dark | `blue-700` | `#1D4ED8` | Hover state on blue CTAs |
-| Success Green | `green-600` | `#16A34A` | Checkmarks, active subscription badges, success toasts |
-| Success Green Light | `green-50` | `#F0FDF4` | Success banner backgrounds |
-| Warning Amber | `amber-600` | `#D97706` | PENDING status badges, warnings |
-| Warning Amber Light | `amber-50` | `#FFFBEB` | Warning banner backgrounds |
-| Info Slate | `slate-50` | `#F8FAFC` | Hero gradient start, alternate section backgrounds |
-| Stripe Purple | `violet-600` | `#7C3AED` | Stripe Connect branding touchpoints |
+| Color               | Tailwind Class | Hex       | Usage                                                  |
+| ------------------- | -------------- | --------- | ------------------------------------------------------ |
+| Brand Blue          | `blue-600`     | `#2563EB` | Primary CTAs, feature icons, active states, links      |
+| Brand Blue Light    | `blue-50`      | `#EFF6FF` | CTA section background, selected filter pill bg        |
+| Brand Blue Dark     | `blue-700`     | `#1D4ED8` | Hover state on blue CTAs                               |
+| Success Green       | `green-600`    | `#16A34A` | Checkmarks, active subscription badges, success toasts |
+| Success Green Light | `green-50`     | `#F0FDF4` | Success banner backgrounds                             |
+| Warning Amber       | `amber-600`    | `#D97706` | PENDING status badges, warnings                        |
+| Warning Amber Light | `amber-50`     | `#FFFBEB` | Warning banner backgrounds                             |
+| Info Slate          | `slate-50`     | `#F8FAFC` | Hero gradient start, alternate section backgrounds     |
+| Stripe Purple       | `violet-600`   | `#7C3AED` | Stripe Connect branding touchpoints                    |
 
 #### Dark Mode
 
-| Token | Hex | Notes |
-|-------|-----|-------|
-| `background` | `#090909` | Near-black |
-| `foreground` | `#FAFAFA` | Near-white |
-| `muted` | `#242424` | Dark muted surface |
-| `muted-foreground` | `#A3A3A3` | Dimmed text |
-| `border` | `#242424` | Subtle dark border |
-| `primary` | `#FAFAFA` | Inverted — white buttons |
-| `ring` | `#EF4444` | Red focus ring in dark mode |
+| Token              | Hex       | Notes                       |
+| ------------------ | --------- | --------------------------- |
+| `background`       | `#090909` | Near-black                  |
+| `foreground`       | `#FAFAFA` | Near-white                  |
+| `muted`            | `#242424` | Dark muted surface          |
+| `muted-foreground` | `#A3A3A3` | Dimmed text                 |
+| `border`           | `#242424` | Subtle dark border          |
+| `primary`          | `#FAFAFA` | Inverted — white buttons    |
+| `ring`             | `#EF4444` | Red focus ring in dark mode |
 
 ### Contrast Ratios (WCAG AA — minimum 4.5:1 text, 3:1 UI)
 
-| Pair | Ratio | Pass |
-|------|-------|------|
-| `foreground` (#090909) on `background` (#FFFFFF) | 20.5:1 | ✅ AAA |
-| `muted-foreground` (#737373) on `background` (#FFFFFF) | 4.6:1 | ✅ AA |
-| `primary-foreground` (#FFFFFF) on `primary` (#171717) | 18.1:1 | ✅ AAA |
-| White on `blue-600` (#2563EB) | 5.9:1 | ✅ AA |
-| White on `green-600` (#16A34A) | 5.2:1 | ✅ AA |
-| `foreground` on `muted` (#F5F5F5) | 18.3:1 | ✅ AAA |
-| `muted-foreground` on `muted` (#F5F5F5) | 3.97:1 | ✅ AA (large text) — use only for 18px+ or bold 14px+ |
+| Pair                                                   | Ratio  | Pass                                                  |
+| ------------------------------------------------------ | ------ | ----------------------------------------------------- |
+| `foreground` (#090909) on `background` (#FFFFFF)       | 20.5:1 | ✅ AAA                                                |
+| `muted-foreground` (#737373) on `background` (#FFFFFF) | 4.6:1  | ✅ AA                                                 |
+| `primary-foreground` (#FFFFFF) on `primary` (#171717)  | 18.1:1 | ✅ AAA                                                |
+| White on `blue-600` (#2563EB)                          | 5.9:1  | ✅ AA                                                 |
+| White on `green-600` (#16A34A)                         | 5.2:1  | ✅ AA                                                 |
+| `foreground` on `muted` (#F5F5F5)                      | 18.3:1 | ✅ AAA                                                |
+| `muted-foreground` on `muted` (#F5F5F5)                | 3.97:1 | ✅ AA (large text) — use only for 18px+ or bold 14px+ |
 
 ---
 
@@ -124,20 +124,20 @@ Loaded via `next/font/google` with `subsets: ['latin']`. Variable font (`woff2`)
 
 ### Type Scale
 
-| Role | Tailwind Class | Size / Line Height | Weight | Usage |
-|------|---------------|-------------------|--------|-------|
-| Display | `text-6xl font-bold leading-none` | 60 px / 60 px | 700 | Hero headline (desktop) |
-| H1 | `text-4xl md:text-5xl font-bold tracking-tighter` | 36→48 px | 700 | Page H1 |
-| H2 | `text-2xl md:text-3xl font-bold` | 24→30 px | 700 | Section headings |
-| H3 | `text-xl font-semibold` | 20 px | 600 | Card titles, subsections |
-| H4 | `text-lg font-semibold` | 18 px | 600 | Feature titles, modal headings |
-| Body Large | `text-xl text-muted-foreground` | 20 px | 400 | Hero subheadline |
-| Body | `text-base` | 16 px / 1.5 | 400 | Default prose |
-| Body Small | `text-sm` | 14 px / 1.5 | 400 | Card descriptions, list items |
-| Caption | `text-xs text-muted-foreground` | 12 px | 400 | Meta info, timestamps |
-| Code | `font-mono text-sm` | 14 px | 400 | Inline code, API keys, endpoint URLs |
-| Label | `text-sm font-medium` | 14 px | 500 | Form labels |
-| Badge | `text-xs font-semibold uppercase tracking-wide` | 12 px | 600 | Status badges |
+| Role       | Tailwind Class                                    | Size / Line Height | Weight | Usage                                |
+| ---------- | ------------------------------------------------- | ------------------ | ------ | ------------------------------------ |
+| Display    | `text-6xl font-bold leading-none`                 | 60 px / 60 px      | 700    | Hero headline (desktop)              |
+| H1         | `text-4xl md:text-5xl font-bold tracking-tighter` | 36→48 px           | 700    | Page H1                              |
+| H2         | `text-2xl md:text-3xl font-bold`                  | 24→30 px           | 700    | Section headings                     |
+| H3         | `text-xl font-semibold`                           | 20 px              | 600    | Card titles, subsections             |
+| H4         | `text-lg font-semibold`                           | 18 px              | 600    | Feature titles, modal headings       |
+| Body Large | `text-xl text-muted-foreground`                   | 20 px              | 400    | Hero subheadline                     |
+| Body       | `text-base`                                       | 16 px / 1.5        | 400    | Default prose                        |
+| Body Small | `text-sm`                                         | 14 px / 1.5        | 400    | Card descriptions, list items        |
+| Caption    | `text-xs text-muted-foreground`                   | 12 px              | 400    | Meta info, timestamps                |
+| Code       | `font-mono text-sm`                               | 14 px              | 400    | Inline code, API keys, endpoint URLs |
+| Label      | `text-sm font-medium`                             | 14 px              | 500    | Form labels                          |
+| Badge      | `text-xs font-semibold uppercase tracking-wide`   | 12 px              | 600    | Status badges                        |
 
 ### Numeric Formatting
 
@@ -154,7 +154,7 @@ All spacing uses Tailwind's default 4 px base unit (`1 = 4px`).
 ### Container
 
 ```html
-<div class="container mx-auto max-w-6xl px-4 md:px-6">
+<div class="container mx-auto max-w-6xl px-4 md:px-6"></div>
 ```
 
 - Max width: `1152px` (`max-w-6xl`)
@@ -163,36 +163,36 @@ All spacing uses Tailwind's default 4 px base unit (`1 = 4px`).
 
 ### Section Vertical Rhythm
 
-| Context | Tailwind | Pixels |
-|---------|----------|--------|
-| Section padding (min) | `py-12` | 48 px top + bottom |
-| Section padding (mid) | `py-12 md:py-24` | 48 → 96 px |
-| Section padding (tall) | `py-12 md:py-24 lg:py-32 xl:py-48` | 48 → 192 px |
-| Between heading and content | `mb-12` | 48 px |
-| Between sibling cards | `gap-8` | 32 px |
-| Between list items | `space-y-3` | 12 px |
-| Intra-card padding | `p-6` or `p-8` | 24 or 32 px |
+| Context                     | Tailwind                           | Pixels             |
+| --------------------------- | ---------------------------------- | ------------------ |
+| Section padding (min)       | `py-12`                            | 48 px top + bottom |
+| Section padding (mid)       | `py-12 md:py-24`                   | 48 → 96 px         |
+| Section padding (tall)      | `py-12 md:py-24 lg:py-32 xl:py-48` | 48 → 192 px        |
+| Between heading and content | `mb-12`                            | 48 px              |
+| Between sibling cards       | `gap-8`                            | 32 px              |
+| Between list items          | `space-y-3`                        | 12 px              |
+| Intra-card padding          | `p-6` or `p-8`                     | 24 or 32 px        |
 
 ### Grid System
 
-| Layout | Tailwind | Usage |
-|--------|----------|-------|
-| 1 column | `grid grid-cols-1` | Mobile default |
-| 2 columns | `grid md:grid-cols-2 gap-8` | How It Works, two-panel layouts |
-| 3 columns | `grid md:grid-cols-3 gap-8` | Stats, features, pricing cards |
-| 4 columns | `grid grid-cols-2 md:grid-cols-4 gap-6` | Server browse sidebar + list |
-| Sidebar + main | `grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8` | Dashboard layouts |
-| 12-col flex | Flex with `flex-1` and fixed sidebar | Developer analytics |
+| Layout         | Tailwind                                          | Usage                           |
+| -------------- | ------------------------------------------------- | ------------------------------- |
+| 1 column       | `grid grid-cols-1`                                | Mobile default                  |
+| 2 columns      | `grid md:grid-cols-2 gap-8`                       | How It Works, two-panel layouts |
+| 3 columns      | `grid md:grid-cols-3 gap-8`                       | Stats, features, pricing cards  |
+| 4 columns      | `grid grid-cols-2 md:grid-cols-4 gap-6`           | Server browse sidebar + list    |
+| Sidebar + main | `grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8` | Dashboard layouts               |
+| 12-col flex    | Flex with `flex-1` and fixed sidebar              | Developer analytics             |
 
 ### Z-Index Stack
 
-| Layer | Value | Usage |
-|-------|-------|-------|
-| Sticky nav | `z-40` | Navbar |
-| Dropdowns | `z-50` | Command menus, select popups |
-| Modals | `z-50` | shadcn Dialog |
-| Toast | `z-[100]` | Sonner/shadcn Toaster |
-| Tooltip | `z-[110]` | Radix Tooltip |
+| Layer      | Value     | Usage                        |
+| ---------- | --------- | ---------------------------- |
+| Sticky nav | `z-40`    | Navbar                       |
+| Dropdowns  | `z-50`    | Command menus, select popups |
+| Modals     | `z-50`    | shadcn Dialog                |
+| Toast      | `z-[100]` | Sonner/shadcn Toaster        |
+| Tooltip    | `z-[110]` | Radix Tooltip                |
 
 ---
 
@@ -410,6 +410,7 @@ Full-width `bg-blue-600`. Content centered `max-w-4xl`. Heading white, body `tex
 
 **Filter Sidebar** (`240px` fixed width on desktop)
 Uses shadcn `Accordion` for collapsible filter groups:
+
 - **Category**: Checkbox list (general, ai, data, productivity, developer-tools, integrations)
 - **Pricing Model**: Radio group (All / Free / Subscription / Usage-based)
 - **Status**: Checkbox (Featured, New, Top Rated)
@@ -455,11 +456,12 @@ shadcn `Pagination` component. 24 servers per page. `[M]` Previous/Next buttons 
 
 **Left Column**
 
-*ServerHero*:
+_ServerHero_:
 `flex items-start gap-6`. Logo: `w-16 h-16 rounded-lg border` (fallback: colored initial avatar). Name: `text-3xl font-bold`. Category badge. Tags row: `flex flex-wrap gap-2`.
 Stats row: `flex gap-6 text-sm text-muted-foreground` — install count, view count, average rating (⭐ x.x).
 
-*Tabs* (shadcn `Tabs`):
+_Tabs_ (shadcn `Tabs`):
+
 - **Overview**: Long description (Markdown rendered). Feature list. Screenshots carousel if provided.
 - **Installation**: Code block with MCP config JSON. Step-by-step guide. Copy button on code block.
 - **Reviews**: `ReviewList` component + `AddReview` form (authenticated users only).
@@ -670,6 +672,7 @@ Feature comparison table: `<Table>` with features as rows, plan columns. Checkma
 Sidebar: collapsible sections with `<Accordion>`. Active item: `bg-blue-50 text-blue-700 font-medium rounded`.
 
 Prose content: standard Tailwind Typography plugin styles (or custom equivalents without the plugin):
+
 - `h2`: `text-2xl font-bold mt-8 mb-4`
 - Code blocks: `bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto`
 - Inline code: `bg-muted px-1 py-0.5 rounded text-sm font-mono`
@@ -686,25 +689,26 @@ Extended from `@radix-ui/slot` via `class-variance-authority`.
 
 **Variants**:
 
-| Variant | Classes | Usage |
-|---------|---------|-------|
-| `default` | `bg-primary text-primary-foreground hover:bg-primary/90` | Primary CTA |
-| `outline` | `border border-input bg-background hover:bg-accent/10` | Secondary actions |
-| `secondary` | `bg-secondary text-secondary-foreground hover:bg-secondary/80` | On dark backgrounds (CTA section) |
-| `ghost` | `hover:bg-accent/10` | Inline/icon actions |
-| `destructive` | `bg-destructive text-destructive-foreground hover:bg-destructive/90` | Delete, cancel |
-| `link` | `text-primary underline-offset-4 hover:underline` | In-text navigation |
+| Variant       | Classes                                                              | Usage                             |
+| ------------- | -------------------------------------------------------------------- | --------------------------------- |
+| `default`     | `bg-primary text-primary-foreground hover:bg-primary/90`             | Primary CTA                       |
+| `outline`     | `border border-input bg-background hover:bg-accent/10`               | Secondary actions                 |
+| `secondary`   | `bg-secondary text-secondary-foreground hover:bg-secondary/80`       | On dark backgrounds (CTA section) |
+| `ghost`       | `hover:bg-accent/10`                                                 | Inline/icon actions               |
+| `destructive` | `bg-destructive text-destructive-foreground hover:bg-destructive/90` | Delete, cancel                    |
+| `link`        | `text-primary underline-offset-4 hover:underline`                    | In-text navigation                |
 
 **Sizes**:
 
-| Size | Classes |
-|------|---------|
-| `sm` | `h-9 px-3 text-sm` |
-| `default` | `h-10 px-4 py-2` |
-| `lg` | `h-11 px-8 text-base` |
-| `icon` | `h-10 w-10 p-0` |
+| Size      | Classes               |
+| --------- | --------------------- |
+| `sm`      | `h-9 px-3 text-sm`    |
+| `default` | `h-10 px-4 py-2`      |
+| `lg`      | `h-11 px-8 text-base` |
+| `icon`    | `h-10 w-10 p-0`       |
 
 **States**:
+
 - `hover`: Opacity 90% or bg shift (per variant)
 - `focus-visible`: `outline-none ring-2 ring-ring ring-offset-2`
 - `disabled`: `pointer-events-none opacity-50`
@@ -726,13 +730,13 @@ Extended from `@radix-ui/slot` via `class-variance-authority`.
 
 **Custom semantic variants** (extend CVA):
 
-| Semantic | Classes | Usage |
-|----------|---------|-------|
-| `success` | `bg-green-100 text-green-800 border border-green-200` | APPROVED, ACTIVE |
-| `warning` | `bg-amber-100 text-amber-800 border border-amber-200` | PENDING, PAST_DUE |
-| `danger` | `bg-red-100 text-red-800 border border-red-200` | REJECTED, SUSPENDED, CANCELED |
-| `info` | `bg-blue-100 text-blue-800 border border-blue-200` | USAGE pricing, featured |
-| `featured` | `bg-blue-600 text-white` | Featured server pill |
+| Semantic   | Classes                                               | Usage                         |
+| ---------- | ----------------------------------------------------- | ----------------------------- |
+| `success`  | `bg-green-100 text-green-800 border border-green-200` | APPROVED, ACTIVE              |
+| `warning`  | `bg-amber-100 text-amber-800 border border-amber-200` | PENDING, PAST_DUE             |
+| `danger`   | `bg-red-100 text-red-800 border border-red-200`       | REJECTED, SUSPENDED, CANCELED |
+| `info`     | `bg-blue-100 text-blue-800 border border-blue-200`    | USAGE pricing, featured       |
+| `featured` | `bg-blue-600 text-white`                              | Featured server pill          |
 
 Base: `inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold`
 
@@ -768,11 +772,13 @@ Used in `/servers` grid and featured carousels.
 ```
 
 **Variants**:
+
 - `featured`: adds `ring-2 ring-blue-500` and `FeaturedBadge` ribbon
 - `compact`: removes `TagList` and `StatsRow`, used in related servers sidebar
 - `horizontal`: logo left, text right — used in admin tables and search results
 
 **States**:
+
 - Default: `border-border`
 - Hover: `border-blue-300 shadow-sm` (via `group-hover` or direct hover)
 - Active (subscribed): `ring-2 ring-green-500` inner glow
@@ -784,9 +790,11 @@ Used in `/servers` grid and featured carousels.
 
 ```tsx
 // Renders server logo or colored initial fallback
-<div class="w-10 h-10 rounded-lg border border-border overflow-hidden flex-shrink-0
+<div
+  class="w-10 h-10 rounded-lg border border-border overflow-hidden flex-shrink-0
             flex items-center justify-center text-white font-bold text-lg"
-     style={{ backgroundColor: hashColor(server.name) }}>
+  style={{ backgroundColor: hashColor(server.name) }}
+>
   {server.logoUrl ? <img src={server.logoUrl} alt={server.name} /> : initial}
 </div>
 ```
@@ -836,6 +844,7 @@ Logo: `object-cover w-full h-full`. Fallback: first character of server name, ba
 ```
 
 **States**:
+
 - Not authenticated: button shows "Sign In to Subscribe" → links to `/login?next=/servers/[slug]`
 - Subscribed: button shows "Manage Subscription" (outline variant)
 - Loading checkout: button in `loading` state
@@ -864,6 +873,7 @@ Logo: `object-cover w-full h-full`. Fallback: first character of server name, ba
 `<StarRating>`: 5 `<Star>` SVG icons (`w-4 h-4`). Filled: `text-amber-400 fill-amber-400`. Empty: `text-muted-foreground`.
 
 `<AddReview>` form:
+
 - Accessible star picker (5 `<button>` elements, keyboard navigable, `aria-label="Rate X stars"`)
 - `<Textarea>` for comment (optional)
 - Submit button
@@ -888,6 +898,7 @@ Used in developer and admin dashboards.
 ```
 
 `<TrendBadge>`:
+
 - Positive: `text-green-600 text-xs` with `TrendingUp w-3 h-3 mr-1`
 - Negative: `text-red-600 text-xs` with `TrendingDown w-3 h-3 mr-1`
 - Neutral: `text-muted-foreground text-xs`
@@ -1004,13 +1015,27 @@ Three-column desktop layout collapses to 2-column on tablet and stacked on mobil
       </linearGradient>
     </defs>
     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-    <XAxis dataKey="date" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} />
-    <YAxis tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-           tickFormatter={(v) => `$${v}`} />
-    <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-    <Area type="monotone" dataKey="revenue"
-          stroke="#2563EB" strokeWidth={2}
-          fill="url(#revenueGradient)" />
+    <XAxis
+      dataKey="date"
+      tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+    />
+    <YAxis
+      tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+      tickFormatter={(v) => `$${v}`}
+    />
+    <Tooltip
+      contentStyle={{
+        background: "hsl(var(--card))",
+        border: "1px solid hsl(var(--border))",
+      }}
+    />
+    <Area
+      type="monotone"
+      dataKey="revenue"
+      stroke="#2563EB"
+      strokeWidth={2}
+      fill="url(#revenueGradient)"
+    />
   </AreaChart>
 </ResponsiveContainer>
 ```
@@ -1058,12 +1083,20 @@ Used in `/servers` page header.
 ```tsx
 <div class="relative w-full max-w-xl">
   <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-  <Input class="pl-9 pr-4" placeholder="Search MCP servers…"
-         role="searchbox" aria-label="Search servers" />
+  <Input
+    class="pl-9 pr-4"
+    placeholder="Search MCP servers…"
+    role="searchbox"
+    aria-label="Search servers"
+  />
   {query && (
-    <Button variant="ghost" size="icon"
-            class="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-            aria-label="Clear search" onClick={clear}>
+    <Button
+      variant="ghost"
+      size="icon"
+      class="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+      aria-label="Clear search"
+      onClick={clear}
+    >
       <X class="w-4 h-4" />
     </Button>
   )}
@@ -1078,12 +1111,12 @@ Debounce: 300 ms. On submit/Enter: updates URL search param `?q=`.
 
 Uses shadcn `Sonner` integration. Positioned `bottom-right` on desktop, `bottom-center` on mobile.
 
-| Type | Icon | Background |
-|------|------|-----------|
+| Type    | Icon                          | Background |
+| ------- | ----------------------------- | ---------- |
 | Success | `CheckCircle2 text-green-600` | White card |
-| Error | `XCircle text-destructive` | White card |
-| Info | `Info text-blue-600` | White card |
-| Loading | `Loader2 animate-spin` | White card |
+| Error   | `XCircle text-destructive`    | White card |
+| Info    | `Info text-blue-600`          | White card |
+| Loading | `Loader2 animate-spin`        | White card |
 
 Duration: 4 s default, 8 s for errors. Always include actionable label (`aria-live="polite"`).
 
@@ -1102,8 +1135,10 @@ Reusable destructive-action confirmation modal.
     </AlertDialogHeader>
     <AlertDialogFooter>
       <AlertDialogCancel>Cancel</AlertDialogCancel>
-      <AlertDialogAction class="bg-destructive text-destructive-foreground
-                                hover:bg-destructive/90">
+      <AlertDialogAction
+        class="bg-destructive text-destructive-foreground
+                                hover:bg-destructive/90"
+      >
         {confirmLabel}
       </AlertDialogAction>
     </AlertDialogFooter>
@@ -1120,6 +1155,7 @@ Used for: cancel subscription, revoke API key, reject server (admin), delete acc
 ### 8.1 Contrast Ratios
 
 All text/background pairs meet WCAG AA (4.5:1 for normal text, 3:1 for large text ≥18px or bold ≥14px). See §2 for full table. Critical pairs:
+
 - Body text on white: 20.5:1 ✅
 - Muted text on white: 4.6:1 ✅
 - White on blue CTA (`blue-600`): 5.9:1 ✅
@@ -1138,24 +1174,25 @@ Dark mode: all tokens maintain equivalent ratios (foreground/background inverted
 
 ### 8.3 ARIA Labels & Roles
 
-| Element | ARIA |
-|---------|------|
-| Navbar | `<header role="banner">`, `<nav aria-label="Main navigation">` |
-| Search | `role="searchbox"`, `aria-label="Search servers"` |
-| Filters sidebar | `<aside aria-label="Server filters">` |
-| Server grid | `<section aria-label="MCP servers">`, each card is `<article>` |
+| Element                   | ARIA                                                                                                            |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Navbar                    | `<header role="banner">`, `<nav aria-label="Main navigation">`                                                  |
+| Search                    | `role="searchbox"`, `aria-label="Search servers"`                                                               |
+| Filters sidebar           | `<aside aria-label="Server filters">`                                                                           |
+| Server grid               | `<section aria-label="MCP servers">`, each card is `<article>`                                                  |
 | Star rating (interactive) | Each star: `role="radio"`, `aria-label="Rate X out of 5 stars"`, group: `role="radiogroup" aria-label="Rating"` |
-| Star rating (display) | `role="img" aria-label="{n} out of 5 stars"` |
-| Status badges | `aria-label="Status: {value}"` |
-| Loading spinners | `role="status" aria-label="Loading"`, spinner: `aria-hidden="true"` |
-| Progress stepper | `role="list"`, each step: `role="listitem"`, current: `aria-current="step"` |
-| Chart | Wrapped in `<figure>`, `<figcaption>` with text summary of key data |
-| API key (masked) | `aria-label="API key ending in {last4}"` |
-| Icon-only buttons | `aria-label` required, e.g. `aria-label="Copy API key"` |
+| Star rating (display)     | `role="img" aria-label="{n} out of 5 stars"`                                                                    |
+| Status badges             | `aria-label="Status: {value}"`                                                                                  |
+| Loading spinners          | `role="status" aria-label="Loading"`, spinner: `aria-hidden="true"`                                             |
+| Progress stepper          | `role="list"`, each step: `role="listitem"`, current: `aria-current="step"`                                     |
+| Chart                     | Wrapped in `<figure>`, `<figcaption>` with text summary of key data                                             |
+| API key (masked)          | `aria-label="API key ending in {last4}"`                                                                        |
+| Icon-only buttons         | `aria-label` required, e.g. `aria-label="Copy API key"`                                                         |
 
 ### 8.4 Touch Targets
 
 Minimum 44×44 px touch target for all interactive elements on mobile:
+
 - Buttons: `h-10` (40px) + vertical padding ensures ≥44px; use `min-h-[44px]` on critical actions
 - Table action buttons: wrapped in 44px clickable area, use `p-2` on icon buttons (`h-8 w-8` icon + `p-2` padding = 48px total area)
 - Checkbox / Radio inputs: custom UI backed by native input with `peer` pattern, hit area `w-[44px] h-[44px]` minimum
@@ -1173,7 +1210,9 @@ Minimum 44×44 px touch target for all interactive elements on mobile:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -1195,13 +1234,13 @@ All `tailwindcss-animate` animations respect this via `motion-safe:` variant pre
 
 Tailwind's default breakpoints used throughout:
 
-| Breakpoint | Prefix | Width | What Changes |
-|-----------|--------|-------|--------------|
-| Mobile | (none) | 0–639 px | Single column layouts, bottom-sheet sidebars, compact nav, stacked cards |
-| Small | `sm:` | 640 px+ | Multi-column buttons in hero, footer 2-col grid |
-| Medium | `md:` | 768 px+ | 2-3 column grids, desktop nav visible, server grid 2-col |
-| Large | `lg:` | 1024 px+ | Sidebar layouts (dashboard, docs), server grid 3-col, sticky detail panel |
-| XL | `xl:` | 1280 px+ | Hero max padding (py-48), wider containers if needed |
+| Breakpoint | Prefix | Width    | What Changes                                                              |
+| ---------- | ------ | -------- | ------------------------------------------------------------------------- |
+| Mobile     | (none) | 0–639 px | Single column layouts, bottom-sheet sidebars, compact nav, stacked cards  |
+| Small      | `sm:`  | 640 px+  | Multi-column buttons in hero, footer 2-col grid                           |
+| Medium     | `md:`  | 768 px+  | 2-3 column grids, desktop nav visible, server grid 2-col                  |
+| Large      | `lg:`  | 1024 px+ | Sidebar layouts (dashboard, docs), server grid 3-col, sticky detail panel |
+| XL         | `xl:`  | 1280 px+ | Hero max padding (py-48), wider containers if needed                      |
 
 ### Specific Changes Per Breakpoint
 
@@ -1252,23 +1291,25 @@ Tailwind's default breakpoints used throughout:
 ```tsx
 // Skeleton grid — same layout as live cards
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-  {Array(9).fill(0).map((_, i) => (
-    <div key={i} class="rounded-lg border border-border p-5 space-y-3">
-      <div class="flex items-start gap-3">
-        <Skeleton class="w-10 h-10 rounded-lg" />
-        <div class="flex-1 space-y-2">
-          <Skeleton class="h-4 w-3/4" />
-          <Skeleton class="h-3 w-1/2" />
+  {Array(9)
+    .fill(0)
+    .map((_, i) => (
+      <div key={i} class="rounded-lg border border-border p-5 space-y-3">
+        <div class="flex items-start gap-3">
+          <Skeleton class="w-10 h-10 rounded-lg" />
+          <div class="flex-1 space-y-2">
+            <Skeleton class="h-4 w-3/4" />
+            <Skeleton class="h-3 w-1/2" />
+          </div>
+        </div>
+        <Skeleton class="h-3 w-full" />
+        <Skeleton class="h-3 w-5/6" />
+        <div class="flex gap-2 pt-1">
+          <Skeleton class="h-5 w-16 rounded-full" />
+          <Skeleton class="h-5 w-12 rounded-full" />
         </div>
       </div>
-      <Skeleton class="h-3 w-full" />
-      <Skeleton class="h-3 w-5/6" />
-      <div class="flex gap-2 pt-1">
-        <Skeleton class="h-5 w-16 rounded-full" />
-        <Skeleton class="h-5 w-12 rounded-full" />
-      </div>
-    </div>
-  ))}
+    ))}
 </div>
 ```
 
@@ -1284,12 +1325,14 @@ Tailwind's default breakpoints used throughout:
 
 ```tsx
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-  {Array(4).fill(0).map((_, i) => (
-    <Card key={i} class="p-4">
-      <Skeleton class="h-3 w-24 mb-3" />
-      <Skeleton class="h-8 w-16" />
-    </Card>
-  ))}
+  {Array(4)
+    .fill(0)
+    .map((_, i) => (
+      <Card key={i} class="p-4">
+        <Skeleton class="h-3 w-24 mb-3" />
+        <Skeleton class="h-8 w-16" />
+      </Card>
+    ))}
 </div>
 ```
 
@@ -1322,7 +1365,9 @@ Button loading state: replace label with `<Loader2 class="animate-spin mr-2 h-4 
   <p class="text-sm text-muted-foreground max-w-sm mb-6">
     Try adjusting your filters or search query.
   </p>
-  <Button variant="outline" onClick={clearFilters}>Clear filters</Button>
+  <Button variant="outline" onClick={clearFilters}>
+    Clear filters
+  </Button>
 </div>
 ```
 
@@ -1335,7 +1380,9 @@ Button loading state: replace label with `<Loader2 class="animate-spin mr-2 h-4 
   <p class="text-sm text-muted-foreground mb-6">
     Discover and subscribe to MCP servers to get started.
   </p>
-  <Button asChild><Link href="/servers">Browse Servers</Link></Button>
+  <Button asChild>
+    <Link href="/servers">Browse Servers</Link>
+  </Button>
 </div>
 ```
 
@@ -1361,7 +1408,9 @@ Button loading state: replace label with `<Loader2 class="animate-spin mr-2 h-4 
   <p class="text-sm text-muted-foreground mb-6">
     List your first MCP server and start earning today.
   </p>
-  <Button asChild><Link href="/developer/servers/new">List a Server</Link></Button>
+  <Button asChild>
+    <Link href="/developer/servers/new">List a Server</Link>
+  </Button>
 </div>
 ```
 
@@ -1410,7 +1459,9 @@ Button loading state: replace label with `<Loader2 class="animate-spin mr-2 h-4 
   </p>
   <div class="flex gap-4">
     <Button onClick={retry}>Try Again</Button>
-    <Button variant="outline" asChild><Link href="/">Go Home</Link></Button>
+    <Button variant="outline" asChild>
+      <Link href="/">Go Home</Link>
+    </Button>
   </div>
 </div>
 ```
@@ -1424,7 +1475,9 @@ Button loading state: replace label with `<Loader2 class="animate-spin mr-2 h-4 
   <p class="text-sm text-muted-foreground mb-8">
     This MCP server doesn't exist or has been removed.
   </p>
-  <Button asChild><Link href="/servers">Browse Servers</Link></Button>
+  <Button asChild>
+    <Link href="/servers">Browse Servers</Link>
+  </Button>
 </div>
 ```
 
@@ -1441,13 +1494,16 @@ Redirect to `/login?next={currentPath}`. On arrival at login page: `<Alert varia
   <p class="text-sm text-muted-foreground mb-8">
     You need a developer account to access this page.
   </p>
-  <Button asChild><Link href="/developer-signup">Become a Developer</Link></Button>
+  <Button asChild>
+    <Link href="/developer-signup">Become a Developer</Link>
+  </Button>
 </div>
 ```
 
 #### Form Validation Errors
 
 Inline below each field:
+
 ```tsx
 <p class="text-sm text-destructive mt-1" id={`${fieldId}-error`} role="alert">
   {error.message}
@@ -1476,12 +1532,14 @@ Input in error state: `border-destructive focus-visible:ring-destructive`
 #### Stripe Payment Failure
 
 After failed checkout redirect, shown as `variant="destructive"` `<Alert>` on the server detail page:
+
 ```tsx
 <Alert variant="destructive">
   <AlertCircle class="h-4 w-4" />
   <AlertTitle>Payment failed</AlertTitle>
   <AlertDescription>
-    {stripeError || "Your payment could not be processed. Please try a different card."}
+    {stripeError ||
+      "Your payment could not be processed. Please try a different card."}
   </AlertDescription>
 </Alert>
 ```
@@ -1512,45 +1570,45 @@ After failed checkout redirect, shown as `variant="destructive"` `<Alert>` on th
 
 ## Appendix A: shadcn/ui Component Inventory
 
-| Component | Used In |
-|-----------|---------|
-| `Button` | Throughout |
-| `Card`, `CardHeader`, `CardContent`, `CardFooter` | Server cards, pricing, dashboard panels |
-| `Badge` | Status, pricing model, category, featured |
-| `Input`, `Textarea` | All forms |
-| `Label` | All forms |
-| `Select`, `SelectTrigger`, `SelectContent`, `SelectItem` | Filters, pricing model, role selector |
-| `Checkbox` | Filter sidebar |
-| `RadioGroup`, `RadioGroupItem` | Pricing filter, star rating |
-| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | Server detail, dashboard |
-| `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent` | FAQ, filter sidebar, docs nav |
-| `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogFooter` | Create API key, subscription management |
-| `AlertDialog` | Destructive confirmations |
-| `Alert`, `AlertTitle`, `AlertDescription` | Inline banners |
-| `Sheet`, `SheetContent`, `SheetHeader` | Mobile nav, mobile filters |
-| `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem` | User nav, table row actions |
-| `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell` | Subscriptions, API keys, admin tables |
-| `Separator` | Dividers in cards, forms |
-| `Avatar`, `AvatarImage`, `AvatarFallback` | User menu, review cards |
-| `Skeleton` | All loading states |
-| `Progress` | Page loading bar |
-| `Tooltip`, `TooltipContent`, `TooltipProvider`, `TooltipTrigger` | Icon-only buttons, truncated data |
-| `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationNext`, `PaginationPrevious` | Server list, admin tables |
-| `Breadcrumb`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbSeparator` | Server detail, admin pages |
+| Component                                                                                                     | Used In                                   |
+| ------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| `Button`                                                                                                      | Throughout                                |
+| `Card`, `CardHeader`, `CardContent`, `CardFooter`                                                             | Server cards, pricing, dashboard panels   |
+| `Badge`                                                                                                       | Status, pricing model, category, featured |
+| `Input`, `Textarea`                                                                                           | All forms                                 |
+| `Label`                                                                                                       | All forms                                 |
+| `Select`, `SelectTrigger`, `SelectContent`, `SelectItem`                                                      | Filters, pricing model, role selector     |
+| `Checkbox`                                                                                                    | Filter sidebar                            |
+| `RadioGroup`, `RadioGroupItem`                                                                                | Pricing filter, star rating               |
+| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`                                                              | Server detail, dashboard                  |
+| `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`                                          | FAQ, filter sidebar, docs nav             |
+| `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogFooter`                                      | Create API key, subscription management   |
+| `AlertDialog`                                                                                                 | Destructive confirmations                 |
+| `Alert`, `AlertTitle`, `AlertDescription`                                                                     | Inline banners                            |
+| `Sheet`, `SheetContent`, `SheetHeader`                                                                        | Mobile nav, mobile filters                |
+| `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`                              | User nav, table row actions               |
+| `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`                                     | Subscriptions, API keys, admin tables     |
+| `Separator`                                                                                                   | Dividers in cards, forms                  |
+| `Avatar`, `AvatarImage`, `AvatarFallback`                                                                     | User menu, review cards                   |
+| `Skeleton`                                                                                                    | All loading states                        |
+| `Progress`                                                                                                    | Page loading bar                          |
+| `Tooltip`, `TooltipContent`, `TooltipProvider`, `TooltipTrigger`                                              | Icon-only buttons, truncated data         |
+| `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationNext`, `PaginationPrevious` | Server list, admin tables                 |
+| `Breadcrumb`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbSeparator`                                       | Server detail, admin pages                |
 
 ---
 
 ## Appendix B: Animation Reference
 
-| Animation | Class | Usage |
-|-----------|-------|-------|
-| Fade in | `animate-in fade-in duration-200` | Route transitions, modal open |
-| Slide up | `animate-in slide-in-from-bottom-4 duration-200` | Toast, mobile sheets |
-| Slide down | `animate-in slide-in-from-top-2 duration-150` | Dropdowns |
-| Spin | `animate-spin` | Loading indicators |
-| Pulse | `animate-pulse` | Skeleton components |
-| Bounce (rare) | `motion-safe:animate-bounce` | New badge, celebration state after first server listing |
+| Animation     | Class                                            | Usage                                                   |
+| ------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| Fade in       | `animate-in fade-in duration-200`                | Route transitions, modal open                           |
+| Slide up      | `animate-in slide-in-from-bottom-4 duration-200` | Toast, mobile sheets                                    |
+| Slide down    | `animate-in slide-in-from-top-2 duration-150`    | Dropdowns                                               |
+| Spin          | `animate-spin`                                   | Loading indicators                                      |
+| Pulse         | `animate-pulse`                                  | Skeleton components                                     |
+| Bounce (rare) | `motion-safe:animate-bounce`                     | New badge, celebration state after first server listing |
 
 ---
 
-*End of MCPmarket Design Specification — DESIGN.md*
+_End of MCPmarket Design Specification — DESIGN.md_
