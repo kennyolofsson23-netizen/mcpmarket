@@ -1,0 +1,281 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String   @id @default(cuid())
+  name             String?
+  email            String   @unique
+  emailVerified    DateTime?
+  image            String?
+  role             String   @default("USER")
+  stripeCustomerId String?
+  stripeConnectId  String?
+  connectOnboarded Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  accounts        Account[]
+  sessions        Session[]
+  servers         McpServer[]      @relation("ServerOwner")
+  subscriptions   Subscription[]
+  reviews         Review[]
+  apiKeys         ApiKey[]
+  webhooks        DeveloperWebhook[]
+  teamMemberships TeamMember[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model McpServer {
+  id              String    @id @default(cuid())
+  name            String
+  slug            String    @unique
+  description     String
+  longDescription String?
+  logoUrl         String?
+  repoUrl         String?
+  websiteUrl      String?
+  category        String    @default("general")
+  tags            String    @default("[]")
+  status          String    @default("PENDING")
+  rejectionReason String?
+  featured        Boolean   @default(false)
+  featuredUntil   DateTime?
+
+  pricingModel  String  @default("FREE")
+  price         Float   @default(0)
+  usagePrice    Float?
+  freeCallLimit Int?
+  priceId       String?
+  productId     String?
+
+  installCount Int    @default(0)
+  viewCount    Int    @default(0)
+  avgRating    Float?
+
+  managedHosting Boolean @default(false)
+  hostingStatus  String?
+  endpointUrl    String?
+  dockerImage    String?
+  githubRepoUrl  String?
+
+  totalRevenue Float @default(0)
+  platformFee  Float @default(0.20)
+
+  ownerId String
+  owner   User   @relation("ServerOwner", fields: [ownerId], references: [id])
+
+  subscriptions  Subscription[]
+  reviews        Review[]
+  serverVersions ServerVersion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String
+  serverId             String
+  status               String    @default("ACTIVE")
+  stripeSubscriptionId String?   @unique
+  stripePriceId        String?
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+
+  user   User      @relation(fields: [userId], references: [id])
+  server McpServer @relation(fields: [serverId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, serverId])
+}
+
+model Review {
+  id       String  @id @default(cuid())
+  rating   Int
+  comment  String?
+  userId   String
+  serverId String
+
+  user   User      @relation(fields: [userId], references: [id])
+  server McpServer @relation(fields: [serverId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, serverId])
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  name        String
+  keyHash     String    @unique
+  keyPrefix   String
+  userId      String
+  serverId    String?
+  lastUsed    DateTime?
+  expiresAt   DateTime?
+  permissions String    @default("[]")
+  isActive    Boolean   @default(true)
+
+  user         User          @relation(fields: [userId], references: [id])
+  usageRecords UsageRecord[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id                    String  @id @default(cuid())
+  amount                Float
+  currency              String  @default("usd")
+  platformFee           Float
+  developerPayout       Float
+  status                String  @default("PENDING")
+  stripePaymentIntentId String?
+  stripeTransferId      String?
+  serverId              String
+  buyerId               String
+  sellerId              String
+  subscriptionId        String?
+
+  createdAt DateTime @default(now())
+}
+
+model FeaturedListing {
+  id                   String   @id @default(cuid())
+  serverId             String   @unique
+  startDate            DateTime
+  endDate              DateTime
+  paid                 Boolean  @default(false)
+  stripeSubscriptionId String?
+
+  createdAt DateTime @default(now())
+}
+
+model UsageRecord {
+  id         String   @id @default(cuid())
+  apiKeyId   String
+  serverId   String
+  userId     String
+  endpoint   String?
+  statusCode Int?
+  createdAt  DateTime @default(now())
+
+  apiKey ApiKey @relation(fields: [apiKeyId], references: [id])
+}
+
+model DeveloperWebhook {
+  id          String  @id @default(cuid())
+  userId      String
+  url         String
+  secret      String
+  events      String  @default("[]")
+  isActive    Boolean @default(true)
+  description String?
+
+  user User        @relation(fields: [userId], references: [id])
+  logs WebhookLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WebhookLog {
+  id         String  @id @default(cuid())
+  webhookId  String
+  event      String
+  payload    String
+  statusCode Int?
+  response   String?
+  success    Boolean @default(false)
+  attempts   Int     @default(1)
+
+  webhook DeveloperWebhook @relation(fields: [webhookId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model ServerVersion {
+  id           String    @id @default(cuid())
+  serverId     String
+  version      String
+  changelog    String?
+  endpointUrl  String?
+  isLatest     Boolean   @default(false)
+  deprecated   Boolean   @default(false)
+  deprecatedAt DateTime?
+
+  server McpServer @relation(fields: [serverId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Team {
+  id           String  @id @default(cuid())
+  name         String
+  slug         String  @unique
+  ownerId      String
+  billingEmail String?
+
+  members TeamMember[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeamMember {
+  id     String @id @default(cuid())
+  teamId String
+  userId String
+  role   String @default("MEMBER")
+
+  team Team @relation(fields: [teamId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([teamId, userId])
+}
