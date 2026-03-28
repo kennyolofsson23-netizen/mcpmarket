@@ -311,7 +311,7 @@ export default function Home() {
               </h3>
               <p className="text-gray-600">
                 Monthly payouts via Stripe Connect to your bank account. Payouts
-                happen on the 1st of each month for the previous month's
+                happen on the 1st of each month for the previous month&apos;s
                 revenue.
               </p>
             </div>
