@@ -1,0 +1,415 @@
+[
+  {
+    "id": "F000",
+    "name": "Shared Infrastructure",
+    "priority": "infra",
+    "description": "Database schema, Prisma client, auth config, Stripe client, layouts, providers, UI primitives, types, and constants",
+    "acceptanceCriteria": [
+      "Prisma schema matches ARCHITECTURE.md and generates without errors",
+      "Prisma client singleton is available at @/lib/prisma",
+      "NextAuth config supports GitHub and Google OAuth with Prisma adapter",
+      "Stripe client is configured with secret key from env",
+      "Root layout renders Navbar, Footer, and providers wrapper",
+      "Dashboard layout renders sidebar navigation with role-based tabs",
+      "Admin layout renders admin sidebar with auth gate for ADMIN role",
+      "All UI primitives (input, textarea, select, card, badge, dialog, avatar, skeleton, tabs, dropdown-menu, toast) are implemented",
+      "TypeScript types for API requests/responses and shared models are defined",
+      "Zod validation schemas for server, review, and common forms are defined",
+      "Constants file defines categories, pricing models, and status enums",
+      "React Query + NextAuth SessionProvider are wrapped in providers.tsx"
+    ],
+    "dependencies": [],
+    "files": {
+      "prisma": "prisma/schema.prisma",
+      "prismaClient": "src/lib/prisma.ts",
+      "auth": "src/lib/auth.ts",
+      "stripe": "src/lib/stripe.ts",
+      "apiKeys": "src/lib/api-keys.ts",
+      "utils": "src/lib/utils.ts",
+      "constants": "src/lib/constants.ts",
+      "validationServer": "src/lib/validations/server.ts",
+      "validationReview": "src/lib/validations/review.ts",
+      "validationCommon": "src/lib/validations/common.ts",
+      "types": "src/types/index.ts",
+      "apiTypes": "src/types/api.ts",
+      "nextAuthTypes": "src/types/next-auth.d.ts",
+      "rootLayout": "src/app/layout.tsx",
+      "globals": "src/app/globals.css",
+      "providers": "src/components/providers.tsx",
+      "navbar": "src/components/navbar.tsx",
+      "footer": "src/components/footer.tsx",
+      "sidebar": "src/components/sidebar.tsx",
+      "dashboardLayout": "src/app/dashboard/layout.tsx",
+      "adminLayout": "src/app/admin/layout.tsx",
+      "uiButton": "src/components/ui/button.tsx",
+      "uiInput": "src/components/ui/input.tsx",
+      "uiTextarea": "src/components/ui/textarea.tsx",
+      "uiSelect": "src/components/ui/select.tsx",
+      "uiCard": "src/components/ui/card.tsx",
+      "uiBadge": "src/components/ui/badge.tsx",
+      "uiDialog": "src/components/ui/dialog.tsx",
+      "uiAvatar": "src/components/ui/avatar.tsx",
+      "uiSkeleton": "src/components/ui/skeleton.tsx",
+      "uiTabs": "src/components/ui/tabs.tsx",
+      "uiDropdownMenu": "src/components/ui/dropdown-menu.tsx",
+      "uiToast": "src/components/ui/toast.tsx",
+      "emptyState": "src/components/empty-state.tsx",
+      "markdownRenderer": "src/components/markdown-renderer.tsx"
+    }
+  },
+  {
+    "id": "F001",
+    "name": "Server Listing & Publishing",
+    "priority": "P0",
+    "description": "Developers publish MCP servers to the marketplace with metadata, pricing, and documentation",
+    "acceptanceCriteria": [
+      "Given a logged-in developer, when they submit the server listing form with name, description, category, pricing model, price, and endpoint URL, then the server appears in their dashboard with Pending Review status",
+      "Given a server listing, when the developer uploads a logo (PNG/JPG, max 2MB) and README (markdown), then both render correctly on the server detail page",
+      "Given a developer choosing usage-based pricing, when they set a per-call price and free tier limit, then the listing displays both the price and free tier allowance",
+      "Given a listing submission, when required fields (name, description, endpoint, pricing) are missing, then validation errors appear inline and submission is blocked"
+    ],
+    "dependencies": ["F000"],
+    "files": {
+      "api": "src/app/api/servers/route.ts",
+      "apiDetail": "src/app/api/servers/[slug]/route.ts",
+      "uiCreate": "src/app/dashboard/developer/servers/new/page.tsx",
+      "uiEdit": "src/app/dashboard/developer/servers/[id]/edit/page.tsx",
+      "serverForm": "src/components/server-form.tsx",
+      "tests": "src/__tests__/unit/servers.test.ts"
+    }
+  },
+  {
+    "id": "F002",
+    "name": "Server Discovery & Browse",
+    "priority": "P0",
+    "description": "Users browse, search, and filter MCP servers by category, pricing, and popularity",
+    "acceptanceCriteria": [
+      "Given the browse page, when a user visits /servers, then servers display in a card grid showing name, logo, short description, price, rating, and install count",
+      "Given the search bar, when a user types a query and presses enter, then results filter in <500ms to show matching servers by name, description, and tags",
+      "Given filter controls, when a user selects a category and/or pricing type (Free, Paid), then the grid updates to show only matching servers",
+      "Given the browse page, when sorting by Popular, Newest, or Top Rated, then servers reorder accordingly"
+    ],
+    "dependencies": ["F000"],
+    "files": {
+      "ui": "src/app/servers/page.tsx",
+      "serverCard": "src/components/server-card.tsx",
+      "serverGrid": "src/components/server-grid.tsx",
+      "searchBar": "src/components/search-bar.tsx",
+      "categoryFilter": "src/components/category-filter.tsx",
+      "pricingToggle": "src/components/pricing-toggle.tsx",
+      "sortSelect": "src/components/sort-select.tsx",
+      "tests": "src/__tests__/unit/browse.test.ts"
+    }
+  },
+  {
+    "id": "F003",
+    "name": "Server Detail Page",
+    "priority": "P0",
+    "description": "Dedicated server page with full description, pricing, reviews, and install instructions",
+    "acceptanceCriteria": [
+      "Given a server detail page at /servers/[slug], when a user visits, then they see name, logo, developer name, full README (rendered markdown), pricing, rating, install count, and category tags",
+      "Given a server with reviews, when viewing the detail page, then reviews display with rating, comment, author, and date, sorted newest-first",
+      "Given a server the user is not subscribed to, when viewing the detail page, then a Subscribe CTA button is prominently displayed with the price",
+      "Given a subscribed server, when viewing the detail page, then the user sees their MCP config snippet (JSON) for copy-paste into claude_desktop_config.json or mcp.json"
+    ],
+    "dependencies": ["F000", "F002"],
+    "files": {
+      "ui": "src/app/servers/[slug]/page.tsx",
+      "configSnippet": "src/components/config-snippet.tsx",
+      "reviewCard": "src/components/review-card.tsx",
+      "starRating": "src/components/star-rating.tsx",
+      "tests": "src/__tests__/unit/server-detail.test.ts"
+    }
+  },
+  {
+    "id": "F004",
+    "name": "Auth (Sign Up / Sign In)",
+    "priority": "P0",
+    "description": "OAuth authentication via GitHub and Google with role-based access control",
+    "acceptanceCriteria": [
+      "Given an unauthenticated user, when they click Sign In and choose GitHub or Google, then they are authenticated and redirected to their dashboard",
+      "Given a new user signing in for the first time, when auth completes, then a User record is created with role=USER",
+      "Given a USER-role account, when they click Become a Developer and accept the developer terms, then their role upgrades to DEVELOPER and they gain access to the publisher dashboard",
+      "Given an authenticated user, when their session expires, then they are redirected to sign in on protected page access"
+    ],
+    "dependencies": ["F000"],
+    "files": {
+      "api": "src/app/api/auth/[...nextauth]/route.ts",
+      "apiUpgrade": "src/app/api/auth/upgrade-role/route.ts",
+      "uiSignin": "src/app/auth/signin/page.tsx",
+      "uiError": "src/app/auth/error/page.tsx",
+      "uiSettings": "src/app/dashboard/settings/page.tsx",
+      "tests": "src/__tests__/unit/auth.test.ts"
+    }
+  },
+  {
+    "id": "F005",
+    "name": "Stripe Subscription Billing",
+    "priority": "P0",
+    "description": "Users subscribe to paid servers via Stripe Checkout with recurring billing",
+    "acceptanceCriteria": [
+      "Given a logged-in user on a paid server's detail page, when they click Subscribe, then they are redirected to a Stripe Checkout session pre-filled with the server's price and subscription interval",
+      "Given a successful Stripe Checkout, when the user completes payment, then a Subscription record is created with status=ACTIVE and the user gains access to the server",
+      "Given an active subscription, when the user visits /dashboard/subscriptions, then they see all active subscriptions with server name, price, next billing date, and a Cancel button",
+      "Given a subscription cancellation, when the user clicks Cancel, then the subscription remains active until the current period ends, after which status changes to CANCELED",
+      "Given a failed payment (Stripe webhook invoice.payment_failed), when received, then the subscription status updates to PAST_DUE and the user receives an email notification"
+    ],
+    "dependencies": ["F000", "F004"],
+    "files": {
+      "apiCheckout": "src/app/api/subscriptions/checkout/route.ts",
+      "apiCancel": "src/app/api/subscriptions/[id]/cancel/route.ts",
+      "apiWebhook": "src/app/api/webhooks/stripe/route.ts",
+      "tests": "src/__tests__/unit/billing.test.ts"
+    }
+  },
+  {
+    "id": "F006",
+    "name": "Developer Dashboard & Analytics",
+    "priority": "P0",
+    "description": "Developers see installs, revenue, and subscriber analytics for their published servers",
+    "acceptanceCriteria": [
+      "Given a developer visiting /dashboard/developer, when the page loads, then they see total subscribers, total revenue (all-time and this month), total installs, and a revenue chart (last 12 months)",
+      "Given a developer with multiple servers, when viewing the dashboard, then each server shows individual subscriber count, revenue, and status",
+      "Given the analytics view, when a developer selects a specific server, then they see daily install and revenue data for the last 30 days in a line chart"
+    ],
+    "dependencies": ["F000", "F004"],
+    "files": {
+      "apiStats": "src/app/api/developer/stats/route.ts",
+      "apiAnalytics": "src/app/api/developer/servers/[id]/analytics/route.ts",
+      "ui": "src/app/dashboard/developer/page.tsx",
+      "uiServerDetail": "src/app/dashboard/developer/servers/[id]/page.tsx",
+      "statsCard": "src/components/stats-card.tsx",
+      "revenueChart": "src/components/revenue-chart.tsx",
+      "tests": "src/__tests__/unit/developer-dashboard.test.ts"
+    }
+  },
+  {
+    "id": "F007",
+    "name": "User Dashboard & Subscription Management",
+    "priority": "P0",
+    "description": "Users manage subscriptions, API keys, and billing from a central dashboard",
+    "acceptanceCriteria": [
+      "Given a user visiting /dashboard, when the page loads, then they see all active and past subscriptions with server name, status, price, and renewal date",
+      "Given an active subscription, when the user clicks Get Config, then a modal shows the MCP client configuration JSON snippet with their API key pre-filled",
+      "Given the dashboard, when the user clicks Billing, then they are redirected to the Stripe Customer Portal to manage payment methods and invoices"
+    ],
+    "dependencies": ["F000", "F004", "F005"],
+    "files": {
+      "apiSubscriptions": "src/app/api/subscriptions/route.ts",
+      "apiConfig": "src/app/api/subscriptions/[id]/config/route.ts",
+      "apiPortal": "src/app/api/billing/portal/route.ts",
+      "ui": "src/app/dashboard/page.tsx",
+      "uiSubscriptions": "src/app/dashboard/subscriptions/page.tsx",
+      "subscriptionCard": "src/components/subscription-card.tsx",
+      "tests": "src/__tests__/unit/user-dashboard.test.ts"
+    }
+  },
+  {
+    "id": "F008",
+    "name": "API Key Management",
+    "priority": "P0",
+    "description": "Users generate and revoke API keys for authenticating with subscribed MCP servers",
+    "acceptanceCriteria": [
+      "Given a new subscription, when created, then an API key is automatically generated for that server and displayed once to the user",
+      "Given the API keys page at /dashboard/api-keys, when the user visits, then they see all active keys with server name, created date, last used date, and a Revoke button",
+      "Given a revoked API key, when used to call an MCP server, then the request returns 401 Unauthorized",
+      "Given a user, when they click Generate New Key for a subscribed server, then the old key is revoked and a new one is created and displayed once"
+    ],
+    "dependencies": ["F000", "F004"],
+    "files": {
+      "apiKeys": "src/app/api/keys/route.ts",
+      "apiKeyDelete": "src/app/api/keys/[id]/route.ts",
+      "apiVerify": "src/app/api/verify-key/route.ts",
+      "ui": "src/app/dashboard/api-keys/page.tsx",
+      "apiKeyRow": "src/components/api-key-row.tsx",
+      "tests": "src/__tests__/unit/api-keys.test.ts"
+    }
+  },
+  {
+    "id": "F009",
+    "name": "Stripe Connect Developer Payouts",
+    "priority": "P0",
+    "description": "Developers receive automated payouts via Stripe Connect with 80/20 revenue split",
+    "acceptanceCriteria": [
+      "Given a developer clicking Set Up Payouts on the developer dashboard, when they click it, then they are redirected to Stripe Connect onboarding",
+      "Given a completed Stripe Connect onboarding, when a subscription payment is received, then 80% is transferred to the developer's Stripe Connect account and 20% is retained as platform fee",
+      "Given the developer dashboard, when viewing payouts, then the developer sees a transaction history with amount, fee, net payout, and status for each payment",
+      "Given a refund, when processed, then the corresponding payout is adjusted and the developer sees the updated amount"
+    ],
+    "dependencies": ["F000", "F004", "F005"],
+    "files": {
+      "apiOnboard": "src/app/api/billing/connect/onboard/route.ts",
+      "apiStatus": "src/app/api/billing/connect/status/route.ts",
+      "apiTransactions": "src/app/api/developer/transactions/route.ts",
+      "ui": "src/app/dashboard/developer/payouts/page.tsx",
+      "stripeConnectBanner": "src/components/stripe-connect-banner.tsx",
+      "tests": "src/__tests__/unit/payouts.test.ts"
+    }
+  },
+  {
+    "id": "F010",
+    "name": "Landing Page",
+    "priority": "P0",
+    "description": "Marketing landing page with value proposition, pricing, and CTAs",
+    "acceptanceCriteria": [
+      "Given a visitor at /, when the page loads, then they see hero section with tagline and CTA, stats section, how-it-works section, feature cards, pricing tiers, FAQ, and footer",
+      "Given the pricing section, when displayed, then it shows three tiers: Basic (free to list, 20% rev share), Managed Hosting ($9/mo per server), and Featured ($29/mo)",
+      "Given the page, when loaded on mobile (viewport <768px), then all sections are responsive and readable without horizontal scrolling"
+    ],
+    "dependencies": ["F000"],
+    "files": {
+      "ui": "src/app/page.tsx",
+      "pricingPage": "src/app/(marketing)/pricing/page.tsx",
+      "tests": "src/__tests__/unit/landing.test.ts"
+    }
+  },
+  {
+    "id": "F011",
+    "name": "Server Reviews & Ratings",
+    "priority": "P1",
+    "description": "Users rate and review subscribed servers to help others make decisions",
+    "acceptanceCriteria": [
+      "Given a user with an active subscription to a server, when they visit the server detail page and click Write Review, then a form appears with a 1-5 star rating and text comment field",
+      "Given a submitted review, when saved, then the server's average rating and review count update immediately",
+      "Given a user who has already reviewed a server, when they visit the review form, then their existing review is pre-filled for editing",
+      "Given a user without a subscription to a server, when they try to review, then the review form is hidden and a message says Subscribe to leave a review"
+    ],
+    "dependencies": ["F000", "F003", "F005"],
+    "files": {
+      "api": "src/app/api/servers/[slug]/reviews/route.ts",
+      "reviewForm": "src/components/review-form.tsx",
+      "tests": "src/__tests__/unit/reviews.test.ts"
+    }
+  },
+  {
+    "id": "F012",
+    "name": "Admin Dashboard",
+    "priority": "P1",
+    "description": "Platform admins review, approve, and manage server listings and users",
+    "acceptanceCriteria": [
+      "Given an admin visiting /admin, when the page loads, then they see pending server count, total users, total revenue, and platform fee earned",
+      "Given pending server listings, when an admin clicks Approve, then the server status changes to APPROVED and it appears in the public browse page",
+      "Given a server listing, when an admin clicks Reject and provides a reason, then the server status changes to REJECTED and the developer receives the rejection reason via email",
+      "Given the admin user list, when an admin searches for a user by email, then the user's profile, role, subscriptions, and servers are displayed"
+    ],
+    "dependencies": ["F000", "F004"],
+    "files": {
+      "apiStats": "src/app/api/admin/stats/route.ts",
+      "apiPending": "src/app/api/admin/servers/pending/route.ts",
+      "apiApprove": "src/app/api/admin/servers/[id]/approve/route.ts",
+      "apiReject": "src/app/api/admin/servers/[id]/reject/route.ts",
+      "apiUsers": "src/app/api/admin/users/route.ts",
+      "ui": "src/app/admin/page.tsx",
+      "uiServers": "src/app/admin/servers/page.tsx",
+      "uiUsers": "src/app/admin/users/page.tsx",
+      "tests": "src/__tests__/unit/admin.test.ts"
+    }
+  },
+  {
+    "id": "F013",
+    "name": "Usage-Based Metering",
+    "priority": "P1",
+    "description": "Track per-call usage for usage-based pricing models and bill accordingly",
+    "acceptanceCriteria": [
+      "Given a usage-based server, when an API call is made with a valid API key, then the call is logged with timestamp, endpoint, and response status",
+      "Given a user with a usage-based subscription, when they visit their dashboard, then they see current period usage (calls made vs. free tier limit) and estimated cost",
+      "Given the end of a billing period, when usage exceeds the free tier, then a Stripe invoice is generated for (total calls - free tier) x per-call price",
+      "Given usage approaching the free tier limit, when 80% of free calls are consumed, then the user receives an email notification"
+    ],
+    "dependencies": ["F000", "F005", "F008"],
+    "files": {
+      "engine": "src/lib/metering.ts",
+      "apiRecord": "src/app/api/usage/record/route.ts",
+      "apiSummary": "src/app/api/usage/summary/route.ts",
+      "tests": "src/__tests__/unit/metering.test.ts"
+    }
+  },
+  {
+    "id": "F014",
+    "name": "Featured Listings",
+    "priority": "P1",
+    "description": "Developers pay $29/mo to feature their server with premium placement",
+    "acceptanceCriteria": [
+      "Given the browse page, when loading, then featured servers appear in a highlighted Featured section at the top",
+      "Given a developer clicking Get Featured on their server, when they complete payment ($29/mo via Stripe), then a FeaturedListing record is created and the server shows a Featured badge",
+      "Given a featured listing expiration, when the subscription lapses, then the server is removed from the featured section and the badge is removed"
+    ],
+    "dependencies": ["F000", "F001", "F005"],
+    "files": {
+      "api": "src/app/api/servers/featured/route.ts",
+      "apiFeaturedCheckout": "src/app/api/billing/featured/route.ts",
+      "tests": "src/__tests__/unit/featured.test.ts"
+    }
+  },
+  {
+    "id": "F015",
+    "name": "Managed Hosting",
+    "priority": "P1",
+    "description": "Optional managed hosting for developers who want MCPmarket to run their server",
+    "acceptanceCriteria": [
+      "Given a developer choosing managed hosting during listing, when they provide a Docker image URL or GitHub repo URL, then the platform provisions hosting and assigns a managed endpoint",
+      "Given a managed server, when the developer visits their server settings, then they see uptime status, request count, and error rate for the last 24 hours",
+      "Given a managed hosting subscription, when the developer is billed, then $9/mo is charged via Stripe separately from marketplace revenue share"
+    ],
+    "dependencies": ["F000", "F001", "F005"],
+    "files": {
+      "engine": "src/lib/hosting.ts",
+      "apiHosting": "src/app/api/hosting/provision/route.ts",
+      "apiHostingStatus": "src/app/api/hosting/[serverId]/status/route.ts",
+      "tests": "src/__tests__/unit/hosting.test.ts"
+    }
+  },
+  {
+    "id": "F016",
+    "name": "Team/Org Accounts",
+    "priority": "P2",
+    "description": "Organizations manage centralized billing and access for team members",
+    "acceptanceCriteria": [
+      "Given an org admin, when they create a team at /dashboard/team, then they can invite members by email",
+      "Given a team subscription, when a member is added, then they automatically get API keys for all team-subscribed servers",
+      "Given the org billing page, when viewed, then all team subscriptions are consolidated into a single invoice"
+    ],
+    "dependencies": ["F000", "F004", "F005", "F008"],
+    "files": {
+      "apiTeam": "src/app/api/teams/route.ts",
+      "apiTeamMembers": "src/app/api/teams/[id]/members/route.ts",
+      "ui": "src/app/dashboard/team/page.tsx",
+      "tests": "src/__tests__/unit/teams.test.ts"
+    }
+  },
+  {
+    "id": "F017",
+    "name": "Webhook Notifications",
+    "priority": "P2",
+    "description": "Developers receive webhooks for subscription events (new subscriber, churn, payment)",
+    "acceptanceCriteria": [
+      "Given a developer's webhook settings, when they provide a URL, then the platform sends POST requests for events: subscription.created, subscription.canceled, subscription.payment_failed",
+      "Given a webhook delivery, when it fails (non-2xx response), then the platform retries 3 times with exponential backoff",
+      "Given the developer dashboard, when viewing webhooks, then a log of recent deliveries shows event type, timestamp, response status, and payload"
+    ],
+    "dependencies": ["F000", "F004", "F005"],
+    "files": {
+      "engine": "src/lib/webhooks.ts",
+      "apiWebhookSettings": "src/app/api/developer/webhooks/route.ts",
+      "apiWebhookLogs": "src/app/api/developer/webhooks/logs/route.ts",
+      "ui": "src/app/dashboard/developer/webhooks/page.tsx",
+      "tests": "src/__tests__/unit/webhooks.test.ts"
+    }
+  },
+  {
+    "id": "F018",
+    "name": "Server Version Management",
+    "priority": "P2",
+    "description": "Developers publish and manage multiple versions of their MCP servers",
+    "acceptanceCriteria": [
+      "Given a developer publishing an update, when they submit a new version, then the previous version remains available for 30 days",
+      "Given a server with multiple versions, when a subscriber views the config, then they see the latest version by default with an option to pin to a specific version"
+    ],
+    "dependencies": ["F000", "F001"],
+    "files": {
+      "apiVersions": "src/app/api/servers/[slug]/versions/route.ts",
+      "ui": "src/app/dashboard/developer/servers/[id]/versions/page.tsx",
+      "tests": "src/__tests__/unit/versions.test.ts"
+    }
+  }
+]
