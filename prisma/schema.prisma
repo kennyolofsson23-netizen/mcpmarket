@@ -234,13 +234,14 @@ model UsageRecord {
 }
 
 model DeveloperWebhook {
-  id          String  @id @default(cuid())
-  userId      String
-  url         String
-  secret      String
-  events      String  @default("[]")
-  isActive    Boolean @default(true)
-  description String?
+  id           String  @id @default(cuid())
+  userId       String
+  url          String
+  secretHash   String
+  secretPrefix String
+  events       String  @default("[]")
+  isActive     Boolean @default(true)
+  description  String?
 
   user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   logs WebhookLog[]

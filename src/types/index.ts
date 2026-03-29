@@ -58,6 +58,8 @@ export type ApiKeyPublic = Omit<ApiKey, "keyHash"> & {
   serverName?: string;
 };
 
+export type WebhookPublic = Omit<DeveloperWebhook, "secretHash">;
+
 export type DeveloperStats = {
   totalSubscribers: number;
   totalRevenue: number;
