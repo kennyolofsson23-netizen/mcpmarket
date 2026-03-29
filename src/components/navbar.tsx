@@ -29,7 +29,7 @@ export function Navbar() {
             href="/servers"
             className="transition-colors hover:text-foreground/80"
           >
-            Browse
+            Browse Servers
           </Link>
           <Link
             href="/pricing"
@@ -89,7 +89,7 @@ export function Navbar() {
                 <Link href="/auth/signin">Sign In</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="/auth/signin">List Server</Link>
+                <Link href="/auth/signin">List Your Server</Link>
               </Button>
             </>
           )}

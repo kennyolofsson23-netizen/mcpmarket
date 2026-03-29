@@ -110,7 +110,7 @@ export function Footer() {
               <Github className="w-5 h-5" />
             </a>
             <a
-              href="mailto:support@mcpmarket.example.com"
+              href="mailto:support@mcpmarket.dev"
               className="hover:text-foreground"
             >
               <Mail className="w-5 h-5" />
