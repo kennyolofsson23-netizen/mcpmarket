@@ -1,5 +1,6 @@
-// Set the env var before any module is imported so the guard in stripe.ts passes.
+// Set required env vars before any module import so the guards in stripe.ts don't throw.
 process.env.STRIPE_SECRET_KEY = "sk_test_mock_key";
+process.env.STRIPE_WEBHOOK_SECRET = "whsec_test_mock_secret";
 
 // Mock the stripe npm package so no real Stripe client is created.
 const mockCustomersCreate = jest.fn();

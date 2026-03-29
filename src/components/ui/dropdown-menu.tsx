@@ -33,9 +33,11 @@ function DropdownMenuTrigger({
 
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
-      children as React.ReactElement<{ onClick?: () => void }>,
+      children as React.ReactElement<{ onClick?: () => void; "aria-haspopup"?: string; "aria-expanded"?: boolean }>,
       {
         onClick: handleClick,
+        "aria-haspopup": "menu",
+        "aria-expanded": open,
       },
     );
   }
@@ -67,6 +69,32 @@ function DropdownMenuContent({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setOpen]);
+
+  React.useEffect(() => {
+    if (!open) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        const items = Array.from(
+          ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []
+        );
+        if (items.length === 0) return;
+        const current = document.activeElement;
+        const idx = items.indexOf(current as HTMLElement);
+        if (e.key === "ArrowDown") {
+          items[(idx + 1) % items.length]?.focus();
+        } else {
+          items[(idx - 1 + items.length) % items.length]?.focus();
+        }
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, setOpen]);
 
   if (!open) return null;
   return (

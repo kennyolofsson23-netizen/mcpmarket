@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionItem } from "@/components/ui/accordion";
 import {
   CheckCircle2,
   Zap,
@@ -306,9 +307,8 @@ export default function Home() {
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
             Frequently Asked Questions
           </h2>
-          <div className="space-y-8">
-            <div>
-              <h3 className="font-bold text-lg mb-2">What is MCPmarket?</h3>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1" trigger="What is MCPmarket?">
               <p className="text-gray-600">
                 MCPmarket is the paid marketplace for MCP (Model Context
                 Protocol) servers. Developers list MCP tools with a subscription
@@ -317,11 +317,8 @@ export default function Home() {
                 payouts. It is the only MCP marketplace that combines discovery,
                 managed hosting, and developer monetization in one platform.
               </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-2">
-                How do I list my MCP server on MCPmarket?
-              </h3>
+            </AccordionItem>
+            <AccordionItem value="item-2" trigger="How do I list my MCP server on MCPmarket?">
               <p className="text-gray-600">
                 Sign in with GitHub or Google, upgrade your account to Developer
                 status, and submit your server listing with a name, description,
@@ -330,11 +327,8 @@ export default function Home() {
                 revenue share. Managed hosting ($9/mo per server) and Featured
                 placement ($29/mo per server) are optional add-ons.
               </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-2">
-                What percentage does MCPmarket take from developer revenue?
-              </h3>
+            </AccordionItem>
+            <AccordionItem value="item-3" trigger="What percentage does MCPmarket take from developer revenue?">
               <p className="text-gray-600">
                 MCPmarket takes a 20% platform fee on all subscription and
                 usage-based transactions. Developers keep 80% of gross revenue.
@@ -342,12 +336,8 @@ export default function Home() {
                 month for the prior month&apos;s earnings, with a $25 minimum
                 payout threshold.
               </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-2">
-                Which AI clients can connect to MCP servers listed on
-                MCPmarket?
-              </h3>
+            </AccordionItem>
+            <AccordionItem value="item-4" trigger="Which AI clients can connect to MCP servers listed on MCPmarket?">
               <p className="text-gray-600">
                 Any client that supports the Model Context Protocol can connect,
                 including Claude Desktop, Cursor, Windsurf, and other
@@ -355,11 +345,8 @@ export default function Home() {
                 ready-to-paste JSON configuration snippet for their MCP client
                 settings file — no manual setup required.
               </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-2">
-                How does MCPmarket compare to free MCP directories like mcp.so?
-              </h3>
+            </AccordionItem>
+            <AccordionItem value="item-5" trigger="How does MCPmarket compare to free MCP directories like mcp.so?">
               <p className="text-gray-600">
                 Free directories like mcp.so and mcpservers.org provide listings
                 only — no billing infrastructure, no hosted endpoints, and no
@@ -368,8 +355,8 @@ export default function Home() {
                 metering, and monthly revenue payouts. Developers on MCPmarket
                 earn revenue; developers on free directories do not.
               </p>
-            </div>
-          </div>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
 

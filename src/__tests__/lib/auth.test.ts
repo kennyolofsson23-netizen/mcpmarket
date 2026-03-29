@@ -1,3 +1,10 @@
+// Set required OAuth env vars before any module import so the module-level
+// requireEnv() guards in auth.ts don't throw during test initialization.
+process.env.AUTH_GITHUB_ID = "mock_github_id";
+process.env.AUTH_GITHUB_SECRET = "mock_github_secret";
+process.env.AUTH_GOOGLE_ID = "mock_google_id";
+process.env.AUTH_GOOGLE_SECRET = "mock_google_secret";
+
 // Mock next-auth and its providers before any import so the module-level
 // NextAuth(...) call in auth.ts doesn't execute real initialization.
 const mockAuth = jest.fn();

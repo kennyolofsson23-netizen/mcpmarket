@@ -34,6 +34,7 @@ export const USER_ROLES = {
 } as const;
 
 export const PLATFORM_FEE_PERCENT = 20;
+export const PLATFORM_FEE_DECIMAL = PLATFORM_FEE_PERCENT / 100; // 0.20 — use this for calculations
 export const DEVELOPER_SHARE_PERCENT = 80;
 export const MANAGED_HOSTING_PRICE_CENTS = 900;
 export const FEATURED_LISTING_PRICE_CENTS = 2900;

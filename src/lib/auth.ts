@@ -4,16 +4,22 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
 
+function requireEnv(name: string): string {
+  const val = process.env[name];
+  if (!val) throw new Error(`Missing required environment variable: ${name}`);
+  return val;
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHub({
-      clientId: process.env.AUTH_GITHUB_ID ?? "",
-      clientSecret: process.env.AUTH_GITHUB_SECRET ?? "",
+      clientId: requireEnv("AUTH_GITHUB_ID"),
+      clientSecret: requireEnv("AUTH_GITHUB_SECRET"),
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID ?? "",
-      clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
+      clientId: requireEnv("AUTH_GOOGLE_ID"),
+      clientSecret: requireEnv("AUTH_GOOGLE_SECRET"),
     }),
   ],
   session: {
@@ -23,7 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.role = (user as { role?: string }).role ?? "USER";
+        session.user.role = user.role ?? "USER";
       }
       return session;
     },
@@ -47,7 +53,7 @@ export async function requireRole(role: string) {
   if (!session?.user) {
     throw new Error("Unauthorized");
   }
-  const userRole = (session.user as { role?: string }).role ?? "USER";
+  const userRole = session.user.role ?? "USER";
   if (userRole !== role && !(role === "DEVELOPER" && userRole === "ADMIN")) {
     throw new Error("Forbidden");
   }

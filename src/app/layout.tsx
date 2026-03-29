@@ -151,7 +151,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       </head>
-      <body className={inter.variable}>
+      <body className={`${inter.variable} font-sans`}>
         <Providers>
           <a
             href="#main-content"

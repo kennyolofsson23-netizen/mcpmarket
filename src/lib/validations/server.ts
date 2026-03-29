@@ -62,7 +62,24 @@ export const createServerSchema = serverBaseSchema.superRefine((data, ctx) => {
   }
 });
 
-export const updateServerSchema = serverBaseSchema.partial();
+export const updateServerSchema = serverBaseSchema.partial().superRefine((data, ctx) => {
+  if (data.pricingModel === "SUBSCRIPTION" && data.price !== undefined && data.price <= 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Price is required for subscription pricing",
+      path: ["price"],
+    });
+  }
+  if (data.pricingModel === "USAGE") {
+    if (data.usagePrice !== undefined && data.usagePrice <= 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Usage price is required for usage-based pricing",
+        path: ["usagePrice"],
+      });
+    }
+  }
+});
 
 export type CreateServerInput = z.infer<typeof createServerSchema>;
 export type UpdateServerInput = z.infer<typeof updateServerSchema>;

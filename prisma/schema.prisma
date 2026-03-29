@@ -20,14 +20,16 @@ model User {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  accounts        Account[]
-  sessions        Session[]
-  servers         McpServer[]      @relation("ServerOwner")
-  subscriptions   Subscription[]
-  reviews         Review[]
-  apiKeys         ApiKey[]
-  webhooks        DeveloperWebhook[]
-  teamMemberships TeamMember[]
+  accounts           Account[]
+  sessions           Session[]
+  servers            McpServer[]      @relation("ServerOwner")
+  subscriptions      Subscription[]
+  reviews            Review[]
+  apiKeys            ApiKey[]
+  webhooks           DeveloperWebhook[]
+  teamMemberships    TeamMember[]
+  buyerTransactions  Transaction[]    @relation("BuyerTransactions")
+  sellerTransactions Transaction[]    @relation("SellerTransactions")
 }
 
 model Account {
@@ -82,8 +84,8 @@ model McpServer {
   featuredUntil   DateTime?
 
   pricingModel  String  @default("FREE")
-  price         Float   @default(0)
-  usagePrice    Float?
+  price         Int     @default(0)
+  usagePrice    Int?
   freeCallLimit Int?
   priceId       String?
   productId     String?
@@ -98,18 +100,22 @@ model McpServer {
   dockerImage    String?
   githubRepoUrl  String?
 
-  totalRevenue Float @default(0)
-  platformFee  Float @default(0.20)
+  totalRevenue Int @default(0)
+  platformFee  Int @default(20)
 
   ownerId String
   owner   User   @relation("ServerOwner", fields: [ownerId], references: [id])
 
-  subscriptions  Subscription[]
-  reviews        Review[]
-  serverVersions ServerVersion[]
+  subscriptions   Subscription[]
+  reviews         Review[]
+  serverVersions  ServerVersion[]
+  transactions    Transaction[]    @relation("ServerTransactions")
+  featuredListing FeaturedListing?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
 }
 
 model Subscription {
@@ -123,13 +129,15 @@ model Subscription {
   currentPeriodEnd     DateTime?
   cancelAtPeriodEnd    Boolean   @default(false)
 
-  user   User      @relation(fields: [userId], references: [id])
-  server McpServer @relation(fields: [serverId], references: [id])
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  server McpServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, serverId])
+  @@index([userId])
+  @@index([serverId])
 }
 
 model Review {
@@ -139,13 +147,15 @@ model Review {
   userId   String
   serverId String
 
-  user   User      @relation(fields: [userId], references: [id])
-  server McpServer @relation(fields: [serverId], references: [id])
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  server McpServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, serverId])
+  @@index([userId])
+  @@index([serverId])
 }
 
 model ApiKey {
@@ -160,19 +170,21 @@ model ApiKey {
   permissions String    @default("[]")
   isActive    Boolean   @default(true)
 
-  user         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   usageRecords UsageRecord[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model Transaction {
   id                    String  @id @default(cuid())
-  amount                Float
+  amount                Int
   currency              String  @default("usd")
-  platformFee           Float
-  developerPayout       Float
+  platformFee           Int
+  developerPayout       Int
   status                String  @default("PENDING")
   stripePaymentIntentId String?
   stripeTransferId      String?
@@ -181,7 +193,15 @@ model Transaction {
   sellerId              String
   subscriptionId        String?
 
+  server McpServer @relation("ServerTransactions", fields: [serverId], references: [id])
+  buyer  User      @relation("BuyerTransactions", fields: [buyerId], references: [id])
+  seller User      @relation("SellerTransactions", fields: [sellerId], references: [id])
+
   createdAt DateTime @default(now())
+
+  @@index([serverId])
+  @@index([buyerId])
+  @@index([sellerId])
 }
 
 model FeaturedListing {
@@ -191,6 +211,8 @@ model FeaturedListing {
   endDate              DateTime
   paid                 Boolean  @default(false)
   stripeSubscriptionId String?
+
+  server McpServer @relation(fields: [serverId], references: [id])
 
   createdAt DateTime @default(now())
 }
@@ -204,7 +226,11 @@ model UsageRecord {
   statusCode Int?
   createdAt  DateTime @default(now())
 
-  apiKey ApiKey @relation(fields: [apiKeyId], references: [id])
+  apiKey ApiKey @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@index([apiKeyId])
+  @@index([serverId])
+  @@index([userId])
 }
 
 model DeveloperWebhook {
@@ -216,11 +242,13 @@ model DeveloperWebhook {
   isActive    Boolean @default(true)
   description String?
 
-  user User        @relation(fields: [userId], references: [id])
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   logs WebhookLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model WebhookLog {
@@ -233,9 +261,11 @@ model WebhookLog {
   success    Boolean @default(false)
   attempts   Int     @default(1)
 
-  webhook DeveloperWebhook @relation(fields: [webhookId], references: [id])
+  webhook DeveloperWebhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+
+  @@index([webhookId])
 }
 
 model ServerVersion {
@@ -248,9 +278,11 @@ model ServerVersion {
   deprecated   Boolean   @default(false)
   deprecatedAt DateTime?
 
-  server McpServer @relation(fields: [serverId], references: [id])
+  server McpServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+
+  @@index([serverId])
 }
 
 model Team {
@@ -272,8 +304,8 @@ model TeamMember {
   userId String
   role   String @default("MEMBER")
 
-  team Team @relation(fields: [teamId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 

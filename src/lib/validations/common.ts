@@ -19,7 +19,10 @@ export const idSchema = z.object({
 });
 
 export const slugSchema = z.object({
-  slug: z.string().min(1),
+  slug: z.string().min(1).max(100).regex(
+    /^[a-z0-9]+(?:[a-z0-9-]*[a-z0-9])?$/,
+    "Slug must contain only lowercase letters, numbers, and hyphens"
+  ),
 });
 
 export const emailSchema = z.object({

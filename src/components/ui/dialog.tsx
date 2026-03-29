@@ -4,6 +4,14 @@ import * as React from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const FOCUSABLE_SELECTORS =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+interface DialogContextValue {
+  titleId: string;
+}
+const DialogContext = React.createContext<DialogContextValue>({ titleId: "" });
+
 interface DialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -11,20 +19,71 @@ interface DialogProps {
 }
 
 function Dialog({ open, onOpenChange, children }: DialogProps) {
+  const titleId = React.useId();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const previousFocusRef = React.useRef<HTMLElement | null>(null);
+
+  React.useEffect(() => {
+    if (open) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      const frame = requestAnimationFrame(() => {
+        const focusable = containerRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS);
+        focusable?.[0]?.focus();
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+    previousFocusRef.current?.focus();
+    return undefined;
+  }, [open]);
+
+  React.useEffect(() => {
+    if (!open) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        onOpenChange?.(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const focusable = Array.from(
+        containerRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS) ?? []
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, onOpenChange]);
+
   if (!open) return null;
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center"
-    >
+    <DialogContext.Provider value={{ titleId }}>
       <div
-        className="fixed inset-0 bg-black/50"
-        onClick={() => onOpenChange?.(false)}
-        aria-hidden="true"
-      />
-      <div className="relative z-50">{children}</div>
-    </div>
+        ref={containerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="fixed inset-0 z-50 flex items-center justify-center"
+      >
+        <div
+          className="fixed inset-0 bg-black/50"
+          onClick={() => onOpenChange?.(false)}
+          aria-hidden="true"
+        />
+        <div className="relative z-50">{children}</div>
+      </div>
+    </DialogContext.Provider>
   );
 }
 
@@ -73,7 +132,14 @@ function DialogTitle({
   className,
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={cn("text-lg font-semibold", className)} {...props} />;
+  const { titleId } = React.useContext(DialogContext);
+  return (
+    <h2
+      id={titleId}
+      className={cn("text-lg font-semibold", className)}
+      {...props}
+    />
+  );
 }
 
 function DialogDescription({

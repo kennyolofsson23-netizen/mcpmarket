@@ -49,14 +49,26 @@ function renderMarkdown(raw: string): string {
     /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
     '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">$1</a>',
   );
-  // Unordered list
-  html = html.replace(/^\- (.+)$/gm, '<li class="ml-4">$1</li>');
+  // Unordered list items → temporary marker
+  html = html.replace(/^\- (.+)$/gm, '<LI_UL>$1</LI_UL>');
+  // Ordered list items → temporary marker
+  html = html.replace(/^\d+\. (.+)$/gm, '<LI_OL>$1</LI_OL>');
+  // Group consecutive UL items
   html = html.replace(
-    /(<li[\s\S]*?<\/li>)/gm,
-    '<ul class="list-disc my-2">$1</ul>',
+    /(?:<LI_UL>.*?<\/LI_UL>\n?)+/gs,
+    (match) => {
+      const items = match.replace(/<LI_UL>(.*?)<\/LI_UL>\n?/gs, '<li class="ml-4">$1</li>');
+      return `<ul class="list-disc my-2">${items}</ul>`;
+    }
   );
-  // Ordered list
-  html = html.replace(/^\d+\. (.+)$/gm, '<li class="ml-4">$1</li>');
+  // Group consecutive OL items
+  html = html.replace(
+    /(?:<LI_OL>.*?<\/LI_OL>\n?)+/gs,
+    (match) => {
+      const items = match.replace(/<LI_OL>(.*?)<\/LI_OL>\n?/gs, '<li class="ml-4">$1</li>');
+      return `<ol class="list-decimal my-2">${items}</ol>`;
+    }
+  );
   // Paragraphs
   html = html.replace(/\n\n(.+?)(?=\n\n|$)/gs, '<p class="mb-4">$1</p>');
   // Newlines
