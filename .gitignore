@@ -52,3 +52,5 @@ prisma/dev.db-journal
 .AppleDouble
 .LSOverride
 Thumbs.db
+
+.vercel
