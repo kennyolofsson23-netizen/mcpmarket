@@ -1,0 +1,24 @@
+# MCPmarket
+
+MCPmarket is the paid marketplace for MCP (Model Context Protocol) servers. Developers list MCP tools with subscription or usage-based pricing. Users subscribe and get managed hosting, API key auth, and billing handled automatically. The platform takes a 20% revenue share; developers keep 80%.
+
+## Key Pages
+- / — Landing page with value proposition, pricing tiers, and FAQ
+- /servers — Browse and search all APPROVED MCP servers
+- /servers/[slug] — Server detail page with README, pricing, reviews, and install config
+- /pricing — Full pricing page: Basic (free + 20% rev share), Managed Hosting ($9/mo), Featured ($29/mo)
+- /auth/signin — GitHub or Google OAuth sign-in
+- /dashboard — User dashboard: subscriptions, API keys, billing
+- /dashboard/developer — Developer dashboard: analytics, revenue, server management
+
+## Pricing Model
+- Basic: Free to list, 20% platform fee on all transactions
+- Managed Hosting: $9/month per server (Docker or GitHub repo hosting)
+- Featured Listing: $29/month per server (premium placement at top of browse page)
+- Developer payout: 80% of gross revenue via Stripe Connect, paid monthly
+
+## MCP Protocol
+MCPmarket serves the Model Context Protocol ecosystem. MCP servers are tools that AI clients (Claude Desktop, Cursor, Windsurf) can connect to. After subscribing, users receive a JSON config snippet to add to their MCP client settings.
+
+## About
+Built for the MCP ecosystem post-universal adoption (Q1 2026). 97M+ SDK downloads/month. Solving the monetization gap: 11,000+ MCP servers exist, less than 5% monetized.
