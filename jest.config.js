@@ -6,7 +6,8 @@ const config = {
   testMatch: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.test.tsx"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
-    "^@auth/prisma-adapter$": "<rootDir>/src/__tests__/__mocks__/prisma-adapter.ts",
+    "^@auth/prisma-adapter$":
+      "<rootDir>/src/__tests__/__mocks__/prisma-adapter.ts",
   },
   transform: {
     "^.+\\.tsx?$": [
@@ -25,10 +26,7 @@ const config = {
     customExportConditions: ["node", "require", "default"],
   },
   clearMocks: true,
-  collectCoverageFrom: [
-    "src/lib/**/*.ts",
-    "!src/lib/prisma.ts",
-  ],
+  collectCoverageFrom: ["src/lib/**/*.ts", "!src/lib/prisma.ts"],
 };
 
 module.exports = config;

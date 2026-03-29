@@ -28,7 +28,10 @@ export function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <nav aria-label="Main navigation" className="hidden sm:flex flex-1 gap-6 text-sm">
+        <nav
+          aria-label="Main navigation"
+          className="hidden sm:flex flex-1 gap-6 text-sm"
+        >
           <Link
             href="/servers"
             className="transition-colors hover:text-foreground/80"
@@ -112,7 +115,11 @@ export function Navbar() {
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </button>
         </div>
 
@@ -128,10 +135,16 @@ export function Navbar() {
               </Link>
               {!user && (
                 <>
-                  <Link href="/auth/signin" onClick={() => setMobileOpen(false)}>
+                  <Link
+                    href="/auth/signin"
+                    onClick={() => setMobileOpen(false)}
+                  >
                     Sign In
                   </Link>
-                  <Link href="/auth/signin" onClick={() => setMobileOpen(false)}>
+                  <Link
+                    href="/auth/signin"
+                    onClick={() => setMobileOpen(false)}
+                  >
                     List Your Server
                   </Link>
                 </>

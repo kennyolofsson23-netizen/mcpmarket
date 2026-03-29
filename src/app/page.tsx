@@ -143,8 +143,8 @@ export default function Home() {
               <Shield className="w-8 h-8 text-blue-600" />
               <h3 className="font-bold text-lg">Stripe-Powered Billing</h3>
               <p className="text-gray-600 text-sm">
-                Subscriptions, usage-based billing, and one-click checkout —
-                all PCI-compliant. You never touch payment infrastructure.
+                Subscriptions, usage-based billing, and one-click checkout — all
+                PCI-compliant. You never touch payment infrastructure.
               </p>
             </div>
             <div className="space-y-4">
@@ -152,8 +152,7 @@ export default function Home() {
               <h3 className="font-bold text-lg">Optional Managed Hosting</h3>
               <p className="text-gray-600 text-sm">
                 Deploy from a Docker image or GitHub repo. We provision the
-                endpoint, handle SSL, and monitor uptime — for $9/mo per
-                server.
+                endpoint, handle SSL, and monitor uptime — for $9/mo per server.
               </p>
             </div>
             <div className="space-y-4">
@@ -318,7 +317,10 @@ export default function Home() {
                 managed hosting, and developer monetization in one platform.
               </p>
             </AccordionItem>
-            <AccordionItem value="item-2" trigger="How do I list my MCP server on MCPmarket?">
+            <AccordionItem
+              value="item-2"
+              trigger="How do I list my MCP server on MCPmarket?"
+            >
               <p className="text-gray-600">
                 Sign in with GitHub or Google, upgrade your account to Developer
                 status, and submit your server listing with a name, description,
@@ -328,7 +330,10 @@ export default function Home() {
                 placement ($29/mo per server) are optional add-ons.
               </p>
             </AccordionItem>
-            <AccordionItem value="item-3" trigger="What percentage does MCPmarket take from developer revenue?">
+            <AccordionItem
+              value="item-3"
+              trigger="What percentage does MCPmarket take from developer revenue?"
+            >
               <p className="text-gray-600">
                 MCPmarket takes a 20% platform fee on all subscription and
                 usage-based transactions. Developers keep 80% of gross revenue.
@@ -337,7 +342,10 @@ export default function Home() {
                 payout threshold.
               </p>
             </AccordionItem>
-            <AccordionItem value="item-4" trigger="Which AI clients can connect to MCP servers listed on MCPmarket?">
+            <AccordionItem
+              value="item-4"
+              trigger="Which AI clients can connect to MCP servers listed on MCPmarket?"
+            >
               <p className="text-gray-600">
                 Any client that supports the Model Context Protocol can connect,
                 including Claude Desktop, Cursor, Windsurf, and other
@@ -346,7 +354,10 @@ export default function Home() {
                 settings file — no manual setup required.
               </p>
             </AccordionItem>
-            <AccordionItem value="item-5" trigger="How does MCPmarket compare to free MCP directories like mcp.so?">
+            <AccordionItem
+              value="item-5"
+              trigger="How does MCPmarket compare to free MCP directories like mcp.so?"
+            >
               <p className="text-gray-600">
                 Free directories like mcp.so and mcpservers.org provide listings
                 only — no billing infrastructure, no hosted endpoints, and no

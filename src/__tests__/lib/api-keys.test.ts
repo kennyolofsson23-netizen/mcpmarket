@@ -69,7 +69,7 @@ describe("hashApiKey", () => {
   it("produces the known SHA-256 hash of 'hello'", () => {
     // SHA-256("hello") is well-known
     expect(hashApiKey("hello")).toBe(
-      "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+      "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824",
     );
   });
 });
@@ -96,7 +96,9 @@ describe("extractBearerToken", () => {
   });
 
   it("returns the full token including any special characters", () => {
-    expect(extractBearerToken("Bearer abc.def_ghi-123")).toBe("abc.def_ghi-123");
+    expect(extractBearerToken("Bearer abc.def_ghi-123")).toBe(
+      "abc.def_ghi-123",
+    );
   });
 
   it("returns an empty string when 'Bearer ' has nothing after the space", () => {

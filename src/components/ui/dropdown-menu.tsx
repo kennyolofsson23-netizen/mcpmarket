@@ -33,7 +33,11 @@ function DropdownMenuTrigger({
 
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
-      children as React.ReactElement<{ onClick?: () => void; "aria-haspopup"?: string; "aria-expanded"?: boolean }>,
+      children as React.ReactElement<{
+        onClick?: () => void;
+        "aria-haspopup"?: string;
+        "aria-expanded"?: boolean;
+      }>,
       {
         onClick: handleClick,
         "aria-haspopup": "menu",
@@ -80,7 +84,7 @@ function DropdownMenuContent({
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         e.preventDefault();
         const items = Array.from(
-          ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []
+          ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [],
         );
         if (items.length === 0) return;
         const current = document.activeElement;

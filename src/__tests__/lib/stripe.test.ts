@@ -167,7 +167,7 @@ describe("createCheckoutSession", () => {
           application_fee_percent: 20,
           transfer_data: { destination: "acct_developer_123" },
         },
-      })
+      }),
     );
   });
 
@@ -250,13 +250,13 @@ describe("constructWebhookEvent", () => {
     const result = constructWebhookEvent(
       '{"id":"evt_123"}',
       "stripe_signature_header",
-      "whsec_test_secret"
+      "whsec_test_secret",
     );
 
     expect(mockWebhooksConstructEvent).toHaveBeenCalledWith(
       '{"id":"evt_123"}',
       "stripe_signature_header",
-      "whsec_test_secret"
+      "whsec_test_secret",
     );
     expect(result).toBe(mockEvent);
   });
@@ -270,8 +270,8 @@ describe("constructWebhookEvent", () => {
       constructWebhookEvent(
         "bad_payload",
         "bad_signature",
-        "whsec_test_secret"
-      )
+        "whsec_test_secret",
+      ),
     ).toThrow("No signatures found matching the expected signature");
   });
 });

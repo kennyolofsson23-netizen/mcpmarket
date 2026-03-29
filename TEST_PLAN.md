@@ -27,16 +27,16 @@
 
 MCPmarket is a **payments-critical marketplace**. The blast radius of a bug varies enormously by subsystem:
 
-| Subsystem | Bug Cost | Test Priority |
-|-----------|----------|---------------|
-| Stripe webhook handler | Revenue loss, wrong payouts | **Critical** |
-| API key hashing / verification | Security breach | **Critical** |
-| Revenue split calculation (80/20) | Financial liability | **Critical** |
-| Auth / RBAC enforcement | Privilege escalation | **Critical** |
-| Server approval workflow | Bad actor exposure | **High** |
-| Subscription lifecycle | Customer churn | **High** |
-| Search / browse / pagination | Poor UX | **Medium** |
-| UI cosmetics / copy | Low | **Low** |
+| Subsystem                         | Bug Cost                    | Test Priority |
+| --------------------------------- | --------------------------- | ------------- |
+| Stripe webhook handler            | Revenue loss, wrong payouts | **Critical**  |
+| API key hashing / verification    | Security breach             | **Critical**  |
+| Revenue split calculation (80/20) | Financial liability         | **Critical**  |
+| Auth / RBAC enforcement           | Privilege escalation        | **Critical**  |
+| Server approval workflow          | Bad actor exposure          | **High**      |
+| Subscription lifecycle            | Customer churn              | **High**      |
+| Search / browse / pagination      | Poor UX                     | **Medium**    |
+| UI cosmetics / copy               | Low                         | **Low**       |
 
 Tests are written **risk-first, not coverage-first**. A 100% line-coverage number that misses the Stripe signature bypass is worthless.
 
@@ -56,14 +56,14 @@ Tests are written **risk-first, not coverage-first**. A 100% line-coverage numbe
 
 ### 1.3 Boundary Decisions
 
-| Boundary | Decision |
-|----------|----------|
-| Stripe SDK calls | **Mock** at the `stripe.*` call level; never hit real Stripe in unit/integration |
-| Prisma DB | **Real SQLite** in-memory for integration tests (reset per suite via `prisma migrate reset`) |
-| NextAuth session | **Inject synthetic session** via test helper `withSession(role)` |
-| External OAuth | **Never called**; NextAuth adapter is mocked |
-| Stripe webhooks | **Reconstruct real signature** using `stripe.webhooks.generateTestHeaderString` |
-| Email delivery | Out of scope for V1; no tests needed |
+| Boundary         | Decision                                                                                     |
+| ---------------- | -------------------------------------------------------------------------------------------- |
+| Stripe SDK calls | **Mock** at the `stripe.*` call level; never hit real Stripe in unit/integration             |
+| Prisma DB        | **Real SQLite** in-memory for integration tests (reset per suite via `prisma migrate reset`) |
+| NextAuth session | **Inject synthetic session** via test helper `withSession(role)`                             |
+| External OAuth   | **Never called**; NextAuth adapter is mocked                                                 |
+| Stripe webhooks  | **Reconstruct real signature** using `stripe.webhooks.generateTestHeaderString`              |
+| Email delivery   | Out of scope for V1; no tests needed                                                         |
 
 ---
 
@@ -71,14 +71,14 @@ Tests are written **risk-first, not coverage-first**. A 100% line-coverage numbe
 
 ### 2.1 Tooling Matrix
 
-| Layer | Tool | Config file |
-|-------|------|-------------|
-| Unit | **Vitest** | `vitest.config.ts` |
-| Integration | **Vitest** + `@vitest/coverage-v8` + **MSW** for Stripe calls | `vitest.integration.config.ts` |
-| E2E | **Playwright** | `playwright.config.ts` |
-| Property-based | **fast-check** (runs inside Vitest) | same as unit |
-| Visual regression | **Playwright** screenshot assertions (smoke only) | `playwright.config.ts` |
-| DB fixtures | **prisma-test-environment** (custom) | `tests/setup/prisma.ts` |
+| Layer             | Tool                                                          | Config file                    |
+| ----------------- | ------------------------------------------------------------- | ------------------------------ |
+| Unit              | **Vitest**                                                    | `vitest.config.ts`             |
+| Integration       | **Vitest** + `@vitest/coverage-v8` + **MSW** for Stripe calls | `vitest.integration.config.ts` |
+| E2E               | **Playwright**                                                | `playwright.config.ts`         |
+| Property-based    | **fast-check** (runs inside Vitest)                           | same as unit                   |
+| Visual regression | **Playwright** screenshot assertions (smoke only)             | `playwright.config.ts`         |
+| DB fixtures       | **prisma-test-environment** (custom)                          | `tests/setup/prisma.ts`        |
 
 ### 2.2 Scripts
 
@@ -339,6 +339,7 @@ UT-CONST-010  SUBSCRIPTION_STATUSES contains ACTIVE, CANCELED, PAST_DUE
 ## 4. Integration Tests (API Routes)
 
 Integration tests use:
+
 - **Real SQLite** DB (Prisma, reset between suites)
 - **MSW** to intercept outbound Stripe API calls
 - **Synthetic session injection** via custom Next.js test wrapper
@@ -1027,25 +1028,28 @@ Run via **fast-check** inside Vitest unit tests.
 
 ```typescript
 // PBT-SER-001: API response types round-trip through JSON
-fc.property(fc.record({
-  id: fc.uuid(),
-  name: fc.string({ minLength: 2, maxLength: 100 }),
-  price: fc.integer({ min: 0, max: 1_000_000 })
-}), (server) => {
-  expect(JSON.parse(JSON.stringify(server))).toEqual(server);
-})
+fc.property(
+  fc.record({
+    id: fc.uuid(),
+    name: fc.string({ minLength: 2, maxLength: 100 }),
+    price: fc.integer({ min: 0, max: 1_000_000 }),
+  }),
+  (server) => {
+    expect(JSON.parse(JSON.stringify(server))).toEqual(server);
+  },
+);
 
 // PBT-SER-002: formatPrice(n) always produces a string starting with "$"
 fc.property(fc.integer({ min: 0, max: 1_000_000 }), (cents) => {
   expect(formatPrice(cents)).toMatch(/^\$/);
-})
+});
 
 // PBT-SER-003: formatPrice never loses cents precision
 fc.property(fc.integer({ min: 0, max: 9_999_999 }), (cents) => {
   const formatted = formatPrice(cents);
-  const reparsed = Math.round(parseFloat(formatted.replace('$', '')) * 100);
+  const reparsed = Math.round(parseFloat(formatted.replace("$", "")) * 100);
   expect(reparsed).toBe(cents);
-})
+});
 ```
 
 ### 6.2 Validator Invariants
@@ -1054,45 +1058,53 @@ fc.property(fc.integer({ min: 0, max: 9_999_999 }), (cents) => {
 // PBT-VAL-001: hashApiKey is stable (deterministic, pure)
 fc.property(fc.string({ minLength: 1 }), (key) => {
   expect(hashApiKey(key)).toBe(hashApiKey(key));
-})
+});
 
 // PBT-VAL-002: hashApiKey always returns 64-char hex
 fc.property(fc.string({ minLength: 1 }), (key) => {
   expect(hashApiKey(key)).toMatch(/^[0-9a-f]{64}$/);
-})
+});
 
 // PBT-VAL-003: generateApiKey always passes its own keyHash verification
 fc.property(fc.constant(null), () => {
   const { key, keyHash } = generateApiKey();
   expect(hashApiKey(key)).toBe(keyHash);
-})
+});
 
 // PBT-VAL-004: Revenue split is always exact and loss-free
 fc.property(fc.integer({ min: 0, max: 10_000_000 }), (amount) => {
-  expect(calculatePlatformFee(amount) + calculateDeveloperShare(amount)).toBe(amount);
-})
+  expect(calculatePlatformFee(amount) + calculateDeveloperShare(amount)).toBe(
+    amount,
+  );
+});
 
 // PBT-VAL-005: Platform fee is always ~20% (within rounding)
 fc.property(fc.integer({ min: 100, max: 10_000_000 }), (amount) => {
   const fee = calculatePlatformFee(amount);
   expect(fee / amount).toBeCloseTo(0.2, 1);
-})
+});
 
 // PBT-VAL-006: Pagination always returns non-negative page numbers
 fc.property(
-  fc.record({ page: fc.integer({ min: 1, max: 1000 }), limit: fc.integer({ min: 1, max: 100 }) }),
+  fc.record({
+    page: fc.integer({ min: 1, max: 1000 }),
+    limit: fc.integer({ min: 1, max: 100 }),
+  }),
   (params) => {
     const result = paginationSchema.safeParse(params);
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.page).toBeGreaterThanOrEqual(1);
-  }
-)
+  },
+);
 
 // PBT-VAL-007: Slug generation is always URL-safe
-fc.property(fc.string({ minLength: 2, maxLength: 100, unit: 'grapheme-ascii' }), (name) => {
-  const slug = generateSlug(name);
-  expect(slug).toMatch(/^[a-z0-9-]+$/);
-})
+fc.property(
+  fc.string({ minLength: 2, maxLength: 100, unit: "grapheme-ascii" }),
+  (name) => {
+    const slug = generateSlug(name);
+    expect(slug).toMatch(/^[a-z0-9-]+$/);
+  },
+);
 ```
 
 ### 6.3 Security Properties
@@ -1100,17 +1112,18 @@ fc.property(fc.string({ minLength: 2, maxLength: 100, unit: 'grapheme-ascii' }),
 ```typescript
 // PBT-SEC-001: No two distinct inputs share the same hash (collision resistance sample)
 fc.property(
-  fc.tuple(fc.string({ minLength: 1 }), fc.string({ minLength: 1 }))
+  fc
+    .tuple(fc.string({ minLength: 1 }), fc.string({ minLength: 1 }))
     .filter(([a, b]) => a !== b),
   ([a, b]) => {
     expect(hashApiKey(a)).not.toBe(hashApiKey(b));
-  }
-)
+  },
+);
 
 // PBT-SEC-002: Platform fee is never zero for any positive amount > 4 cents
 fc.property(fc.integer({ min: 5, max: 10_000_000 }), (amount) => {
   expect(calculatePlatformFee(amount)).toBeGreaterThan(0);
-})
+});
 ```
 
 ---
@@ -1119,80 +1132,80 @@ fc.property(fc.integer({ min: 5, max: 10_000_000 }), (amount) => {
 
 Every SPEC.md acceptance criterion maps to at least one test.
 
-| Feature | Acceptance Criterion | Test ID(s) |
-|---------|---------------------|------------|
-| **F001** Server Listing | Developer can create server listing with name, description, category, pricing | IT-SRV-CRT-005..007, E2E-PUB-003..004 |
-| F001 | Server requires admin approval before visibility | IT-SRV-CRT-005 (status=PENDING), E2E-PUB-005, IT-ADM-003..004 |
-| F001 | Supported pricing: FREE, SUBSCRIPTION, USAGE | IT-SRV-CRT-005..007, UT-VAL-SRV-001..003 |
-| F001 | SUBSCRIPTION requires price > 0 | UT-VAL-SRV-014..015, IT-SRV-CRT-013 |
-| F001 | USAGE requires pricePerCall + freeCallLimit | UT-VAL-SRV-016..017, IT-SRV-CRT-014 |
-| F001 | Endpoint required unless managedHosting=true | UT-VAL-SRV-020..022, IT-SRV-CRT-008 |
-| F001 | Developer can edit own listing | IT-SRV-UPD-003, E2E-PUB-012..013 |
-| F001 | Only owner or ADMIN can edit/delete | IT-SRV-UPD-002, IT-SRV-DEL-002..003 |
-| **F002** Discovery | Browse/search by keyword | IT-SRV-LST-003, E2E-BROWSE-003 |
-| F002 | Filter by category | IT-SRV-LST-004, E2E-BROWSE-004 |
-| F002 | Filter by pricing model | IT-SRV-LST-005, E2E-BROWSE-005 |
-| F002 | Sort by popular/newest/rating | IT-SRV-LST-006..008, E2E-BROWSE-006 |
-| F002 | Pagination | IT-SRV-LST-009..010, E2E-BROWSE-007 |
-| F002 | Only APPROVED servers visible | IT-SRV-LST-002, IT-SRV-LST-012 |
-| **F003** Server Detail | Display full server info | IT-SRV-DTL-001, E2E-DETAIL-002 |
-| F003 | Subscribe CTA for paid servers | E2E-DETAIL-003 |
-| F003 | MCP config snippet after subscription | IT-SUB-CFG-003..005, E2E-SUB-007 |
-| F003 | Unauthenticated subscribe → redirect to sign in | E2E-DETAIL-004 |
-| **F004** Auth | GitHub OAuth sign in | E2E-AUTH-001..002 |
-| F004 | Google OAuth sign in | E2E-AUTH-001..002 |
-| F004 | Session persistence | E2E-AUTH-003 |
-| F004 | Protected routes enforce auth | E2E-AUTH-005 |
-| F004 | Role-based route protection | UT-AUTH-003..009, E2E-AUTH-006..007 |
-| F004 | Upgrade USER → DEVELOPER | IT-AUTH-UPG-001..004, E2E-PUB-001..002 |
-| **F005** Billing | Stripe Checkout for SUBSCRIPTION servers | IT-SUB-CHK-003..004, E2E-SUB-001 |
-| F005 | FREE server has no checkout | IT-SUB-CHK-002 |
-| F005 | Duplicate subscription blocked | IT-SUB-CHK-003 |
-| F005 | checkout.session.completed creates Subscription | IT-WH-004 |
-| F005 | Subscription visible in dashboard | E2E-SUB-002..003 |
-| F005 | Cancel at period end | IT-SUB-CAN-003, E2E-SUB-005..006 |
-| F005 | Stripe Customer Portal | IT-BIL-PRT-003, E2E-SUB-004 |
-| F005 | invoice.payment_failed → PAST_DUE | IT-WH-011 |
-| F005 | Config snippet access for ACTIVE subscribers only | IT-SUB-CFG-003..004, IT-VFY-004 |
-| **F006** Dev Dashboard | Aggregate stats (revenue, subscribers) | IT-DEV-001..003, E2E-DEV-001 |
-| F006 | Revenue charts | E2E-DEV-002 |
-| F006 | Per-server analytics | IT-DEV-005..006, E2E-DEV-004..005 |
-| F006 | Stripe Connect setup | IT-BIL-CON-003..005, E2E-DEV-006..008 |
-| F006 | Transaction history | IT-DEV-008..009, E2E-DEV-009 |
-| **F007** User Dashboard | Subscription list | IT-SUB-LST-001..003, E2E-USR-001..002 |
-| F007 | Config snippet access | IT-SUB-CFG-003, E2E-USR-003 |
-| F007 | Cancel subscription | IT-SUB-CAN-003, E2E-USR-004 |
-| F007 | PAST_DUE status visibility | IT-WH-011, E2E-USR-005 |
-| **F008** API Keys | Generate key (shown once) | IT-KEY-CRT-001..004, E2E-KEY-003..005 |
-| F008 | Key stored as SHA-256 hash only | IT-KEY-CRT-004, UT-KEY-019, PBT-VAL-001..002 |
-| F008 | List keys (prefix only) | IT-KEY-LST-002, E2E-KEY-006 |
-| F008 | Revoke key | IT-KEY-DEL-003..004, E2E-KEY-007..008 |
-| F008 | Verify key via Bearer token | IT-VFY-001..008 |
-| F008 | Expired keys rejected | IT-VFY-005 |
-| **F009** Payouts | Stripe Connect Express onboarding | IT-BIL-CON-003..005, E2E-PAY-001..003 |
-| F009 | 80/20 revenue split | IT-WH-006, IT-WH-018..020, UT-STRIPE-001..007, PBT-VAL-004..005, E2E-PAY-004 |
-| F009 | Platform fee correct in Transaction record | IT-WH-006, IT-WH-018..020 |
-| F009 | account.updated webhook updates onboarded status | IT-WH-016..017 |
-| **F010** Landing | Hero section + CTAs | E2E-LND-001..003 |
-| F010 | Featured servers section | IT-SRV-FTR-001..003, E2E-LND-004 |
-| F010 | LCP < 2500ms | E2E-LND-005 |
-| **F011** Reviews (P1) | Subscriber can submit review | IT-REV-CRT-003, E2E-REV-002 |
-| F011 | Non-subscriber blocked | IT-REV-CRT-002, E2E-REV-006 |
-| F011 | Edit own review (upsert) | IT-REV-CRT-004, E2E-REV-005 |
-| F011 | Rating 1-5 validation | UT-VAL-REV-001..005, IT-REV-CRT-005..006 |
-| F011 | avgRating updated on server | IT-REV-CRT-008, E2E-REV-004 |
-| **F012** Admin (P1) | Pending approval queue | IT-ADM-001..002, E2E-ADM-002 |
-| F012 | Approve listing | IT-ADM-003..006, E2E-ADM-003 |
-| F012 | Reject with reason | IT-ADM-007..009, E2E-ADM-004..005 |
-| F012 | ADMIN-only access | IT-ADM-001, E2E-ADM-001 |
-| F012 | Platform stats | IT-ADM-011..012, E2E-ADM-006 |
-| **NFR** Security | OAuth-only auth (no passwords) | E2E-AUTH-001 |
-| NFR | API keys SHA-256 hashed only | UT-KEY-006..010, IT-KEY-CRT-004, PBT-VAL-001..003 |
-| NFR | Stripe webhook signature verified | IT-WH-001..003 |
-| NFR | RBAC on all protected routes | UT-AUTH-001..009, IT-SRV-CRT-001..004 |
-| NFR | No stack traces in error responses | IT-SRV-CRT-017 (500 body check) |
-| NFR | Revenue split always sums to 100% | UT-STRIPE-003, PBT-VAL-004 |
-| NFR | p95 API response < 200ms | Flag for k6 load tests (out of Vitest scope) |
+| Feature                 | Acceptance Criterion                                                          | Test ID(s)                                                                   |
+| ----------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **F001** Server Listing | Developer can create server listing with name, description, category, pricing | IT-SRV-CRT-005..007, E2E-PUB-003..004                                        |
+| F001                    | Server requires admin approval before visibility                              | IT-SRV-CRT-005 (status=PENDING), E2E-PUB-005, IT-ADM-003..004                |
+| F001                    | Supported pricing: FREE, SUBSCRIPTION, USAGE                                  | IT-SRV-CRT-005..007, UT-VAL-SRV-001..003                                     |
+| F001                    | SUBSCRIPTION requires price > 0                                               | UT-VAL-SRV-014..015, IT-SRV-CRT-013                                          |
+| F001                    | USAGE requires pricePerCall + freeCallLimit                                   | UT-VAL-SRV-016..017, IT-SRV-CRT-014                                          |
+| F001                    | Endpoint required unless managedHosting=true                                  | UT-VAL-SRV-020..022, IT-SRV-CRT-008                                          |
+| F001                    | Developer can edit own listing                                                | IT-SRV-UPD-003, E2E-PUB-012..013                                             |
+| F001                    | Only owner or ADMIN can edit/delete                                           | IT-SRV-UPD-002, IT-SRV-DEL-002..003                                          |
+| **F002** Discovery      | Browse/search by keyword                                                      | IT-SRV-LST-003, E2E-BROWSE-003                                               |
+| F002                    | Filter by category                                                            | IT-SRV-LST-004, E2E-BROWSE-004                                               |
+| F002                    | Filter by pricing model                                                       | IT-SRV-LST-005, E2E-BROWSE-005                                               |
+| F002                    | Sort by popular/newest/rating                                                 | IT-SRV-LST-006..008, E2E-BROWSE-006                                          |
+| F002                    | Pagination                                                                    | IT-SRV-LST-009..010, E2E-BROWSE-007                                          |
+| F002                    | Only APPROVED servers visible                                                 | IT-SRV-LST-002, IT-SRV-LST-012                                               |
+| **F003** Server Detail  | Display full server info                                                      | IT-SRV-DTL-001, E2E-DETAIL-002                                               |
+| F003                    | Subscribe CTA for paid servers                                                | E2E-DETAIL-003                                                               |
+| F003                    | MCP config snippet after subscription                                         | IT-SUB-CFG-003..005, E2E-SUB-007                                             |
+| F003                    | Unauthenticated subscribe → redirect to sign in                               | E2E-DETAIL-004                                                               |
+| **F004** Auth           | GitHub OAuth sign in                                                          | E2E-AUTH-001..002                                                            |
+| F004                    | Google OAuth sign in                                                          | E2E-AUTH-001..002                                                            |
+| F004                    | Session persistence                                                           | E2E-AUTH-003                                                                 |
+| F004                    | Protected routes enforce auth                                                 | E2E-AUTH-005                                                                 |
+| F004                    | Role-based route protection                                                   | UT-AUTH-003..009, E2E-AUTH-006..007                                          |
+| F004                    | Upgrade USER → DEVELOPER                                                      | IT-AUTH-UPG-001..004, E2E-PUB-001..002                                       |
+| **F005** Billing        | Stripe Checkout for SUBSCRIPTION servers                                      | IT-SUB-CHK-003..004, E2E-SUB-001                                             |
+| F005                    | FREE server has no checkout                                                   | IT-SUB-CHK-002                                                               |
+| F005                    | Duplicate subscription blocked                                                | IT-SUB-CHK-003                                                               |
+| F005                    | checkout.session.completed creates Subscription                               | IT-WH-004                                                                    |
+| F005                    | Subscription visible in dashboard                                             | E2E-SUB-002..003                                                             |
+| F005                    | Cancel at period end                                                          | IT-SUB-CAN-003, E2E-SUB-005..006                                             |
+| F005                    | Stripe Customer Portal                                                        | IT-BIL-PRT-003, E2E-SUB-004                                                  |
+| F005                    | invoice.payment_failed → PAST_DUE                                             | IT-WH-011                                                                    |
+| F005                    | Config snippet access for ACTIVE subscribers only                             | IT-SUB-CFG-003..004, IT-VFY-004                                              |
+| **F006** Dev Dashboard  | Aggregate stats (revenue, subscribers)                                        | IT-DEV-001..003, E2E-DEV-001                                                 |
+| F006                    | Revenue charts                                                                | E2E-DEV-002                                                                  |
+| F006                    | Per-server analytics                                                          | IT-DEV-005..006, E2E-DEV-004..005                                            |
+| F006                    | Stripe Connect setup                                                          | IT-BIL-CON-003..005, E2E-DEV-006..008                                        |
+| F006                    | Transaction history                                                           | IT-DEV-008..009, E2E-DEV-009                                                 |
+| **F007** User Dashboard | Subscription list                                                             | IT-SUB-LST-001..003, E2E-USR-001..002                                        |
+| F007                    | Config snippet access                                                         | IT-SUB-CFG-003, E2E-USR-003                                                  |
+| F007                    | Cancel subscription                                                           | IT-SUB-CAN-003, E2E-USR-004                                                  |
+| F007                    | PAST_DUE status visibility                                                    | IT-WH-011, E2E-USR-005                                                       |
+| **F008** API Keys       | Generate key (shown once)                                                     | IT-KEY-CRT-001..004, E2E-KEY-003..005                                        |
+| F008                    | Key stored as SHA-256 hash only                                               | IT-KEY-CRT-004, UT-KEY-019, PBT-VAL-001..002                                 |
+| F008                    | List keys (prefix only)                                                       | IT-KEY-LST-002, E2E-KEY-006                                                  |
+| F008                    | Revoke key                                                                    | IT-KEY-DEL-003..004, E2E-KEY-007..008                                        |
+| F008                    | Verify key via Bearer token                                                   | IT-VFY-001..008                                                              |
+| F008                    | Expired keys rejected                                                         | IT-VFY-005                                                                   |
+| **F009** Payouts        | Stripe Connect Express onboarding                                             | IT-BIL-CON-003..005, E2E-PAY-001..003                                        |
+| F009                    | 80/20 revenue split                                                           | IT-WH-006, IT-WH-018..020, UT-STRIPE-001..007, PBT-VAL-004..005, E2E-PAY-004 |
+| F009                    | Platform fee correct in Transaction record                                    | IT-WH-006, IT-WH-018..020                                                    |
+| F009                    | account.updated webhook updates onboarded status                              | IT-WH-016..017                                                               |
+| **F010** Landing        | Hero section + CTAs                                                           | E2E-LND-001..003                                                             |
+| F010                    | Featured servers section                                                      | IT-SRV-FTR-001..003, E2E-LND-004                                             |
+| F010                    | LCP < 2500ms                                                                  | E2E-LND-005                                                                  |
+| **F011** Reviews (P1)   | Subscriber can submit review                                                  | IT-REV-CRT-003, E2E-REV-002                                                  |
+| F011                    | Non-subscriber blocked                                                        | IT-REV-CRT-002, E2E-REV-006                                                  |
+| F011                    | Edit own review (upsert)                                                      | IT-REV-CRT-004, E2E-REV-005                                                  |
+| F011                    | Rating 1-5 validation                                                         | UT-VAL-REV-001..005, IT-REV-CRT-005..006                                     |
+| F011                    | avgRating updated on server                                                   | IT-REV-CRT-008, E2E-REV-004                                                  |
+| **F012** Admin (P1)     | Pending approval queue                                                        | IT-ADM-001..002, E2E-ADM-002                                                 |
+| F012                    | Approve listing                                                               | IT-ADM-003..006, E2E-ADM-003                                                 |
+| F012                    | Reject with reason                                                            | IT-ADM-007..009, E2E-ADM-004..005                                            |
+| F012                    | ADMIN-only access                                                             | IT-ADM-001, E2E-ADM-001                                                      |
+| F012                    | Platform stats                                                                | IT-ADM-011..012, E2E-ADM-006                                                 |
+| **NFR** Security        | OAuth-only auth (no passwords)                                                | E2E-AUTH-001                                                                 |
+| NFR                     | API keys SHA-256 hashed only                                                  | UT-KEY-006..010, IT-KEY-CRT-004, PBT-VAL-001..003                            |
+| NFR                     | Stripe webhook signature verified                                             | IT-WH-001..003                                                               |
+| NFR                     | RBAC on all protected routes                                                  | UT-AUTH-001..009, IT-SRV-CRT-001..004                                        |
+| NFR                     | No stack traces in error responses                                            | IT-SRV-CRT-017 (500 body check)                                              |
+| NFR                     | Revenue split always sums to 100%                                             | UT-STRIPE-003, PBT-VAL-004                                                   |
+| NFR                     | p95 API response < 200ms                                                      | Flag for k6 load tests (out of Vitest scope)                                 |
 
 ---
 
@@ -1200,29 +1213,29 @@ Every SPEC.md acceptance criterion maps to at least one test.
 
 Coverage is measured by **Vitest** (`@vitest/coverage-v8`), reported per-file.
 
-| Module / File | Line % | Branch % | Rationale |
-|---------------|--------|----------|-----------|
-| `src/lib/api-keys.ts` | **100%** | **100%** | Security-critical; every path exercised |
-| `src/lib/stripe.ts` | **95%** | **90%** | Financial logic; uncovered = documented Stripe SDK error paths |
-| `src/lib/auth.ts` | **95%** | **95%** | RBAC; every role × route combination |
-| `src/lib/constants.ts` | **100%** | **100%** | Trivial exports; snapshot-tested |
-| `src/lib/validations/server.ts` | **100%** | **100%** | All cross-field rules exercised |
-| `src/lib/validations/review.ts` | **100%** | **100%** | Small; fully coverable |
-| `src/lib/validations/common.ts` | **100%** | **100%** | Used everywhere; all branches |
-| `src/lib/utils.ts` | **95%** | **90%** | Formatting helpers |
-| `src/lib/prisma.ts` | **60%** | **60%** | Singleton setup; DB connection not unit tested |
-| `src/app/api/webhooks/stripe/route.ts` | **95%** | **90%** | All event types covered |
-| `src/app/api/servers/route.ts` | **90%** | **85%** | All filter/sort/pagination branches |
-| `src/app/api/servers/[slug]/route.ts` | **90%** | **85%** | All CRUD + auth branches |
-| `src/app/api/subscriptions/**` | **90%** | **85%** | All lifecycle states |
-| `src/app/api/keys/**` | **95%** | **90%** | Security-adjacent |
-| `src/app/api/verify-key/route.ts` | **100%** | **100%** | Every auth failure path |
-| `src/app/api/billing/**` | **85%** | **80%** | Stripe mocking covers happy paths |
-| `src/app/api/developer/**` | **85%** | **80%** | Analytics aggregation logic |
-| `src/app/api/admin/**` | **90%** | **85%** | Approval workflow branches |
-| `src/app/api/auth/**` | **85%** | **80%** | NextAuth wrapping |
-| `src/components/**` (React) | **70%** | **65%** | Visual logic via E2E; unit-test hooks only |
-| **Overall project target** | **≥ 85%** | **≥ 80%** | Enforced as CI quality gate |
+| Module / File                          | Line %    | Branch %  | Rationale                                                      |
+| -------------------------------------- | --------- | --------- | -------------------------------------------------------------- |
+| `src/lib/api-keys.ts`                  | **100%**  | **100%**  | Security-critical; every path exercised                        |
+| `src/lib/stripe.ts`                    | **95%**   | **90%**   | Financial logic; uncovered = documented Stripe SDK error paths |
+| `src/lib/auth.ts`                      | **95%**   | **95%**   | RBAC; every role × route combination                           |
+| `src/lib/constants.ts`                 | **100%**  | **100%**  | Trivial exports; snapshot-tested                               |
+| `src/lib/validations/server.ts`        | **100%**  | **100%**  | All cross-field rules exercised                                |
+| `src/lib/validations/review.ts`        | **100%**  | **100%**  | Small; fully coverable                                         |
+| `src/lib/validations/common.ts`        | **100%**  | **100%**  | Used everywhere; all branches                                  |
+| `src/lib/utils.ts`                     | **95%**   | **90%**   | Formatting helpers                                             |
+| `src/lib/prisma.ts`                    | **60%**   | **60%**   | Singleton setup; DB connection not unit tested                 |
+| `src/app/api/webhooks/stripe/route.ts` | **95%**   | **90%**   | All event types covered                                        |
+| `src/app/api/servers/route.ts`         | **90%**   | **85%**   | All filter/sort/pagination branches                            |
+| `src/app/api/servers/[slug]/route.ts`  | **90%**   | **85%**   | All CRUD + auth branches                                       |
+| `src/app/api/subscriptions/**`         | **90%**   | **85%**   | All lifecycle states                                           |
+| `src/app/api/keys/**`                  | **95%**   | **90%**   | Security-adjacent                                              |
+| `src/app/api/verify-key/route.ts`      | **100%**  | **100%**  | Every auth failure path                                        |
+| `src/app/api/billing/**`               | **85%**   | **80%**   | Stripe mocking covers happy paths                              |
+| `src/app/api/developer/**`             | **85%**   | **80%**   | Analytics aggregation logic                                    |
+| `src/app/api/admin/**`                 | **90%**   | **85%**   | Approval workflow branches                                     |
+| `src/app/api/auth/**`                  | **85%**   | **80%**   | NextAuth wrapping                                              |
+| `src/components/**` (React)            | **70%**   | **65%**   | Visual logic via E2E; unit-test hooks only                     |
+| **Overall project target**             | **≥ 85%** | **≥ 80%** | Enforced as CI quality gate                                    |
 
 ### Coverage Enforcement (vitest.config.ts)
 
@@ -1230,7 +1243,7 @@ Coverage is measured by **Vitest** (`@vitest/coverage-v8`), reported per-file.
 export default defineConfig({
   test: {
     coverage: {
-      provider: 'v8',
+      provider: "v8",
       thresholds: {
         lines: 85,
         branches: 80,
@@ -1238,14 +1251,14 @@ export default defineConfig({
         statements: 85,
       },
       exclude: [
-        'node_modules/**',
-        'tests/**',
-        '**/*.config.ts',
-        'src/lib/prisma.ts',   // DB singleton
+        "node_modules/**",
+        "tests/**",
+        "**/*.config.ts",
+        "src/lib/prisma.ts", // DB singleton
       ],
     },
   },
-})
+});
 ```
 
 ---
@@ -1257,48 +1270,75 @@ export default defineConfig({
 ```typescript
 // tests/fixtures/users.ts
 export const userFixtures = {
-  userBasic:    { email: 'user@test.com',  role: 'USER',      name: 'Test User' },
-  userDev:      { email: 'dev@test.com',   role: 'DEVELOPER', name: 'Dev Dana',
-                  connectAccountId: 'acct_test123', connectOnboarded: true },
-  userAdmin:    { email: 'admin@test.com', role: 'ADMIN',     name: 'Admin Alice' },
-  userNoConnect:{ email: 'dev2@test.com',  role: 'DEVELOPER', name: 'Dev Bob',
-                  connectAccountId: null, connectOnboarded: false },
-}
+  userBasic: { email: "user@test.com", role: "USER", name: "Test User" },
+  userDev: {
+    email: "dev@test.com",
+    role: "DEVELOPER",
+    name: "Dev Dana",
+    connectAccountId: "acct_test123",
+    connectOnboarded: true,
+  },
+  userAdmin: { email: "admin@test.com", role: "ADMIN", name: "Admin Alice" },
+  userNoConnect: {
+    email: "dev2@test.com",
+    role: "DEVELOPER",
+    name: "Dev Bob",
+    connectAccountId: null,
+    connectOnboarded: false,
+  },
+};
 
 // tests/fixtures/servers.ts
 export const serverFixtures = {
   freeServer: {
-    name: 'Free Tool', slug: 'free-tool', status: 'APPROVED',
-    pricingModel: 'FREE', category: 'developer-tools',
-    description: 'A free developer tool for testing purposes',
-    endpoint: 'https://free-tool.example.com/mcp',
+    name: "Free Tool",
+    slug: "free-tool",
+    status: "APPROVED",
+    pricingModel: "FREE",
+    category: "developer-tools",
+    description: "A free developer tool for testing purposes",
+    endpoint: "https://free-tool.example.com/mcp",
   },
   paidServer: {
-    name: 'Pro Tool', slug: 'pro-tool', status: 'APPROVED',
-    pricingModel: 'SUBSCRIPTION', priceAmount: 1000,
-    stripeProductId: 'prod_test123', stripePriceId: 'price_test123',
-    description: 'A premium subscription tool for testing',
-    endpoint: 'https://pro-tool.example.com/mcp',
+    name: "Pro Tool",
+    slug: "pro-tool",
+    status: "APPROVED",
+    pricingModel: "SUBSCRIPTION",
+    priceAmount: 1000,
+    stripeProductId: "prod_test123",
+    stripePriceId: "price_test123",
+    description: "A premium subscription tool for testing",
+    endpoint: "https://pro-tool.example.com/mcp",
   },
   pendingServer: {
-    name: 'Pending Tool', slug: 'pending-tool', status: 'PENDING',
-    pricingModel: 'FREE', category: 'productivity',
-    description: 'A pending tool awaiting admin approval',
-    endpoint: 'https://pending.example.com/mcp',
+    name: "Pending Tool",
+    slug: "pending-tool",
+    status: "PENDING",
+    pricingModel: "FREE",
+    category: "productivity",
+    description: "A pending tool awaiting admin approval",
+    endpoint: "https://pending.example.com/mcp",
   },
   rejectedServer: {
-    name: 'Rejected Tool', slug: 'rejected-tool', status: 'REJECTED',
-    pricingModel: 'FREE', category: 'general',
-    description: 'A tool that was rejected by an admin',
-    endpoint: 'https://rejected.example.com/mcp',
+    name: "Rejected Tool",
+    slug: "rejected-tool",
+    status: "REJECTED",
+    pricingModel: "FREE",
+    category: "general",
+    description: "A tool that was rejected by an admin",
+    endpoint: "https://rejected.example.com/mcp",
   },
   usageServer: {
-    name: 'Usage Tool', slug: 'usage-tool', status: 'APPROVED',
-    pricingModel: 'USAGE', pricePerCall: 1, freeCallLimit: 100,
-    description: 'A usage-based billing tool for testing',
-    endpoint: 'https://usage-tool.example.com/mcp',
+    name: "Usage Tool",
+    slug: "usage-tool",
+    status: "APPROVED",
+    pricingModel: "USAGE",
+    pricePerCall: 1,
+    freeCallLimit: 100,
+    description: "A usage-based billing tool for testing",
+    endpoint: "https://usage-tool.example.com/mcp",
   },
-}
+};
 ```
 
 ### 9.2 Stripe Test Helpers
@@ -1345,18 +1385,26 @@ export const stripeEvents = {
 // tests/setup/auth-helpers.ts
 // Bypasses NextAuth OAuth; injects a fake session for route handler tests
 
-import { vi } from 'vitest'
-import * as nextAuthModule from 'next-auth'
+import { vi } from "vitest";
+import * as nextAuthModule from "next-auth";
 
-export function mockSession(role: 'USER' | 'DEVELOPER' | 'ADMIN', userId = 'test-user-id') {
-  vi.spyOn(nextAuthModule, 'getServerSession').mockResolvedValue({
-    user: { id: userId, role, email: `${role.toLowerCase()}@test.com`, name: 'Test User' },
+export function mockSession(
+  role: "USER" | "DEVELOPER" | "ADMIN",
+  userId = "test-user-id",
+) {
+  vi.spyOn(nextAuthModule, "getServerSession").mockResolvedValue({
+    user: {
+      id: userId,
+      role,
+      email: `${role.toLowerCase()}@test.com`,
+      name: "Test User",
+    },
     expires: new Date(Date.now() + 3_600_000).toISOString(),
-  })
+  });
 }
 
 export function mockNoSession() {
-  vi.spyOn(nextAuthModule, 'getServerSession').mockResolvedValue(null)
+  vi.spyOn(nextAuthModule, "getServerSession").mockResolvedValue(null);
 }
 ```
 
@@ -1364,23 +1412,32 @@ export function mockNoSession() {
 
 ```typescript
 // tests/setup/prisma.ts
-import { PrismaClient } from '@prisma/client'
-import { execSync } from 'child_process'
+import { PrismaClient } from "@prisma/client";
+import { execSync } from "child_process";
 
 export const testDb = new PrismaClient({
-  datasources: { db: { url: 'file:./test.db' } },
-})
+  datasources: { db: { url: "file:./test.db" } },
+});
 
 export async function resetDb() {
   // Truncate all tables in dependency order
-  await testDb.$executeRawUnsafe(`PRAGMA foreign_keys = OFF`)
-  const tables = ['Transaction','Review','ApiKey','Subscription',
-                  'FeaturedListing','UsageRecord','McpServer',
-                  'Session','Account','User']
+  await testDb.$executeRawUnsafe(`PRAGMA foreign_keys = OFF`);
+  const tables = [
+    "Transaction",
+    "Review",
+    "ApiKey",
+    "Subscription",
+    "FeaturedListing",
+    "UsageRecord",
+    "McpServer",
+    "Session",
+    "Account",
+    "User",
+  ];
   for (const t of tables) {
-    await testDb.$executeRawUnsafe(`DELETE FROM "${t}"`)
+    await testDb.$executeRawUnsafe(`DELETE FROM "${t}"`);
   }
-  await testDb.$executeRawUnsafe(`PRAGMA foreign_keys = ON`)
+  await testDb.$executeRawUnsafe(`PRAGMA foreign_keys = ON`);
 }
 ```
 
@@ -1406,7 +1463,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20', cache: 'npm' }
+        with: { node-version: "20", cache: "npm" }
       - run: npm ci
       - run: npm run test:coverage
       - uses: actions/upload-artifact@v4
@@ -1424,7 +1481,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20', cache: 'npm' }
+        with: { node-version: "20", cache: "npm" }
       - run: npm ci
       - run: npx prisma migrate deploy
       - run: npm run test:integration
@@ -1442,7 +1499,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '20', cache: 'npm' }
+        with: { node-version: "20", cache: "npm" }
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npx prisma migrate deploy && npx prisma db seed
@@ -1458,16 +1515,16 @@ jobs:
 
 ### 10.2 Quality Gates
 
-| Gate | Threshold | Blocks merge? |
-|------|-----------|---------------|
-| Unit test pass rate | 100% | ✅ Yes |
-| Integration test pass rate | 100% | ✅ Yes |
-| E2E test pass rate | 100% | ✅ Yes |
-| Overall line coverage | ≥ 85% | ✅ Yes |
-| Overall branch coverage | ≥ 80% | ✅ Yes |
-| `src/lib/api-keys.ts` line coverage | 100% | ✅ Yes |
-| `src/app/api/verify-key/route.ts` line coverage | 100% | ✅ Yes |
-| `src/app/api/webhooks/stripe/route.ts` line coverage | ≥ 95% | ✅ Yes |
+| Gate                                                 | Threshold | Blocks merge? |
+| ---------------------------------------------------- | --------- | ------------- |
+| Unit test pass rate                                  | 100%      | ✅ Yes        |
+| Integration test pass rate                           | 100%      | ✅ Yes        |
+| E2E test pass rate                                   | 100%      | ✅ Yes        |
+| Overall line coverage                                | ≥ 85%     | ✅ Yes        |
+| Overall branch coverage                              | ≥ 80%     | ✅ Yes        |
+| `src/lib/api-keys.ts` line coverage                  | 100%      | ✅ Yes        |
+| `src/app/api/verify-key/route.ts` line coverage      | 100%      | ✅ Yes        |
+| `src/app/api/webhooks/stripe/route.ts` line coverage | ≥ 95%     | ✅ Yes        |
 
 ### 10.3 Execution Order & Timing Budget
 
@@ -1487,5 +1544,5 @@ Total expected CI time per PR: **~6 minutes**
 
 ---
 
-*Total test cases: ~230 across 19 unit suites · 21 integration suites · 12 E2E flows · 10 property-based suites*
-*Every P0 and P1 acceptance criterion from SPEC.md has at least one mapped test ID.*
+_Total test cases: ~230 across 19 unit suites · 21 integration suites · 12 E2E flows · 10 property-based suites_
+_Every P0 and P1 acceptance criterion from SPEC.md has at least one mapped test ID._

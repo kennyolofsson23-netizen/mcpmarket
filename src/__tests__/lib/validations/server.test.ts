@@ -1,4 +1,7 @@
-import { createServerSchema, updateServerSchema } from "@/lib/validations/server";
+import {
+  createServerSchema,
+  updateServerSchema,
+} from "@/lib/validations/server";
 
 const validFreeServer = {
   name: "My MCP Server",
@@ -166,11 +169,11 @@ describe("createServerSchema", () => {
       });
       expect(result.success).toBe(false);
       if (!result.success) {
-        const priceError = result.error.issues.find(
-          (i) => i.path.includes("price")
+        const priceError = result.error.issues.find((i) =>
+          i.path.includes("price"),
         );
         expect(priceError?.message).toBe(
-          "Price is required for subscription pricing"
+          "Price is required for subscription pricing",
         );
       }
     });
@@ -204,10 +207,10 @@ describe("createServerSchema", () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         const err = result.error.issues.find((i) =>
-          i.path.includes("usagePrice")
+          i.path.includes("usagePrice"),
         );
         expect(err?.message).toBe(
-          "Usage price is required for usage-based pricing"
+          "Usage price is required for usage-based pricing",
         );
       }
     });
@@ -231,10 +234,10 @@ describe("createServerSchema", () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         const err = result.error.issues.find((i) =>
-          i.path.includes("freeCallLimit")
+          i.path.includes("freeCallLimit"),
         );
         expect(err?.message).toBe(
-          "Free call limit is required for usage-based pricing"
+          "Free call limit is required for usage-based pricing",
         );
       }
     });
@@ -258,10 +261,10 @@ describe("createServerSchema", () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         const err = result.error.issues.find((i) =>
-          i.path.includes("endpointUrl")
+          i.path.includes("endpointUrl"),
         );
         expect(err?.message).toBe(
-          "Endpoint URL is required unless using managed hosting"
+          "Endpoint URL is required unless using managed hosting",
         );
       }
     });

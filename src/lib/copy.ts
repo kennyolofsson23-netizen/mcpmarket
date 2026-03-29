@@ -87,8 +87,7 @@ export const COPY = {
   // User-facing only — never expose internal details
   // ---------------------------------------------------------------------------
   errors: {
-    generic:
-      "Something went wrong. Refresh the page or try again in a moment.",
+    generic: "Something went wrong. Refresh the page or try again in a moment.",
     notFound: "This page doesn't exist or has been removed.",
     unauthorized: "You don't have permission to view this.",
     sessionExpired: "Your session has expired. Sign in to continue.",
@@ -109,24 +108,20 @@ export const COPY = {
     uploadTooLarge: "File exceeds the 2 MB limit. Choose a smaller image.",
     uploadBadType: "Only PNG and JPG images are accepted.",
     formRequired: "Complete all required fields before submitting.",
-    webhookBadUrl:
-      "Enter a valid HTTPS URL for your webhook endpoint.",
+    webhookBadUrl: "Enter a valid HTTPS URL for your webhook endpoint.",
     payoutBelowMinimum:
       "Payouts require a minimum balance of $25. Your current balance will carry over to next month.",
     connectNotSetUp:
       "Set up Stripe payouts from your developer dashboard before you can receive revenue.",
     reviewAlreadyExists:
       "You've already reviewed this server. Edit your existing review below.",
-    reviewNoSubscription:
-      "Subscribe to this server to leave a review.",
+    reviewNoSubscription: "Subscribe to this server to leave a review.",
     cancelFailed:
       "Couldn't cancel the subscription. Refresh and try again, or contact support.",
     revokeFailed:
       "Couldn't revoke this key. Refresh the page and try revoking again.",
-    adminApproveFailed:
-      "Couldn't approve this server. Refresh and try again.",
-    adminRejectFailed:
-      "Couldn't reject this server. Refresh and try again.",
+    adminApproveFailed: "Couldn't approve this server. Refresh and try again.",
+    adminRejectFailed: "Couldn't reject this server. Refresh and try again.",
   },
 
   // ---------------------------------------------------------------------------
@@ -148,8 +143,7 @@ export const COPY = {
       "Sign-in failed. Make sure you've authorized MCPmarket in your GitHub or Google account settings.",
     errorEmailExists:
       "An account with this email already exists. Sign in with the original provider.",
-    errorSessionRequired:
-      "Sign in to access your dashboard.",
+    errorSessionRequired: "Sign in to access your dashboard.",
   },
 
   // ---------------------------------------------------------------------------

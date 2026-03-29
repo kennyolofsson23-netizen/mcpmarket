@@ -27,7 +27,10 @@ function Dialog({ open, onOpenChange, children }: DialogProps) {
     if (open) {
       previousFocusRef.current = document.activeElement as HTMLElement;
       const frame = requestAnimationFrame(() => {
-        const focusable = containerRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS);
+        const focusable =
+          containerRef.current?.querySelectorAll<HTMLElement>(
+            FOCUSABLE_SELECTORS,
+          );
         focusable?.[0]?.focus();
       });
       return () => cancelAnimationFrame(frame);
@@ -45,7 +48,9 @@ function Dialog({ open, onOpenChange, children }: DialogProps) {
       }
       if (e.key !== "Tab") return;
       const focusable = Array.from(
-        containerRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS) ?? []
+        containerRef.current?.querySelectorAll<HTMLElement>(
+          FOCUSABLE_SELECTORS,
+        ) ?? [],
       );
       if (focusable.length === 0) return;
       const first = focusable[0];

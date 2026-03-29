@@ -78,9 +78,9 @@ describe("searchSchema", () => {
   });
 
   it("rejects an invalid sort value", () => {
-    expect(
-      searchSchema.safeParse({ sort: "alphabetical" }).success
-    ).toBe(false);
+    expect(searchSchema.safeParse({ sort: "alphabetical" }).success).toBe(
+      false,
+    );
   });
 
   it("accepts valid pricing values", () => {
@@ -91,9 +91,9 @@ describe("searchSchema", () => {
   });
 
   it("rejects an invalid pricing value", () => {
-    expect(
-      searchSchema.safeParse({ pricing: "ENTERPRISE" }).success
-    ).toBe(false);
+    expect(searchSchema.safeParse({ pricing: "ENTERPRISE" }).success).toBe(
+      false,
+    );
   });
 
   it("accepts a search query string", () => {
@@ -172,29 +172,25 @@ describe("slugSchema", () => {
   });
 
   it("accepts slugs with hyphens", () => {
-    expect(
-      slugSchema.safeParse({ slug: "my-awesome-server-v2" }).success
-    ).toBe(true);
+    expect(slugSchema.safeParse({ slug: "my-awesome-server-v2" }).success).toBe(
+      true,
+    );
   });
 });
 
 describe("emailSchema", () => {
   it("accepts a valid email address", () => {
-    expect(
-      emailSchema.safeParse({ email: "user@example.com" }).success
-    ).toBe(true);
+    expect(emailSchema.safeParse({ email: "user@example.com" }).success).toBe(
+      true,
+    );
   });
 
   it("rejects an invalid email (no @)", () => {
-    expect(
-      emailSchema.safeParse({ email: "notanemail" }).success
-    ).toBe(false);
+    expect(emailSchema.safeParse({ email: "notanemail" }).success).toBe(false);
   });
 
   it("rejects an invalid email (no domain)", () => {
-    expect(
-      emailSchema.safeParse({ email: "user@" }).success
-    ).toBe(false);
+    expect(emailSchema.safeParse({ email: "user@" }).success).toBe(false);
   });
 
   it("rejects an empty string email", () => {
@@ -207,7 +203,7 @@ describe("emailSchema", () => {
 
   it("accepts email with subdomain", () => {
     expect(
-      emailSchema.safeParse({ email: "admin@mail.example.co.uk" }).success
+      emailSchema.safeParse({ email: "admin@mail.example.co.uk" }).success,
     ).toBe(true);
   });
 });
