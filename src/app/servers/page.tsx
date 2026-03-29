@@ -4,6 +4,7 @@ import { CategoryFilter } from "@/components/category-filter";
 import { PricingToggle } from "@/components/pricing-toggle";
 import { SortSelect } from "@/components/sort-select";
 import { ServerGrid } from "@/components/server-grid";
+import { prisma } from "@/lib/prisma";
 import type { McpServerWithOwner } from "@/types";
 
 interface BrowsePageProps {
@@ -16,6 +17,8 @@ interface BrowsePageProps {
   }>;
 }
 
+const PAGE_SIZE = 20;
+
 async function fetchServers(params: {
   category?: string;
   pricingModel?: string;
@@ -27,20 +30,46 @@ async function fetchServers(params: {
   total: number;
   totalPages: number;
 }> {
-  const query = new URLSearchParams();
-  if (params.category) query.set("category", params.category);
-  if (params.pricingModel) query.set("pricingModel", params.pricingModel);
-  if (params.sort) query.set("sort", params.sort);
-  if (params.search) query.set("search", params.search);
-  if (params.page) query.set("page", params.page);
+  try {
+    const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
+    const skip = (page - 1) * PAGE_SIZE;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/servers?${query.toString()}`, {
-    next: { revalidate: 60 },
-  });
+    const where: Record<string, unknown> = { status: "APPROVED" };
+    if (params.category) where.category = params.category;
+    if (params.pricingModel) where.pricingModel = params.pricingModel;
+    if (params.search) {
+      where.OR = [
+        { name: { contains: params.search, mode: "insensitive" } },
+        { description: { contains: params.search, mode: "insensitive" } },
+      ];
+    }
 
-  if (!res.ok) return { servers: [], total: 0, totalPages: 1 };
-  return res.json();
+    let orderBy: Record<string, string> = { createdAt: "desc" };
+    if (params.sort === "popular") orderBy = { installCount: "desc" };
+    if (params.sort === "rating") orderBy = { avgRating: "desc" };
+
+    const [servers, total] = await Promise.all([
+      prisma.mcpServer.findMany({
+        where,
+        orderBy,
+        skip,
+        take: PAGE_SIZE,
+        include: {
+          owner: { select: { id: true, name: true, email: true, image: true } },
+          _count: { select: { subscriptions: true, reviews: true } },
+        },
+      }),
+      prisma.mcpServer.count({ where }),
+    ]);
+
+    return {
+      servers: servers as unknown as McpServerWithOwner[],
+      total,
+      totalPages: Math.ceil(total / PAGE_SIZE),
+    };
+  } catch {
+    return { servers: [], total: 0, totalPages: 1 };
+  }
 }
 
 export default async function BrowsePage({ searchParams }: BrowsePageProps) {
