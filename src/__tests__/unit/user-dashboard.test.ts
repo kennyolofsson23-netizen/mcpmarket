@@ -103,7 +103,7 @@ describe("GET /api/subscriptions/:id/config", () => {
     const req = new Request(
       "http://localhost/api/subscriptions/sub-1/config",
     ) as any;
-    const res = await getConfig(req, { params: { id: "sub-1" } });
+    const res = await getConfig(req, { params: Promise.resolve({ id: "sub-1" }) });
 
     expect(res.status).toBe(200);
     const data = await res.json();
@@ -134,7 +134,7 @@ describe("GET /api/subscriptions/:id/config", () => {
     const req = new Request(
       "http://localhost/api/subscriptions/sub-1/config",
     ) as any;
-    const res = await getConfig(req, { params: { id: "sub-1" } });
+    const res = await getConfig(req, { params: Promise.resolve({ id: "sub-1" }) });
 
     expect(res.status).toBe(403);
     const data = await res.json();

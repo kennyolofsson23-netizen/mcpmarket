@@ -107,7 +107,7 @@ describe("GET /api/developer/servers/:id/analytics", () => {
     const req = new Request(
       "http://localhost/api/developer/servers/srv-1/analytics",
     ) as any;
-    const res = await getAnalytics(req, { params: { id: "srv-1" } });
+    const res = await getAnalytics(req, { params: Promise.resolve({ id: "srv-1" }) });
 
     expect(res.status).toBe(200);
     const data = await res.json();
@@ -138,7 +138,7 @@ describe("GET /api/developer/servers/:id/analytics", () => {
     const req = new Request(
       "http://localhost/api/developer/servers/srv-1/analytics",
     ) as any;
-    const res = await getAnalytics(req, { params: { id: "srv-1" } });
+    const res = await getAnalytics(req, { params: Promise.resolve({ id: "srv-1" }) });
 
     expect(res.status).toBe(403);
     const data = await res.json();

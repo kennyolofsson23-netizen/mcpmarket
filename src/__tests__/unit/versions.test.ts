@@ -15,7 +15,7 @@ import { GET, POST } from "@/app/api/servers/[slug]/versions/route";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -48,9 +48,9 @@ describe("POST /api/servers/:slug/versions", () => {
       method: "POST",
       body: JSON.stringify({ version: "1.1.0", changelog: "Bug fixes" }),
     }) as any;
-    const context = { params: { slug: "my-server" } };
+    const context = { params: Promise.resolve({ slug: "my-server" }) };
 
-    const res = await POST(req, context);
+    const res = await POST(req, context as any);
 
     expect(res.status).toBe(201);
     const data = await res.json();
@@ -84,9 +84,9 @@ describe("POST /api/servers/:slug/versions", () => {
       method: "POST",
       body: JSON.stringify({ version: "2.0.0" }),
     }) as any;
-    const context = { params: { slug: "my-server" } };
+    const context = { params: Promise.resolve({ slug: "my-server" }) };
 
-    const res = await POST(req, context);
+    const res = await POST(req, context as any);
 
     expect(res.status).toBe(201);
     expect(prisma.serverVersion.updateMany).toHaveBeenCalledWith({
@@ -112,9 +112,9 @@ describe("POST /api/servers/:slug/versions", () => {
       method: "POST",
       body: JSON.stringify({ version: "1.0.1" }),
     }) as any;
-    const context = { params: { slug: "my-server" } };
+    const context = { params: Promise.resolve({ slug: "my-server" }) };
 
-    const res = await POST(req, context);
+    const res = await POST(req, context as any);
 
     expect(res.status).toBe(403);
   });
@@ -144,9 +144,9 @@ describe("GET /api/servers/:slug/versions", () => {
     const req = new Request(
       "http://localhost/api/servers/my-server/versions",
     ) as any;
-    const context = { params: { slug: "my-server" } };
+    const context = { params: Promise.resolve({ slug: "my-server" }) };
 
-    const res = await GET(req, context);
+    const res = await GET(req, context as any);
 
     expect(res.status).toBe(200);
     const data = await res.json();

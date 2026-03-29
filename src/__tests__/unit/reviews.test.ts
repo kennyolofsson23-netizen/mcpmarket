@@ -18,7 +18,7 @@ import { GET, POST } from "@/app/api/servers/[slug]/reviews/route";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -60,7 +60,7 @@ describe("POST /api/servers/:slug/reviews", () => {
       },
     ) as any;
 
-    const res = await POST(req, { params: { slug: "test-server" } });
+    const res = await POST(req, { params: Promise.resolve({ slug: "test-server" }) } as any);
     expect(res.status).toBe(201);
     const data = await res.json();
     expect(data.rating).toBe(5);
@@ -86,7 +86,7 @@ describe("POST /api/servers/:slug/reviews", () => {
       },
     ) as any;
 
-    const res = await POST(req, { params: { slug: "test-server" } });
+    const res = await POST(req, { params: Promise.resolve({ slug: "test-server" }) } as any);
     expect(res.status).toBe(403);
     const data = await res.json();
     expect(data.error).toMatch(/subscribe/i);
@@ -127,7 +127,7 @@ describe("POST /api/servers/:slug/reviews", () => {
       },
     ) as any;
 
-    const res = await POST(req, { params: { slug: "test-server" } });
+    const res = await POST(req, { params: Promise.resolve({ slug: "test-server" }) } as any);
     // upsert allows overwrite — should succeed with 201
     expect(res.status).toBe(201);
     expect(prisma.review.upsert).toHaveBeenCalledWith(
@@ -151,7 +151,7 @@ describe("POST /api/servers/:slug/reviews", () => {
       },
     ) as any;
 
-    const res = await POST(req, { params: { slug: "test-server" } });
+    const res = await POST(req, { params: Promise.resolve({ slug: "test-server" }) } as any);
     expect(res.status).toBe(400);
     const data = await res.json();
     expect(data.error).toMatch(/rating/i);
@@ -180,7 +180,7 @@ describe("GET /api/servers/:slug/reviews", () => {
     const req = new Request(
       "http://localhost/api/servers/test-server/reviews?page=1&limit=10",
     ) as any;
-    const res = await GET(req, { params: { slug: "test-server" } });
+    const res = await GET(req, { params: Promise.resolve({ slug: "test-server" }) } as any);
 
     expect(res.status).toBe(200);
     const data = await res.json();

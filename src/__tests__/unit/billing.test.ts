@@ -206,7 +206,7 @@ describe("POST /api/subscriptions/:id/cancel", () => {
       method: "POST",
     }) as never;
 
-    const res = await cancelPost(req, { params: { id: "sub-1" } });
+    const res = await cancelPost(req, { params: Promise.resolve({ id: "sub-1" }) });
     const body = await res.json();
 
     expect(res.status).toBe(200);
@@ -232,7 +232,7 @@ describe("POST /api/subscriptions/:id/cancel", () => {
       method: "POST",
     }) as never;
 
-    const res = await cancelPost(req, { params: { id: "sub-1" } });
+    const res = await cancelPost(req, { params: Promise.resolve({ id: "sub-1" }) });
     const body = await res.json();
 
     expect(res.status).toBe(403);

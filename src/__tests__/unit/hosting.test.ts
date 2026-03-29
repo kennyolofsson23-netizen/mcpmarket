@@ -16,7 +16,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { provisionHosting, getHostingStatus } from "@/lib/hosting";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -89,9 +89,9 @@ describe("GET /api/hosting/:serverId/status", () => {
     });
 
     const req = new Request("http://localhost/api/hosting/srv-1/status") as any;
-    const context = { params: { serverId: "srv-1" } };
+    const context = { params: Promise.resolve({ serverId: "srv-1" }) };
 
-    const res = await hostingStatus(req, context);
+    const res = await hostingStatus(req, context as any);
 
     expect(res.status).toBe(200);
     const data = await res.json();

@@ -25,7 +25,7 @@ import {
   createConnectOnboardingLink,
 } from "@/lib/stripe";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as unknown as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();

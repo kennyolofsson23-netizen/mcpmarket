@@ -28,7 +28,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateApiKey, hashApiKey, extractBearerToken } from "@/lib/api-keys";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -128,7 +128,7 @@ describe("DELETE /api/keys/:id", () => {
     const req = new Request("http://localhost/api/keys/key-1", {
       method: "DELETE",
     }) as any;
-    const res = await DELETE(req, { params: { id: "key-1" } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: "key-1" }) } as any);
 
     expect(res.status).toBe(200);
     const data = await res.json();
@@ -150,7 +150,7 @@ describe("DELETE /api/keys/:id", () => {
     const req = new Request("http://localhost/api/keys/key-99", {
       method: "DELETE",
     }) as any;
-    const res = await DELETE(req, { params: { id: "key-99" } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: "key-99" }) } as any);
 
     expect(res.status).toBe(403);
     expect(prisma.apiKey.delete).not.toHaveBeenCalled();

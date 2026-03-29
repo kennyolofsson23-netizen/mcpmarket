@@ -22,16 +22,10 @@ import { GET as getDetail, PUT } from "@/app/api/servers/[slug]/route";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
-const mockFindUnique = prisma.mcpServer.findUnique as jest.MockedFunction<
-  typeof prisma.mcpServer.findUnique
->;
-const mockCreate = prisma.mcpServer.create as jest.MockedFunction<
-  typeof prisma.mcpServer.create
->;
-const mockUpdate = prisma.mcpServer.update as jest.MockedFunction<
-  typeof prisma.mcpServer.update
->;
+const mockAuth = auth as jest.Mock;
+const mockFindUnique = prisma.mcpServer.findUnique as jest.Mock;
+const mockCreate = prisma.mcpServer.create as jest.Mock;
+const mockUpdate = prisma.mcpServer.update as jest.Mock;
 
 const baseServerBody = {
   name: "My Server",
@@ -77,7 +71,7 @@ const mockServer = {
 };
 
 function makeSlugContext(slug: string) {
-  return { params: { slug } };
+  return { params: Promise.resolve({ slug }) };
 }
 
 beforeEach(() => {

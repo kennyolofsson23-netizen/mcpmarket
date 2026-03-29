@@ -17,7 +17,7 @@ import { GET as adminUsers } from "@/app/api/admin/users/route";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -111,7 +111,7 @@ describe("POST /api/admin/servers/:id/approve", () => {
       },
     ) as any;
 
-    const res = await approveServer(req, { params: { id: "srv-1" } });
+    const res = await approveServer(req, { params: Promise.resolve({ id: "srv-1" }) } as any);
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.success).toBe(true);
@@ -142,7 +142,7 @@ describe("POST /api/admin/servers/:id/reject", () => {
       body: JSON.stringify({ reason: "Violates ToS" }),
     }) as any;
 
-    const res = await rejectServer(req, { params: { id: "srv-1" } });
+    const res = await rejectServer(req, { params: Promise.resolve({ id: "srv-1" }) } as any);
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.success).toBe(true);

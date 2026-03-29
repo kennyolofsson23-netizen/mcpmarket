@@ -22,7 +22,7 @@ import { auth } from "@/lib/auth";
 import { extractBearerToken } from "@/lib/api-keys";
 import { recordApiCall, getUsageSummary } from "@/lib/metering";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as unknown as jest.Mock;
 const mockExtractBearerToken = extractBearerToken as jest.MockedFunction<
   typeof extractBearerToken
 >;

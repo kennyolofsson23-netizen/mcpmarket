@@ -21,7 +21,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateWebhookSecret } from "@/lib/webhooks";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as unknown as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();

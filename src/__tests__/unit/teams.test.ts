@@ -13,7 +13,7 @@ import { POST as addMember } from "@/app/api/teams/[id]/members/route";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockAuth = auth as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -81,9 +81,9 @@ describe("POST /api/teams/:id/members", () => {
       method: "POST",
       body: JSON.stringify({ email: "member@example.com", role: "MEMBER" }),
     }) as any;
-    const context = { params: { id: "team-1" } };
+    const context = { params: Promise.resolve({ id: "team-1" }) };
 
-    const res = await addMember(req, context);
+    const res = await addMember(req, context as any);
 
     expect(res.status).toBe(201);
     const data = await res.json();
@@ -109,9 +109,9 @@ describe("POST /api/teams/:id/members", () => {
       method: "POST",
       body: JSON.stringify({ email: "member@example.com" }),
     }) as any;
-    const context = { params: { id: "team-1" } };
+    const context = { params: Promise.resolve({ id: "team-1" }) };
 
-    const res = await addMember(req, context);
+    const res = await addMember(req, context as any);
 
     expect(res.status).toBe(403);
   });
