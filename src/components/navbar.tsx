@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Button } from "./ui/button";
 import { Avatar } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -12,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, Terminal } from "lucide-react";
 
 export function Navbar() {
   const { data: session } = useSession();
@@ -21,26 +20,31 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-6xl items-center mx-auto px-4 relative">
-        <Link href="/" className="mr-8 flex items-center space-x-2">
-          <div className="font-bold text-xl">MCPmarket</div>
+    <header className="sticky top-0 z-40 w-full border-b border-zinc-800/50 bg-[#0a0a0f]/80 backdrop-blur-xl">
+      <div className="flex h-14 items-center px-6 lg:px-8 max-w-[1400px] mx-auto">
+        <Link href="/" className="mr-8 flex items-center gap-2 group">
+          <div className="w-7 h-7 rounded bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center group-hover:border-cyan-400/40 transition-colors">
+            <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+          </div>
+          <span className="font-semibold text-zinc-100 tracking-tight">
+            MCP<span className="text-cyan-400">market</span>
+          </span>
         </Link>
 
         {/* Desktop nav */}
         <nav
           aria-label="Main navigation"
-          className="hidden sm:flex flex-1 gap-6 text-sm"
+          className="hidden sm:flex flex-1 gap-1 text-sm"
         >
           <Link
             href="/servers"
-            className="transition-colors hover:text-foreground/80"
+            className="px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-all"
           >
-            Browse Servers
+            Browse
           </Link>
           <Link
             href="/pricing"
-            className="transition-colors hover:text-foreground/80"
+            className="px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-all"
           >
             Pricing
           </Link>
@@ -52,14 +56,14 @@ export function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className="flex items-center gap-2 text-sm hover:opacity-80"
+                  className="flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
                   aria-label={`Account menu for ${user.name ?? "user"}`}
                 >
                   <Avatar
                     src={user.image}
                     alt={user.name ?? ""}
                     fallback={user.name ?? "U"}
-                    size={32}
+                    size={28}
                   />
                   <ChevronDown className="w-3 h-3" />
                 </button>
@@ -97,12 +101,18 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/auth/signin">Sign In</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link href="/auth/signin">List Your Server</Link>
-              </Button>
+              <Link
+                href="/auth/signin"
+                className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors px-3 py-1.5"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/auth/signin"
+                className="text-sm font-medium bg-cyan-400 text-[#0a0a0f] px-4 py-1.5 rounded-md hover:bg-cyan-300 transition-colors accent-glow"
+              >
+                List Your Server
+              </Link>
             </>
           )}
         </div>
@@ -110,7 +120,7 @@ export function Navbar() {
         {/* Mobile hamburger */}
         <div className="sm:hidden ml-auto">
           <button
-            className="p-2 rounded-md"
+            className="p-2 rounded-md text-zinc-400 hover:text-zinc-100"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
@@ -123,31 +133,32 @@ export function Navbar() {
           </button>
         </div>
 
-        {/* Mobile nav overlay */}
+        {/* Mobile nav */}
         {mobileOpen && (
-          <div className="sm:hidden absolute top-14 left-0 right-0 bg-background border-b border-border p-4 z-50">
-            <nav aria-label="Main navigation" className="flex flex-col gap-4">
-              <Link href="/servers" onClick={() => setMobileOpen(false)}>
+          <div className="sm:hidden absolute top-14 left-0 right-0 bg-[#0a0a0f] border-b border-zinc-800/50 p-4 z-50">
+            <nav aria-label="Main navigation" className="flex flex-col gap-3">
+              <Link
+                href="/servers"
+                onClick={() => setMobileOpen(false)}
+                className="text-zinc-300 hover:text-cyan-400 transition-colors"
+              >
                 Browse Servers
               </Link>
-              <Link href="/pricing" onClick={() => setMobileOpen(false)}>
+              <Link
+                href="/pricing"
+                onClick={() => setMobileOpen(false)}
+                className="text-zinc-300 hover:text-cyan-400 transition-colors"
+              >
                 Pricing
               </Link>
               {!user && (
-                <>
-                  <Link
-                    href="/auth/signin"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/auth/signin"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    List Your Server
-                  </Link>
-                </>
+                <Link
+                  href="/auth/signin"
+                  onClick={() => setMobileOpen(false)}
+                  className="mt-2 text-center bg-cyan-400 text-[#0a0a0f] font-medium py-2 rounded-md"
+                >
+                  List Your Server
+                </Link>
               )}
             </nav>
           </div>

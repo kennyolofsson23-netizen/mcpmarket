@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   FEATURED_LISTING_PRICE_CENTS,
   MANAGED_HOSTING_PRICE_CENTS,
@@ -9,64 +7,133 @@ import {
 
 export default function PricingPage() {
   return (
-    <div className="container mx-auto px-4 py-16 max-w-4xl">
-      <h1 className="text-4xl font-bold text-center mb-4">
-        Simple, Transparent Pricing
+    <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-16">
+      <h1 className="text-4xl font-bold text-zinc-100 text-center mb-3">
+        Developer pricing
       </h1>
-      <p className="text-center text-gray-600 mb-12">
-        No upfront costs. We only earn when you do.
+      <p className="text-center text-zinc-500 mb-14 max-w-md mx-auto">
+        No upfront costs. Free to list. We only earn when you do.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Basic tier */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-2">Basic</h2>
-          <p className="text-3xl font-bold mb-1">Free to list</p>
-          <p className="text-gray-500 mb-4">
-            20% revenue share per transaction
-          </p>
-          <ul className="space-y-2 mb-6 text-sm">
-            <li>✓ Unlimited server listings</li>
-            <li>✓ Payment processing included</li>
-            <li>✓ {DEVELOPER_SHARE_PERCENT}% developer payout</li>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+        {/* Basic */}
+        <div className="rounded-lg border border-zinc-800/60 bg-zinc-900/40 p-6">
+          <div className="font-mono text-xs text-zinc-600 mb-3">BASIC</div>
+          <div className="text-3xl font-bold text-zinc-100 mb-1">Free</div>
+          <div className="text-sm text-zinc-500 mb-6">20% revenue share</div>
+          <ul className="space-y-3 text-sm text-zinc-400 mb-8">
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Unlimited server listings
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Stripe billing included
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              {DEVELOPER_SHARE_PERCENT}% developer payout
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              API key auth for subscribers
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Revenue analytics dashboard
+            </li>
           </ul>
-          <Button asChild className="w-full">
-            <Link href="/auth/signin">Get Started Free</Link>
-          </Button>
-        </Card>
+          <Link
+            href="/auth/signin"
+            className="block text-center text-sm font-medium border border-zinc-700 text-zinc-300 px-4 py-2.5 rounded-lg hover:border-zinc-600 hover:text-zinc-100 transition-all"
+          >
+            Get started free
+          </Link>
+        </div>
 
-        {/* Managed Hosting tier */}
-        <Card className="p-6 border-2 border-blue-500">
-          <h2 className="text-xl font-semibold mb-2">Managed Hosting</h2>
-          <p className="text-3xl font-bold mb-1">
-            ${(MANAGED_HOSTING_PRICE_CENTS / 100).toFixed(0)}/mo
-          </p>
-          <p className="text-gray-500 mb-4">per server, plus 20% rev share</p>
-          <ul className="space-y-2 mb-6 text-sm">
-            <li>✓ Everything in Basic</li>
-            <li>✓ Managed infrastructure</li>
-            <li>✓ Auto-scaling &amp; uptime monitoring</li>
+        {/* Managed Hosting */}
+        <div className="rounded-lg border border-cyan-400/30 bg-cyan-400/[0.03] p-6 relative">
+          <div className="absolute -top-3 left-6">
+            <span className="bg-cyan-400 text-[#0a0a0f] text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded">
+              Popular
+            </span>
+          </div>
+          <div className="font-mono text-xs text-cyan-400/60 mb-3">MANAGED</div>
+          <div className="text-3xl font-bold text-zinc-100 mb-1">
+            ${(MANAGED_HOSTING_PRICE_CENTS / 100).toFixed(0)}
+            <span className="text-lg text-zinc-500">/mo</span>
+          </div>
+          <div className="text-sm text-zinc-500 mb-6">
+            per server + 20% rev share
+          </div>
+          <ul className="space-y-3 text-sm text-zinc-400 mb-8">
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Everything in Basic
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Hosted endpoint with SSL
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Auto-scaling &amp; uptime monitoring
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Deploy from Docker or GitHub
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-cyan-400 mt-0.5">&#8250;</span>
+              Custom endpoint URL
+            </li>
           </ul>
-          <Button asChild variant="outline" className="w-full">
-            <Link href="/auth/signin">Start Hosting</Link>
-          </Button>
-        </Card>
+          <Link
+            href="/auth/signin"
+            className="block text-center text-sm font-semibold bg-cyan-400 text-[#0a0a0f] px-4 py-2.5 rounded-lg hover:bg-cyan-300 transition-colors accent-glow"
+          >
+            Start hosting
+          </Link>
+        </div>
 
-        {/* Featured tier */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-2">Featured</h2>
-          <p className="text-3xl font-bold mb-1">
-            ${(FEATURED_LISTING_PRICE_CENTS / 100).toFixed(0)}/mo
-          </p>
-          <p className="text-gray-500 mb-4">per server, plus 20% rev share</p>
-          <ul className="space-y-2 mb-6 text-sm">
-            <li>✓ Everything in Basic</li>
-            <li>✓ Featured placement on browse page</li>
-            <li>✓ Featured badge on server card</li>
+        {/* Featured */}
+        <div className="rounded-lg border border-zinc-800/60 bg-zinc-900/40 p-6">
+          <div className="font-mono text-xs text-zinc-600 mb-3">FEATURED</div>
+          <div className="text-3xl font-bold text-zinc-100 mb-1">
+            ${(FEATURED_LISTING_PRICE_CENTS / 100).toFixed(0)}
+            <span className="text-lg text-zinc-500">/mo</span>
+          </div>
+          <div className="text-sm text-zinc-500 mb-6">
+            per server + 20% rev share
+          </div>
+          <ul className="space-y-3 text-sm text-zinc-400 mb-8">
+            <li className="flex items-start gap-2">
+              <span className="text-violet-400 mt-0.5">&#8250;</span>
+              Everything in Basic
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-violet-400 mt-0.5">&#8250;</span>
+              Top placement on browse page
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-violet-400 mt-0.5">&#8250;</span>
+              Featured badge on listing
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-violet-400 mt-0.5">&#8250;</span>
+              Priority review (24h)
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-violet-400 mt-0.5">&#8250;</span>
+              Priority support
+            </li>
           </ul>
-          <Button asChild variant="outline" className="w-full">
-            <Link href="/auth/signin">Get Featured</Link>
-          </Button>
-        </Card>
+          <Link
+            href="/auth/signin"
+            className="block text-center text-sm font-medium border border-zinc-700 text-zinc-300 px-4 py-2.5 rounded-lg hover:border-zinc-600 hover:text-zinc-100 transition-all"
+          >
+            Get featured
+          </Link>
+        </div>
       </div>
     </div>
   );

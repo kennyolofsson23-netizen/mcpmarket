@@ -1,390 +1,406 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Accordion, AccordionItem } from "@/components/ui/accordion";
 import {
-  CheckCircle2,
+  ArrowRight,
+  Plug,
+  DollarSign,
+  Server,
   Zap,
-  Shield,
-  TrendingUp,
-  Code2,
-  Wallet,
+  Lock,
+  BarChart3,
 } from "lucide-react";
+
+function TerminalWindow({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="terminal-glow rounded-lg overflow-hidden bg-[#0d0d14] border border-zinc-800/60">
+      <div className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900/80 border-b border-zinc-800/60">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+          <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+          <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+        </div>
+        <span className="text-[11px] font-mono text-zinc-500 ml-2">
+          {title}
+        </span>
+      </div>
+      <div className="p-5 font-mono text-sm leading-relaxed overflow-x-auto">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function FeatureBlock({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="group p-5 rounded-lg border border-zinc-800/50 bg-zinc-900/30 hover:border-cyan-400/20 hover:bg-zinc-900/50 transition-all">
+      <div className="w-9 h-9 rounded-md bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mb-4 group-hover:border-cyan-400/30 transition-colors">
+        <Icon className="w-4 h-4 text-cyan-400" />
+      </div>
+      <h3 className="font-semibold text-zinc-100 mb-2">{title}</h3>
+      <p className="text-sm text-zinc-500 leading-relaxed">{description}</p>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
     <div className="w-full">
       {/* Hero */}
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-slate-50 to-white">
-        <div className="container px-4 md:px-6 mx-auto max-w-6xl">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-              The Marketplace for Paid MCP Servers
-            </h1>
-            <p className="mx-auto max-w-[700px] text-gray-600 md:text-xl">
-              MCPmarket is a free AI marketplace tool that connects MCP server
-              developers with paying subscribers. Developers list a server, set
-              a price, and keep 80% of all subscription revenue — while
-              MCPmarket handles billing, hosting, and discovery in one place.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <Button size="lg" asChild>
-                <Link href="/servers">Browse Servers</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/auth/signin">List Your Server</Link>
-              </Button>
+      <section className="hero-mesh noise-bg relative overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-32">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left — copy */}
+            <div className="animate-fade-in-up">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 text-xs font-medium mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                97M+ MCP SDK downloads/month
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-zinc-50 tracking-tight leading-[1.1] mb-6">
+                Your MCP server
+                <br />
+                <span className="text-cyan-400">deserves revenue</span>
+              </h1>
+              <p className="text-lg text-zinc-400 leading-relaxed max-w-lg mb-8">
+                MCPmarket is the paid marketplace for MCP servers. List your
+                tool, set a price, and earn 80% of every subscription. We handle
+                Stripe billing, API key auth, and optional managed hosting.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/auth/signin"
+                  className="inline-flex items-center gap-2 bg-cyan-400 text-[#0a0a0f] font-semibold px-6 py-3 rounded-lg hover:bg-cyan-300 transition-colors accent-glow"
+                >
+                  List your server
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/servers"
+                  className="inline-flex items-center gap-2 border border-zinc-700 text-zinc-300 font-medium px-6 py-3 rounded-lg hover:border-zinc-600 hover:text-zinc-100 transition-all"
+                >
+                  Browse marketplace
+                </Link>
+              </div>
+            </div>
+
+            {/* Right — config snippet */}
+            <div className="animate-fade-in-up delay-200">
+              <TerminalWindow title="claude_desktop_config.json">
+                <div className="text-zinc-500">{"{"}</div>
+                <div className="text-zinc-500 pl-4">
+                  {'"mcpServers"'}: {"{"}
+                </div>
+                <div className="pl-8">
+                  <span className="text-cyan-400">{'"code-review-pro"'}</span>
+                  <span className="text-zinc-500">: {"{"}</span>
+                </div>
+                <div className="pl-12">
+                  <span className="text-zinc-500">{'"url"'}: </span>
+                  <span className="text-emerald-400">
+                    {'"https://api.mcpmarket.dev/s/code-review-pro"'}
+                  </span>
+                  <span className="text-zinc-600">,</span>
+                </div>
+                <div className="pl-12">
+                  <span className="text-zinc-500">
+                    {'"headers"'}: {"{"}
+                  </span>
+                </div>
+                <div className="pl-16">
+                  <span className="text-zinc-500">{'"Authorization"'}: </span>
+                  <span className="text-amber-400">{'"Bearer mcp_sk_'}</span>
+                  <span className="text-amber-400/50">{"••••••••"}</span>
+                  <span className="text-amber-400">{'"'}</span>
+                </div>
+                <div className="pl-12 text-zinc-500">{"}"}</div>
+                <div className="pl-8 text-zinc-500">{"}"}</div>
+                <div className="text-zinc-500 pl-4">{"}"}</div>
+                <div className="text-zinc-500">{"}"}</div>
+                <div className="mt-3 pt-3 border-t border-zinc-800/60 text-xs text-zinc-600 flex items-center gap-2">
+                  <span className="text-emerald-500">&#10003;</span> Subscribe
+                  &rarr; paste config &rarr; done
+                </div>
+              </TerminalWindow>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="w-full py-12 md:py-24 bg-white">
-        <div className="container px-4 md:px-6 mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <h3 className="text-3xl font-bold">11,000+</h3>
-              <p className="text-gray-600 mt-2">MCP Servers Built</p>
+      {/* How it works — asymmetric */}
+      <section className="border-t border-zinc-800/50 grid-bg">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-20 lg:py-28">
+          <div className="grid lg:grid-cols-5 gap-16 items-start">
+            <div className="lg:col-span-2">
+              <h2 className="text-2xl font-bold text-zinc-100 mb-4">
+                How it works
+              </h2>
+              <p className="text-zinc-500 leading-relaxed mb-8">
+                No complicated onboarding. List a server, set a price, start
+                earning.
+              </p>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 shrink-0 rounded bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center font-mono text-xs text-cyan-400 font-bold">
+                    1
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-zinc-200 mb-1">
+                      List your server
+                    </h3>
+                    <p className="text-sm text-zinc-500">
+                      Connect GitHub, describe your MCP server, set a monthly
+                      price or per-call rate.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 shrink-0 rounded bg-violet-400/10 border border-violet-400/20 flex items-center justify-center font-mono text-xs text-violet-400 font-bold">
+                    2
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-zinc-200 mb-1">
+                      Users subscribe
+                    </h3>
+                    <p className="text-sm text-zinc-500">
+                      One-click Stripe checkout. Subscribers get an API key and
+                      a config snippet.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 shrink-0 rounded bg-emerald-400/10 border border-emerald-400/20 flex items-center justify-center font-mono text-xs text-emerald-400 font-bold">
+                    3
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-zinc-200 mb-1">
+                      Get paid monthly
+                    </h3>
+                    <p className="text-sm text-zinc-500">
+                      Stripe Connect deposits 80% to your bank on the 1st of
+                      each month.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-3xl font-bold">97M+</h3>
-              <p className="text-gray-600 mt-2">Monthly MCP SDK Downloads</p>
-            </div>
-            <div>
-              <h3 className="text-3xl font-bold">&lt;5%</h3>
-              <p className="text-gray-600 mt-2">Currently Earning Revenue</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* How It Works */}
-      <section className="w-full py-12 md:py-24 bg-gray-50">
-        <div className="container px-4 md:px-6 mx-auto max-w-6xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-            How MCPmarket Works
-          </h2>
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+            <div className="lg:col-span-3">
+              <TerminalWindow title="terminal — developer earnings">
+                <div className="text-zinc-500 text-xs mb-4">
+                  $ mcpmarket earnings --month 2026-03
                 </div>
-                <div>
-                  <h3 className="font-bold text-lg">For Developers</h3>
-                  <p className="text-gray-600 text-sm mt-1">
-                    List your MCP server, set a subscription or per-call price,
-                    and earn 80% of revenue. We handle auth, billing, and
-                    optional managed hosting.
-                  </p>
+                <div className="space-y-1">
+                  <div className="flex justify-between">
+                    <span className="text-zinc-400">code-review-pro</span>
+                    <span className="text-emerald-400">$2,340.00</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-400">sql-optimizer</span>
+                    <span className="text-emerald-400">$890.00</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-400">design-tokens-mcp</span>
+                    <span className="text-emerald-400">$445.00</span>
+                  </div>
+                  <div className="border-t border-zinc-800/60 mt-3 pt-3 flex justify-between font-medium">
+                    <span className="text-zinc-300">Total payout</span>
+                    <span className="text-cyan-400">$3,675.00</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-zinc-600">Platform fee (20%)</span>
+                    <span className="text-zinc-600">$918.75</span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                <div className="mt-4 pt-3 border-t border-zinc-800/60 text-xs text-zinc-600">
+                  <span className="text-emerald-500">&#10003;</span> Payout
+                  scheduled for Apr 1, 2026 via Stripe Connect
                 </div>
-                <div>
-                  <h3 className="font-bold text-lg">For Users</h3>
-                  <p className="text-gray-600 text-sm mt-1">
-                    Browse and subscribe to premium MCP tools in one place. One
-                    account, one billing method, instant config snippets for
-                    Claude Desktop, Cursor, and other AI clients.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <CheckCircle2 className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">Platform Fee</h3>
-                  <p className="text-gray-600 text-sm mt-1">
-                    MCPmarket keeps 20% of transactions. Optional managed
-                    hosting is $9/mo per server. Featured placement is $29/mo
-                    per server.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gray-900 rounded-lg p-6 font-mono text-sm">
-              <p className="text-gray-500 text-xs mb-4">
-                ~/claude_desktop_config.json
-              </p>
-              <p className="text-blue-400">{`{`}</p>
-              <p className="text-blue-400 pl-4">{`"mcpServers": {`}</p>
-              <p className="text-green-400 pl-8">{`"code-review-pro": {`}</p>
-              <p className="text-yellow-300 pl-12">
-                {`"url": "https://api.mcpmarket.dev/s/code-review-pro",`}
-              </p>
-              <p className="text-yellow-300 pl-12">{`"headers": {`}</p>
-              <p className="text-orange-300 pl-16">
-                {`"Authorization": "Bearer mcp_sk_••••••••"`}
-              </p>
-              <p className="text-yellow-300 pl-12">{`}`}</p>
-              <p className="text-green-400 pl-8">{`}`}</p>
-              <p className="text-blue-400 pl-4">{`}`}</p>
-              <p className="text-blue-400">{`}`}</p>
-              <p className="text-gray-500 text-xs mt-4">
-                ✓ Subscribe to a server and paste this into your MCP client
-              </p>
+              </TerminalWindow>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features */}
-      <section className="w-full py-12 md:py-24 bg-white">
-        <div className="container px-4 md:px-6 mx-auto max-w-6xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-            Everything You Need to Monetize MCP
+      <section className="border-t border-zinc-800/50">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-20 lg:py-28">
+          <h2 className="text-2xl font-bold text-zinc-100 mb-3 text-center">
+            Everything to monetize MCP
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <Shield className="w-8 h-8 text-blue-600" />
-              <h3 className="font-bold text-lg">Stripe-Powered Billing</h3>
-              <p className="text-gray-600 text-sm">
-                Subscriptions, usage-based billing, and one-click checkout — all
-                PCI-compliant. You never touch payment infrastructure.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <Zap className="w-8 h-8 text-blue-600" />
-              <h3 className="font-bold text-lg">Optional Managed Hosting</h3>
-              <p className="text-gray-600 text-sm">
-                Deploy from a Docker image or GitHub repo. We provision the
-                endpoint, handle SSL, and monitor uptime — for $9/mo per server.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <TrendingUp className="w-8 h-8 text-blue-600" />
-              <h3 className="font-bold text-lg">Revenue Analytics</h3>
-              <p className="text-gray-600 text-sm">
-                Live subscriber count, monthly revenue, and daily install
-                charts. Track every server individually from your dashboard.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <Code2 className="w-8 h-8 text-blue-600" />
-              <h3 className="font-bold text-lg">Instant Config Snippets</h3>
-              <p className="text-gray-600 text-sm">
-                Subscribers get a pre-filled JSON config to paste into their MCP
-                client. Works with Claude Desktop, Cursor, and all
-                MCP-compatible clients.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <Wallet className="w-8 h-8 text-blue-600" />
-              <h3 className="font-bold text-lg">Monthly Payouts</h3>
-              <p className="text-gray-600 text-sm">
-                Stripe Connect sends 80% of gross revenue to your bank account
-                on the 1st of each month. $25 minimum payout threshold.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <Shield className="w-8 h-8 text-blue-600" />
-              <h3 className="font-bold text-lg">API Key Authentication</h3>
-              <p className="text-gray-600 text-sm">
-                Every subscriber gets a unique, revocable API key. Hashed at
-                rest, shown once on creation, and verified on every request.
-              </p>
-            </div>
+          <p className="text-zinc-500 text-center mb-12 max-w-xl mx-auto">
+            Built for the MCP ecosystem. No boilerplate billing code, no auth
+            headaches.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <FeatureBlock
+              icon={DollarSign}
+              title="Stripe-powered billing"
+              description="Subscriptions and usage-based pricing. PCI-compliant checkout. You never touch payment infrastructure."
+            />
+            <FeatureBlock
+              icon={Server}
+              title="Managed hosting"
+              description="Deploy from Docker or GitHub. Auto-scaling, SSL, uptime monitoring. $9/mo per server."
+            />
+            <FeatureBlock
+              icon={BarChart3}
+              title="Revenue analytics"
+              description="Live subscriber count, MRR tracking, daily install charts. Per-server breakdowns."
+            />
+            <FeatureBlock
+              icon={Plug}
+              title="Instant config snippets"
+              description="Subscribers get a JSON config to paste into Claude Desktop, Cursor, or any MCP client."
+            />
+            <FeatureBlock
+              icon={Lock}
+              title="API key authentication"
+              description="Unique, revocable keys per subscriber. Hashed at rest, shown once on creation."
+            />
+            <FeatureBlock
+              icon={Zap}
+              title="Usage metering"
+              description="Track per-call usage. Bill by the request for high-volume tools. Real-time dashboards."
+            />
           </div>
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="w-full py-12 md:py-24 bg-gray-50">
-        <div className="container px-4 md:px-6 mx-auto max-w-6xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
-            Developer Pricing
+      <section className="border-t border-zinc-800/50 noise-bg">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-20 lg:py-28">
+          <h2 className="text-2xl font-bold text-zinc-100 mb-3 text-center">
+            Developer pricing
           </h2>
-          <p className="text-center text-gray-600 mb-12 max-w-xl mx-auto">
-            Free to list. Pay only when you earn — or add hosting and featured
-            placement as optional upgrades.
+          <p className="text-zinc-500 text-center mb-12">
+            Free to list. You only pay when you earn.
           </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h3 className="font-bold text-lg mb-1">Basic</h3>
-              <p className="text-sm text-gray-500 mb-4">Free to list</p>
-              <p className="text-3xl font-bold mb-6">
-                $0<span className="text-sm text-gray-600">/month</span>
-              </p>
-              <ul className="space-y-3 text-sm text-gray-600">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  List your MCP server on the marketplace
+          <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            <div className="rounded-lg border border-zinc-800/60 bg-zinc-900/40 p-6">
+              <div className="font-mono text-xs text-zinc-600 mb-3">BASIC</div>
+              <div className="text-3xl font-bold text-zinc-100 mb-1">Free</div>
+              <div className="text-sm text-zinc-500 mb-6">20% rev share</div>
+              <ul className="space-y-3 text-sm text-zinc-400 mb-8">
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-400 mt-0.5">&#8250;</span>Unlimited
+                  server listings
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Set any price — subscription or per-call
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-400 mt-0.5">&#8250;</span>Stripe
+                  billing included
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Subscriber analytics and revenue dashboard
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  20% platform fee on each transaction
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-400 mt-0.5">&#8250;</span>80%
+                  developer payout
                 </li>
               </ul>
-              <Button className="w-full mt-8" variant="outline" asChild>
-                <Link href="/auth/signin">List Your Server Free</Link>
-              </Button>
+              <Link
+                href="/auth/signin"
+                className="block text-center text-sm font-medium border border-zinc-700 text-zinc-300 px-4 py-2.5 rounded-lg hover:border-zinc-600 hover:text-zinc-100 transition-all"
+              >
+                Get started free
+              </Link>
             </div>
-
-            <div className="bg-white rounded-lg border-2 border-blue-600 p-8 relative">
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                  Most Popular
+            <div className="rounded-lg border border-cyan-400/30 bg-cyan-400/[0.03] p-6 relative">
+              <div className="absolute -top-3 left-6">
+                <span className="bg-cyan-400 text-[#0a0a0f] text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded">
+                  Popular
                 </span>
               </div>
-              <h3 className="font-bold text-lg mb-1">Managed Hosting</h3>
-              <p className="text-sm text-gray-500 mb-4">Add-on for Basic</p>
-              <p className="text-3xl font-bold mb-6">
-                $9
-                <span className="text-sm text-gray-600">/month per server</span>
-              </p>
-              <ul className="space-y-3 text-sm text-gray-600">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
+              <div className="font-mono text-xs text-cyan-400/60 mb-3">
+                MANAGED
+              </div>
+              <div className="text-3xl font-bold text-zinc-100 mb-1">
+                $9<span className="text-lg text-zinc-500">/mo</span>
+              </div>
+              <div className="text-sm text-zinc-500 mb-6">
+                per server + 20% rev share
+              </div>
+              <ul className="space-y-3 text-sm text-zinc-400 mb-8">
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-400 mt-0.5">&#8250;</span>
                   Everything in Basic
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  MCPmarket hosts your server endpoint
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-400 mt-0.5">&#8250;</span>Hosted
+                  endpoint with SSL
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Auto-scaling, SSL, and uptime monitoring
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Deploy from Docker image or GitHub repo
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-400 mt-0.5">&#8250;</span>
+                  Auto-scaling &amp; monitoring
                 </li>
               </ul>
-              <Button className="w-full mt-8" asChild>
-                <Link href="/auth/signin">Start with Managed Hosting</Link>
-              </Button>
+              <Link
+                href="/auth/signin"
+                className="block text-center text-sm font-semibold bg-cyan-400 text-[#0a0a0f] px-4 py-2.5 rounded-lg hover:bg-cyan-300 transition-colors accent-glow"
+              >
+                Start hosting
+              </Link>
             </div>
-
-            <div className="bg-white rounded-lg border border-gray-200 p-8">
-              <h3 className="font-bold text-lg mb-1">Featured Listing</h3>
-              <p className="text-sm text-gray-500 mb-4">Add-on for Basic</p>
-              <p className="text-3xl font-bold mb-6">
-                $29
-                <span className="text-sm text-gray-600">/month per server</span>
-              </p>
-              <ul className="space-y-3 text-sm text-gray-600">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
+            <div className="rounded-lg border border-zinc-800/60 bg-zinc-900/40 p-6">
+              <div className="font-mono text-xs text-zinc-600 mb-3">
+                FEATURED
+              </div>
+              <div className="text-3xl font-bold text-zinc-100 mb-1">
+                $29<span className="text-lg text-zinc-500">/mo</span>
+              </div>
+              <div className="text-sm text-zinc-500 mb-6">
+                per server + 20% rev share
+              </div>
+              <ul className="space-y-3 text-sm text-zinc-400 mb-8">
+                <li className="flex items-start gap-2">
+                  <span className="text-violet-400 mt-0.5">&#8250;</span>
                   Everything in Basic
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Featured placement at top of browse page
+                <li className="flex items-start gap-2">
+                  <span className="text-violet-400 mt-0.5">&#8250;</span>Top
+                  placement on browse
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  &ldquo;Featured&rdquo; badge on your listing
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Priority support response
+                <li className="flex items-start gap-2">
+                  <span className="text-violet-400 mt-0.5">&#8250;</span>
+                  Featured badge on listing
                 </li>
               </ul>
-              <Button className="w-full mt-8" variant="outline" asChild>
-                <Link href="/auth/signin">Get Featured Placement</Link>
-              </Button>
+              <Link
+                href="/auth/signin"
+                className="block text-center text-sm font-medium border border-zinc-700 text-zinc-300 px-4 py-2.5 rounded-lg hover:border-zinc-600 hover:text-zinc-100 transition-all"
+              >
+                Get featured
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="w-full py-12 md:py-24 bg-white">
-        <div className="container px-4 md:px-6 mx-auto max-w-4xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-            Frequently Asked Questions
+      {/* CTA */}
+      <section className="border-t border-zinc-800/50">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-20 lg:py-24 text-center">
+          <h2 className="text-3xl font-bold text-zinc-100 mb-4">
+            11,000+ servers. &lt;5% earning revenue.
           </h2>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="item-1" trigger="What is MCPmarket?">
-              <p className="text-gray-600">
-                MCPmarket is the paid marketplace for MCP (Model Context
-                Protocol) servers. Developers list MCP tools with a subscription
-                or usage-based price, users subscribe with one click, and the
-                platform handles billing, hosting, authentication, and monthly
-                payouts. It is the only MCP marketplace that combines discovery,
-                managed hosting, and developer monetization in one platform.
-              </p>
-            </AccordionItem>
-            <AccordionItem
-              value="item-2"
-              trigger="How do I list my MCP server on MCPmarket?"
-            >
-              <p className="text-gray-600">
-                Sign in with GitHub or Google, upgrade your account to Developer
-                status, and submit your server listing with a name, description,
-                category, pricing model, and endpoint URL. Listings are reviewed
-                within 24 hours. The Basic listing tier is free with a 20%
-                revenue share. Managed hosting ($9/mo per server) and Featured
-                placement ($29/mo per server) are optional add-ons.
-              </p>
-            </AccordionItem>
-            <AccordionItem
-              value="item-3"
-              trigger="What percentage does MCPmarket take from developer revenue?"
-            >
-              <p className="text-gray-600">
-                MCPmarket takes a 20% platform fee on all subscription and
-                usage-based transactions. Developers keep 80% of gross revenue.
-                Payouts are processed via Stripe Connect on the 1st of each
-                month for the prior month&apos;s earnings, with a $25 minimum
-                payout threshold.
-              </p>
-            </AccordionItem>
-            <AccordionItem
-              value="item-4"
-              trigger="Which AI clients can connect to MCP servers listed on MCPmarket?"
-            >
-              <p className="text-gray-600">
-                Any client that supports the Model Context Protocol can connect,
-                including Claude Desktop, Cursor, Windsurf, and other
-                MCP-compatible AI assistants. After subscribing, users receive a
-                ready-to-paste JSON configuration snippet for their MCP client
-                settings file — no manual setup required.
-              </p>
-            </AccordionItem>
-            <AccordionItem
-              value="item-5"
-              trigger="How does MCPmarket compare to free MCP directories like mcp.so?"
-            >
-              <p className="text-gray-600">
-                Free directories like mcp.so and mcpservers.org provide listings
-                only — no billing infrastructure, no hosted endpoints, and no
-                developer payouts. MCPmarket adds Stripe subscription billing,
-                optional managed server hosting, API key authentication, usage
-                metering, and monthly revenue payouts. Developers on MCPmarket
-                earn revenue; developers on free directories do not.
-              </p>
-            </AccordionItem>
-          </Accordion>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="w-full py-12 md:py-24 bg-blue-600 text-white">
-        <div className="container px-4 md:px-6 mx-auto max-w-4xl text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Your MCP Server Should Earn Revenue
-          </h2>
-          <p className="text-blue-50 mb-8 max-w-2xl mx-auto">
-            Over 11,000 MCP servers exist and fewer than 5% earn revenue. List
-            your server today and start receiving payouts within 30 days of your
-            first subscriber.
+          <p className="text-zinc-500 mb-8 max-w-lg mx-auto">
+            The MCP ecosystem is exploding. Developers are building — they just
+            have no way to charge. MCPmarket fixes that.
           </p>
-          <Button size="lg" variant="secondary" asChild>
-            <Link href="/auth/signin">List Your Server — It&apos;s Free</Link>
-          </Button>
+          <Link
+            href="/auth/signin"
+            className="inline-flex items-center gap-2 bg-cyan-400 text-[#0a0a0f] font-semibold px-8 py-3.5 rounded-lg hover:bg-cyan-300 transition-colors accent-glow text-lg"
+          >
+            List your server &mdash; it&apos;s free
+            <ArrowRight className="w-5 h-5" />
+          </Link>
         </div>
       </section>
     </div>

@@ -49,11 +49,13 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
   const currentPage = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Browse MCP Servers</h1>
-      <p className="text-muted-foreground mb-8">
-        MCPmarket is a free AI marketplace tool that lets you discover and
-        subscribe to premium MCP servers from independent developers.
+    <div className="max-w-[1400px] mx-auto px-6 lg:px-8 py-10">
+      <h1 className="text-3xl font-bold text-zinc-100 mb-2">
+        Browse MCP Servers
+      </h1>
+      <p className="text-zinc-500 mb-8">
+        Discover and subscribe to premium MCP servers from independent
+        developers.
       </p>
 
       <div className="space-y-4 mb-8">
