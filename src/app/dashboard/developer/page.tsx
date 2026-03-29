@@ -11,10 +11,7 @@ import type { DeveloperStats } from '@/types'
 
 const RevenueChart = dynamic(
   () => import('@/components/revenue-chart'),
-  {
-    ssr: false,
-    loading: () => <div className="h-[300px] animate-pulse rounded bg-muted" />,
-  },
+  { loading: () => <div className="h-[300px] animate-pulse rounded bg-muted" /> },
 )
 
 function formatCents(cents: number): string {

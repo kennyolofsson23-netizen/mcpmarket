@@ -26,8 +26,7 @@ function formatAxisDollars(cents: number): string {
   return `$${dollars.toFixed(0)}`
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function CustomTooltip({ active, payload, label }: any) {
+function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) {
   if (active && payload && payload.length) {
     return (
       <div className="rounded-lg border border-border bg-background px-3 py-2 shadow-md">

@@ -1,14 +1,21 @@
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mcpmarket.dev'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch all APPROVED servers for dynamic routes
-  const servers = await prisma.mcpServer.findMany({
-    where: { status: 'APPROVED' },
-    select: { slug: true, updatedAt: true },
-  })
+  let servers: Array<{ slug: string; updatedAt: Date }> = []
+  try {
+    servers = await prisma.mcpServer.findMany({
+      where: { status: 'APPROVED' },
+      select: { slug: true, updatedAt: true },
+    })
+  } catch {
+    // DB unavailable during build — return static routes only
+  }
 
   const serverEntries = servers.map((server) => ({
     url: `${baseUrl}/servers/${server.slug}`,
