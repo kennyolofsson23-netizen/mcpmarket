@@ -1,14 +1,16 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
-export type HostingStatus = 'PENDING' | 'RUNNING' | 'STOPPED' | 'ERROR';
+export type HostingStatus = "PENDING" | "RUNNING" | "STOPPED" | "ERROR";
 
-export async function provisionHosting(serverId: string): Promise<{ endpointUrl: string }> {
+export async function provisionHosting(
+  serverId: string,
+): Promise<{ endpointUrl: string }> {
   const endpointUrl = `https://hosted.mcpmarket.com/${serverId}`;
 
   await prisma.mcpServer.update({
     where: { id: serverId },
     data: {
-      hostingStatus: 'PENDING',
+      hostingStatus: "PENDING",
       endpointUrl,
     },
   });
@@ -24,10 +26,10 @@ export async function getHostingStatus(
     select: { hostingStatus: true, endpointUrl: true },
   });
 
-  if (!server) throw new Error('Server not found');
+  if (!server) throw new Error("Server not found");
 
   return {
-    status: server.hostingStatus ?? 'NOT_PROVISIONED',
+    status: server.hostingStatus ?? "NOT_PROVISIONED",
     endpointUrl: server.endpointUrl,
   };
 }

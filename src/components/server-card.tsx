@@ -45,7 +45,8 @@ function ServerLogo({ server }: { server: McpServerWithOwner }) {
 
 export function ServerCard({ server }: ServerCardProps) {
   const categoryLabel =
-    CATEGORIES.find((c) => c.value === server.category)?.label ?? server.category;
+    CATEGORIES.find((c) => c.value === server.category)?.label ??
+    server.category;
   const priceLabel = formatPrice(server);
   const isFree = server.pricingModel === "FREE";
   const installCount = server._count?.subscriptions ?? server.installCount;
@@ -64,7 +65,9 @@ export function ServerCard({ server }: ServerCardProps) {
                 {server.name}
               </Link>
               {server.featured && (
-                <Badge variant="featured" className="shrink-0">Featured</Badge>
+                <Badge variant="featured" className="shrink-0">
+                  Featured
+                </Badge>
               )}
             </div>
             <p className="text-xs text-muted-foreground truncate">

@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import { generateApiKey } from '@/lib/api-keys';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { generateApiKey } from "@/lib/api-keys";
 
 export async function GET(_req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const keys = await prisma.apiKey.findMany({
@@ -21,14 +21,14 @@ export async function GET(_req: NextRequest) {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await req.json();
   const { name, serverId } = body as { name: string; serverId?: string };
 
   if (!name) {
-    return NextResponse.json({ error: 'name is required' }, { status: 400 });
+    return NextResponse.json({ error: "name is required" }, { status: 400 });
   }
 
   const { key: rawKey, keyHash, keyPrefix } = generateApiKey();
@@ -40,12 +40,18 @@ export async function POST(req: NextRequest) {
       name,
       keyHash,
       keyPrefix,
-      permissions: '[]',
+      permissions: "[]",
     },
   });
 
   return NextResponse.json(
-    { key: rawKey, keyPrefix: created.keyPrefix, id: created.id, name: created.name, createdAt: created.createdAt },
+    {
+      key: rawKey,
+      keyPrefix: created.keyPrefix,
+      id: created.id,
+      name: created.name,
+      createdAt: created.createdAt,
+    },
     { status: 201 },
   );
 }

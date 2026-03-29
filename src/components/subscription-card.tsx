@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import type { SubscriptionWithServer } from '@/types'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import type { SubscriptionWithServer } from "@/types";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -21,20 +21,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/textarea'
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
-type StatusVariant = 'approved' | 'secondary' | 'warning'
+type StatusVariant = "approved" | "secondary" | "warning";
 
 const STATUS_VARIANT: Record<string, StatusVariant> = {
-  ACTIVE: 'approved',
-  CANCELED: 'secondary',
-  PAST_DUE: 'warning',
-}
+  ACTIVE: "approved",
+  CANCELED: "secondary",
+  PAST_DUE: "warning",
+};
 
 function formatPrice(cents: number): string {
-  if (!cents) return 'Free'
-  return `$${(cents / 100).toFixed(2)}/mo`
+  if (!cents) return "Free";
+  return `$${(cents / 100).toFixed(2)}/mo`;
 }
 
 function ConfigModal({
@@ -42,32 +42,32 @@ function ConfigModal({
   open,
   onClose,
 }: {
-  subscriptionId: string
-  open: boolean
-  onClose: () => void
+  subscriptionId: string;
+  open: boolean;
+  onClose: () => void;
 }) {
-  const [config, setConfig] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [config, setConfig] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function fetchConfig() {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const res = await fetch(`/api/subscriptions/${subscriptionId}/config`)
-      if (!res.ok) throw new Error('Failed to fetch config')
-      const data = await res.json()
-      setConfig(JSON.stringify(data, null, 2))
+      const res = await fetch(`/api/subscriptions/${subscriptionId}/config`);
+      if (!res.ok) throw new Error("Failed to fetch config");
+      const data = await res.json();
+      setConfig(JSON.stringify(data, null, 2));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   function handleOpen(isOpen: boolean) {
-    if (isOpen && !config) fetchConfig()
-    if (!isOpen) onClose()
+    if (isOpen && !config) fetchConfig();
+    if (!isOpen) onClose();
   }
 
   return (
@@ -103,39 +103,39 @@ function ConfigModal({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export function SubscriptionCard({
   subscription,
 }: {
-  subscription: SubscriptionWithServer
+  subscription: SubscriptionWithServer;
 }) {
-  const router = useRouter()
-  const [configOpen, setConfigOpen] = useState(false)
-  const [canceling, setCanceling] = useState(false)
-  const [cancelError, setCancelError] = useState<string | null>(null)
+  const router = useRouter();
+  const [configOpen, setConfigOpen] = useState(false);
+  const [canceling, setCanceling] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
 
-  const { server } = subscription
-  const statusVariant = STATUS_VARIANT[subscription.status] ?? 'secondary'
+  const { server } = subscription;
+  const statusVariant = STATUS_VARIANT[subscription.status] ?? "secondary";
 
   async function handleCancel() {
-    if (!confirm('Are you sure you want to cancel this subscription?')) return
-    setCanceling(true)
-    setCancelError(null)
+    if (!confirm("Are you sure you want to cancel this subscription?")) return;
+    setCanceling(true);
+    setCancelError(null);
     try {
       const res = await fetch(`/api/subscriptions/${subscription.id}/cancel`, {
-        method: 'POST',
-      })
+        method: "POST",
+      });
       if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        throw new Error(body.error ?? 'Failed to cancel subscription')
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error ?? "Failed to cancel subscription");
       }
-      router.refresh()
+      router.refresh();
     } catch (err) {
-      setCancelError(err instanceof Error ? err.message : 'An error occurred')
+      setCancelError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      setCanceling(false)
+      setCanceling(false);
     }
   }
 
@@ -176,7 +176,7 @@ export function SubscriptionCard({
         <CardContent className="pb-3">
           {subscription.currentPeriodEnd && (
             <p className="text-xs text-muted-foreground">
-              Next billing:{' '}
+              Next billing:{" "}
               {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
             </p>
           )}
@@ -188,7 +188,7 @@ export function SubscriptionCard({
           <Button size="sm" onClick={() => setConfigOpen(true)}>
             Get Config
           </Button>
-          {subscription.status === 'ACTIVE' && (
+          {subscription.status === "ACTIVE" && (
             <Button
               size="sm"
               variant="outline"
@@ -210,5 +210,5 @@ export function SubscriptionCard({
         onClose={() => setConfigOpen(false)}
       />
     </>
-  )
+  );
 }

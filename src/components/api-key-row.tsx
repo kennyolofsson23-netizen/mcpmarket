@@ -55,7 +55,9 @@ export function ApiKeyRow({ apiKey, onRevoke }: ApiKeyRowProps) {
     setRegenerating(true);
     setError(null);
     try {
-      const body: Record<string, string | undefined> = { name: apiKey.name ?? undefined };
+      const body: Record<string, string | undefined> = {
+        name: apiKey.name ?? undefined,
+      };
       if (apiKey.serverId) body.serverId = apiKey.serverId;
       const res = await fetch("/api/keys", {
         method: "POST",
@@ -80,7 +82,9 @@ export function ApiKeyRow({ apiKey, onRevoke }: ApiKeyRowProps) {
               {apiKey.keyPrefix}...
             </code>
             {apiKey.name && (
-              <span className="text-sm font-medium truncate">{apiKey.name}</span>
+              <span className="text-sm font-medium truncate">
+                {apiKey.name}
+              </span>
             )}
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">

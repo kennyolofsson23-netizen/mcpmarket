@@ -66,7 +66,9 @@ export default async function VersionsPage({
                 <tbody>
                   {versions.map((version) => (
                     <tr key={version.id} className="border-b last:border-0">
-                      <td className="px-4 py-3 font-mono font-medium">{version.version}</td>
+                      <td className="px-4 py-3 font-mono font-medium">
+                        {version.version}
+                      </td>
                       <td className="px-4 py-3 text-muted-foreground max-w-[200px] truncate">
                         {version.endpointUrl ?? server.endpointUrl ?? "—"}
                       </td>
@@ -76,13 +78,19 @@ export default async function VersionsPage({
                       <td className="px-4 py-3">
                         <div className="flex gap-1 flex-wrap">
                           {version.isLatest && (
-                            <Badge variant="default" className="text-xs">Latest</Badge>
+                            <Badge variant="default" className="text-xs">
+                              Latest
+                            </Badge>
                           )}
                           {version.deprecated && (
-                            <Badge variant="destructive" className="text-xs">Deprecated</Badge>
+                            <Badge variant="destructive" className="text-xs">
+                              Deprecated
+                            </Badge>
                           )}
                           {!version.isLatest && !version.deprecated && (
-                            <Badge variant="secondary" className="text-xs">Published</Badge>
+                            <Badge variant="secondary" className="text-xs">
+                              Published
+                            </Badge>
                           )}
                         </div>
                       </td>

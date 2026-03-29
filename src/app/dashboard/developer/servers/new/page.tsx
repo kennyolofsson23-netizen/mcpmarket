@@ -33,7 +33,8 @@ export default function NewServerPage() {
 
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      const message = (body as { error?: string }).error ?? "Failed to create server";
+      const message =
+        (body as { error?: string }).error ?? "Failed to create server";
       addToast(message, "error");
       throw new Error(message);
     }

@@ -1,27 +1,29 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export function StripeConnectBanner() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleConnect() {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const res = await fetch('/api/billing/connect/onboard', { method: 'POST' })
-      const data = await res.json()
+      const res = await fetch("/api/billing/connect/onboard", {
+        method: "POST",
+      });
+      const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error ?? 'Failed to start onboarding')
+        throw new Error(data.error ?? "Failed to start onboarding");
       }
       if (data.url) {
-        window.location.href = data.url
+        window.location.href = data.url;
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
-      setLoading(false)
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      setLoading(false);
     }
   }
 
@@ -50,33 +52,66 @@ export function StripeConnectBanner() {
             </h2>
           </div>
           <p className="mt-2 text-sm text-violet-700 dark:text-violet-300">
-            Connect your Stripe account to receive payouts for your MCP server subscriptions.
-            MCPmarket uses an{' '}
-            <strong>80/20 revenue split</strong> — you keep 80% of all revenue, and we
-            retain 20% as a platform fee to cover infrastructure and payment processing.
+            Connect your Stripe account to receive payouts for your MCP server
+            subscriptions. MCPmarket uses an{" "}
+            <strong>80/20 revenue split</strong> — you keep 80% of all revenue,
+            and we retain 20% as a platform fee to cover infrastructure and
+            payment processing.
           </p>
           <ul className="mt-3 space-y-1 text-sm text-violet-700 dark:text-violet-300">
             <li className="flex items-center gap-2">
-              <svg className="h-4 w-4 shrink-0 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4 shrink-0 text-violet-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               Instant payouts via Stripe Connect
             </li>
             <li className="flex items-center gap-2">
-              <svg className="h-4 w-4 shrink-0 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4 shrink-0 text-violet-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               You keep 80% of every subscription payment
             </li>
             <li className="flex items-center gap-2">
-              <svg className="h-4 w-4 shrink-0 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4 shrink-0 text-violet-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               Secure onboarding via Stripe — we never store your banking details
             </li>
           </ul>
           {error && (
-            <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>
+            <p className="mt-3 text-sm text-red-600 dark:text-red-400">
+              {error}
+            </p>
           )}
         </div>
         <div className="shrink-0">
@@ -87,18 +122,33 @@ export function StripeConnectBanner() {
           >
             {loading ? (
               <span className="flex items-center gap-2">
-                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                <svg
+                  className="h-4 w-4 animate-spin"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  />
                 </svg>
                 Connecting...
               </span>
             ) : (
-              'Connect with Stripe'
+              "Connect with Stripe"
             )}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

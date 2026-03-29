@@ -60,7 +60,9 @@ export function WebhookItem({ webhook }: WebhookItemProps) {
     if (!confirm("Delete this webhook endpoint?")) return;
     setLoading(true);
     try {
-      await fetch(`/api/developer/webhooks/${webhook.id}`, { method: "DELETE" });
+      await fetch(`/api/developer/webhooks/${webhook.id}`, {
+        method: "DELETE",
+      });
       router.refresh();
     } finally {
       setLoading(false);
@@ -70,7 +72,9 @@ export function WebhookItem({ webhook }: WebhookItemProps) {
   async function handleTest() {
     setTestLoading(true);
     try {
-      await fetch(`/api/developer/webhooks/${webhook.id}/test`, { method: "POST" });
+      await fetch(`/api/developer/webhooks/${webhook.id}/test`, {
+        method: "POST",
+      });
       router.refresh();
     } finally {
       setTestLoading(false);
@@ -89,20 +93,38 @@ export function WebhookItem({ webhook }: WebhookItemProps) {
               </Badge>
             </div>
             {webhook.description && (
-              <p className="text-sm text-muted-foreground mt-1">{webhook.description}</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {webhook.description}
+              </p>
             )}
             <p className="text-xs text-muted-foreground mt-1">
-              Secret prefix: <span className="font-mono">{webhook.secretPrefix}…</span>
+              Secret prefix:{" "}
+              <span className="font-mono">{webhook.secretPrefix}…</span>
             </p>
           </div>
           <div className="flex gap-2 flex-shrink-0">
-            <Button variant="outline" size="sm" onClick={handleTest} disabled={testLoading}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleTest}
+              disabled={testLoading}
+            >
               {testLoading ? "Testing..." : "Test"}
             </Button>
-            <Button variant="outline" size="sm" onClick={handleToggle} disabled={loading}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleToggle}
+              disabled={loading}
+            >
               {webhook.isActive ? "Disable" : "Enable"}
             </Button>
-            <Button variant="destructive" size="sm" onClick={handleDelete} disabled={loading}>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={loading}
+            >
               Delete
             </Button>
           </div>
@@ -110,10 +132,15 @@ export function WebhookItem({ webhook }: WebhookItemProps) {
       </CardHeader>
       <CardContent>
         <div className="mb-4">
-          <p className="text-xs font-medium text-muted-foreground uppercase mb-2">Events</p>
+          <p className="text-xs font-medium text-muted-foreground uppercase mb-2">
+            Events
+          </p>
           <div className="flex flex-wrap gap-1">
             {events.map((event) => (
-              <span key={event} className="font-mono text-xs bg-muted px-2 py-0.5 rounded">
+              <span
+                key={event}
+                className="font-mono text-xs bg-muted px-2 py-0.5 rounded"
+              >
                 {event}
               </span>
             ))}
@@ -142,7 +169,10 @@ export function WebhookItem({ webhook }: WebhookItemProps) {
                       {new Date(log.createdAt).toLocaleString()}
                     </td>
                     <td className="py-2">
-                      <Badge variant={log.success ? "default" : "destructive"} className="text-xs">
+                      <Badge
+                        variant={log.success ? "default" : "destructive"}
+                        className="text-xs"
+                      >
                         {log.success ? "Success" : "Failed"}
                       </Badge>
                     </td>

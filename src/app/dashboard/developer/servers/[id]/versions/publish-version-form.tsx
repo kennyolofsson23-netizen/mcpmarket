@@ -26,18 +26,26 @@ export function PublishVersionForm({ serverId }: PublishVersionFormProps) {
       const res = await fetch(`/api/developer/servers/${serverId}/versions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ version, endpointUrl: endpointUrl || undefined, changelog }),
+        body: JSON.stringify({
+          version,
+          endpointUrl: endpointUrl || undefined,
+          changelog,
+        }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error((body as { error?: string }).error ?? "Failed to publish version");
+        throw new Error(
+          (body as { error?: string }).error ?? "Failed to publish version",
+        );
       }
       setVersion("");
       setEndpointUrl("");
       setChangelog("");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to publish version");
+      setError(
+        err instanceof Error ? err.message : "Failed to publish version",
+      );
     } finally {
       setLoading(false);
     }
@@ -46,7 +54,10 @@ export function PublishVersionForm({ serverId }: PublishVersionFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="version-string" className="block text-sm font-medium mb-1">
+        <label
+          htmlFor="version-string"
+          className="block text-sm font-medium mb-1"
+        >
           Version
         </label>
         <Input
@@ -58,9 +69,14 @@ export function PublishVersionForm({ serverId }: PublishVersionFormProps) {
         />
       </div>
       <div>
-        <label htmlFor="version-endpoint" className="block text-sm font-medium mb-1">
+        <label
+          htmlFor="version-endpoint"
+          className="block text-sm font-medium mb-1"
+        >
           Endpoint URL{" "}
-          <span className="text-muted-foreground font-normal">(optional — overrides server default)</span>
+          <span className="text-muted-foreground font-normal">
+            (optional — overrides server default)
+          </span>
         </label>
         <Input
           id="version-endpoint"
@@ -71,7 +87,10 @@ export function PublishVersionForm({ serverId }: PublishVersionFormProps) {
         />
       </div>
       <div>
-        <label htmlFor="version-changelog" className="block text-sm font-medium mb-1">
+        <label
+          htmlFor="version-changelog"
+          className="block text-sm font-medium mb-1"
+        >
           Changelog{" "}
           <span className="text-muted-foreground font-normal">(optional)</span>
         </label>

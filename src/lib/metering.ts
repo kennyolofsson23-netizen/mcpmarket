@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma';
-import { hashApiKey } from '@/lib/api-keys';
+import { prisma } from "@/lib/prisma";
+import { hashApiKey } from "@/lib/api-keys";
 
 export async function recordApiCall(opts: {
   apiKey: string;
@@ -11,7 +11,7 @@ export async function recordApiCall(opts: {
   const key = await prisma.apiKey.findUnique({
     where: { keyHash, isActive: true },
   });
-  if (!key) throw new Error('Invalid API key');
+  if (!key) throw new Error("Invalid API key");
 
   await prisma.usageRecord.create({
     data: {

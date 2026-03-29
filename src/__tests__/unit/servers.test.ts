@@ -1,11 +1,11 @@
 // F001: Server Listing & Publishing
-jest.mock('@/lib/auth', () => ({
+jest.mock("@/lib/auth", () => ({
   auth: jest.fn(),
   requireAuth: jest.fn(),
   requireRole: jest.fn(),
 }));
 
-jest.mock('@/lib/prisma', () => ({
+jest.mock("@/lib/prisma", () => ({
   prisma: {
     mcpServer: {
       findMany: jest.fn(),
@@ -17,51 +17,62 @@ jest.mock('@/lib/prisma', () => ({
   },
 }));
 
-import { POST } from '@/app/api/servers/route';
-import { GET as getDetail, PUT } from '@/app/api/servers/[slug]/route';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { POST } from "@/app/api/servers/route";
+import { GET as getDetail, PUT } from "@/app/api/servers/[slug]/route";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 const mockAuth = auth as jest.MockedFunction<typeof auth>;
-const mockFindUnique = prisma.mcpServer.findUnique as jest.MockedFunction<typeof prisma.mcpServer.findUnique>;
-const mockCreate = prisma.mcpServer.create as jest.MockedFunction<typeof prisma.mcpServer.create>;
-const mockUpdate = prisma.mcpServer.update as jest.MockedFunction<typeof prisma.mcpServer.update>;
+const mockFindUnique = prisma.mcpServer.findUnique as jest.MockedFunction<
+  typeof prisma.mcpServer.findUnique
+>;
+const mockCreate = prisma.mcpServer.create as jest.MockedFunction<
+  typeof prisma.mcpServer.create
+>;
+const mockUpdate = prisma.mcpServer.update as jest.MockedFunction<
+  typeof prisma.mcpServer.update
+>;
 
 const baseServerBody = {
-  name: 'My Server',
-  description: 'A test server description here',
-  pricingModel: 'FREE',
+  name: "My Server",
+  description: "A test server description here",
+  pricingModel: "FREE",
   managedHosting: false,
-  endpointUrl: 'https://api.example.com',
-  category: 'general',
+  endpointUrl: "https://api.example.com",
+  category: "general",
   tags: [],
 };
 
 const mockServer = {
-  id: 'server-1',
-  name: 'My Server',
-  slug: 'my-server',
-  description: 'A test server description here',
+  id: "server-1",
+  name: "My Server",
+  slug: "my-server",
+  description: "A test server description here",
   longDescription: null,
   logoUrl: null,
   repoUrl: null,
   websiteUrl: null,
-  category: 'general',
-  tags: '[]',
-  status: 'APPROVED',
-  pricingModel: 'FREE',
+  category: "general",
+  tags: "[]",
+  status: "APPROVED",
+  pricingModel: "FREE",
   price: 0,
   usagePrice: null,
   freeCallLimit: null,
-  endpointUrl: 'https://api.example.com',
+  endpointUrl: "https://api.example.com",
   managedHosting: false,
   installCount: 0,
   avgRating: null,
-  ownerId: 'user-1',
+  ownerId: "user-1",
   featured: false,
-  createdAt: new Date('2024-01-01'),
-  updatedAt: new Date('2024-01-01'),
-  owner: { id: 'user-1', name: 'Dev User', email: 'dev@example.com', image: null },
+  createdAt: new Date("2024-01-01"),
+  updatedAt: new Date("2024-01-01"),
+  owner: {
+    id: "user-1",
+    name: "Dev User",
+    email: "dev@example.com",
+    image: null,
+  },
   _count: { subscriptions: 0, reviews: 0 },
 };
 
@@ -73,38 +84,43 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe('POST /api/servers', () => {
-  it('creates a server for authenticated developer', async () => {
+describe("POST /api/servers", () => {
+  it("creates a server for authenticated developer", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'user-1', role: 'DEVELOPER', name: 'Dev', email: 'dev@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "user-1",
+        role: "DEVELOPER",
+        name: "Dev",
+        email: "dev@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
     mockFindUnique.mockResolvedValue(null);
-    mockCreate.mockResolvedValue({ ...mockServer, status: 'PENDING' } as any);
+    mockCreate.mockResolvedValue({ ...mockServer, status: "PENDING" } as any);
 
-    const req = new Request('http://localhost/api/servers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const req = new Request("http://localhost/api/servers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(baseServerBody),
     }) as any;
 
     const res = await POST(req);
     expect(res.status).toBe(201);
     const data = await res.json();
-    expect(data.slug).toBe('my-server');
+    expect(data.slug).toBe("my-server");
     expect(mockCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ status: 'PENDING', ownerId: 'user-1' }),
+        data: expect.objectContaining({ status: "PENDING", ownerId: "user-1" }),
       }),
     );
   });
 
-  it('rejects unauthenticated requests with 401', async () => {
+  it("rejects unauthenticated requests with 401", async () => {
     mockAuth.mockResolvedValue(null);
 
-    const req = new Request('http://localhost/api/servers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const req = new Request("http://localhost/api/servers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(baseServerBody),
     }) as any;
 
@@ -114,15 +130,20 @@ describe('POST /api/servers', () => {
     expect(data.error).toBeDefined();
   });
 
-  it('rejects non-developer role with 403', async () => {
+  it("rejects non-developer role with 403", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'user-2', role: 'USER', name: 'Regular', email: 'user@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "user-2",
+        role: "USER",
+        name: "Regular",
+        email: "user@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
 
-    const req = new Request('http://localhost/api/servers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const req = new Request("http://localhost/api/servers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(baseServerBody),
     }) as any;
 
@@ -130,35 +151,45 @@ describe('POST /api/servers', () => {
     expect(res.status).toBe(403);
   });
 
-  it('validates required fields', async () => {
+  it("validates required fields", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'user-1', role: 'DEVELOPER', name: 'Dev', email: 'dev@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "user-1",
+        role: "DEVELOPER",
+        name: "Dev",
+        email: "dev@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
 
-    const req = new Request('http://localhost/api/servers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'X' }), // too short, missing required fields
+    const req = new Request("http://localhost/api/servers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "X" }), // too short, missing required fields
     }) as any;
 
     const res = await POST(req);
     expect(res.status).toBe(400);
     const data = await res.json();
-    expect(data.error).toBe('Validation failed');
+    expect(data.error).toBe("Validation failed");
     expect(data.details).toBeDefined();
   });
 
-  it('rejects duplicate slugs with 409', async () => {
+  it("rejects duplicate slugs with 409", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'user-1', role: 'DEVELOPER', name: 'Dev', email: 'dev@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "user-1",
+        role: "DEVELOPER",
+        name: "Dev",
+        email: "dev@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
     mockFindUnique.mockResolvedValue(mockServer as any);
 
-    const req = new Request('http://localhost/api/servers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const req = new Request("http://localhost/api/servers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(baseServerBody),
     }) as any;
 
@@ -168,17 +199,26 @@ describe('POST /api/servers', () => {
     expect(data.error).toMatch(/slug/i);
   });
 
-  it('allows ADMIN role to create server', async () => {
+  it("allows ADMIN role to create server", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'admin-1', role: 'ADMIN', name: 'Admin', email: 'admin@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "admin-1",
+        role: "ADMIN",
+        name: "Admin",
+        email: "admin@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
     mockFindUnique.mockResolvedValue(null);
-    mockCreate.mockResolvedValue({ ...mockServer, ownerId: 'admin-1', status: 'PENDING' } as any);
+    mockCreate.mockResolvedValue({
+      ...mockServer,
+      ownerId: "admin-1",
+      status: "PENDING",
+    } as any);
 
-    const req = new Request('http://localhost/api/servers', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const req = new Request("http://localhost/api/servers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(baseServerBody),
     }) as any;
 
@@ -187,25 +227,27 @@ describe('POST /api/servers', () => {
   });
 });
 
-describe('GET /api/servers/:slug', () => {
-  it('returns server details for approved server', async () => {
+describe("GET /api/servers/:slug", () => {
+  it("returns server details for approved server", async () => {
     mockFindUnique.mockResolvedValue(mockServer as any);
 
-    const req = new Request('http://localhost/api/servers/my-server') as any;
-    const res = await getDetail(req, makeSlugContext('my-server') as any);
+    const req = new Request("http://localhost/api/servers/my-server") as any;
+    const res = await getDetail(req, makeSlugContext("my-server") as any);
 
     expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.slug).toBe('my-server');
-    expect(data.name).toBe('My Server');
-    expect(data.status).toBe('APPROVED');
+    expect(data.slug).toBe("my-server");
+    expect(data.name).toBe("My Server");
+    expect(data.status).toBe("APPROVED");
   });
 
-  it('returns 404 for unknown slug', async () => {
+  it("returns 404 for unknown slug", async () => {
     mockFindUnique.mockResolvedValue(null);
 
-    const req = new Request('http://localhost/api/servers/does-not-exist') as any;
-    const res = await getDetail(req, makeSlugContext('does-not-exist') as any);
+    const req = new Request(
+      "http://localhost/api/servers/does-not-exist",
+    ) as any;
+    const res = await getDetail(req, makeSlugContext("does-not-exist") as any);
 
     expect(res.status).toBe(404);
     const data = await res.json();
@@ -213,94 +255,117 @@ describe('GET /api/servers/:slug', () => {
   });
 });
 
-describe('PUT /api/servers/:slug', () => {
-  it('updates server for owner', async () => {
+describe("PUT /api/servers/:slug", () => {
+  it("updates server for owner", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'user-1', role: 'DEVELOPER', name: 'Dev', email: 'dev@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "user-1",
+        role: "DEVELOPER",
+        name: "Dev",
+        email: "dev@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
     mockFindUnique.mockResolvedValue(mockServer as any);
-    const updatedServer = { ...mockServer, name: 'Updated Server' };
+    const updatedServer = { ...mockServer, name: "Updated Server" };
     mockUpdate.mockResolvedValue(updatedServer as any);
 
-    const req = new Request('http://localhost/api/servers/my-server', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'Updated Server' }),
+    const req = new Request("http://localhost/api/servers/my-server", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Updated Server" }),
     }) as any;
 
-    const res = await PUT(req, makeSlugContext('my-server') as any);
+    const res = await PUT(req, makeSlugContext("my-server") as any);
     expect(res.status).toBe(200);
     const data = await res.json();
-    expect(data.name).toBe('Updated Server');
+    expect(data.name).toBe("Updated Server");
     expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { slug: 'my-server' } }),
+      expect.objectContaining({ where: { slug: "my-server" } }),
     );
   });
 
-  it('rejects update from non-owner with 403', async () => {
+  it("rejects update from non-owner with 403", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'other-user', role: 'USER', name: 'Other', email: 'other@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "other-user",
+        role: "USER",
+        name: "Other",
+        email: "other@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
     mockFindUnique.mockResolvedValue(mockServer as any);
 
-    const req = new Request('http://localhost/api/servers/my-server', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'Hijacked Name' }),
+    const req = new Request("http://localhost/api/servers/my-server", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Hijacked Name" }),
     }) as any;
 
-    const res = await PUT(req, makeSlugContext('my-server') as any);
+    const res = await PUT(req, makeSlugContext("my-server") as any);
     expect(res.status).toBe(403);
     expect(mockUpdate).not.toHaveBeenCalled();
   });
 
-  it('allows ADMIN to update any server', async () => {
+  it("allows ADMIN to update any server", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'admin-1', role: 'ADMIN', name: 'Admin', email: 'admin@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "admin-1",
+        role: "ADMIN",
+        name: "Admin",
+        email: "admin@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
     mockFindUnique.mockResolvedValue(mockServer as any);
-    mockUpdate.mockResolvedValue({ ...mockServer, name: 'Admin Updated' } as any);
+    mockUpdate.mockResolvedValue({
+      ...mockServer,
+      name: "Admin Updated",
+    } as any);
 
-    const req = new Request('http://localhost/api/servers/my-server', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'Admin Updated' }),
+    const req = new Request("http://localhost/api/servers/my-server", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Admin Updated" }),
     }) as any;
 
-    const res = await PUT(req, makeSlugContext('my-server') as any);
+    const res = await PUT(req, makeSlugContext("my-server") as any);
     expect(res.status).toBe(200);
   });
 
-  it('returns 401 when unauthenticated', async () => {
+  it("returns 401 when unauthenticated", async () => {
     mockAuth.mockResolvedValue(null);
 
-    const req = new Request('http://localhost/api/servers/my-server', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'Anything' }),
+    const req = new Request("http://localhost/api/servers/my-server", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Anything" }),
     }) as any;
 
-    const res = await PUT(req, makeSlugContext('my-server') as any);
+    const res = await PUT(req, makeSlugContext("my-server") as any);
     expect(res.status).toBe(401);
   });
 
-  it('returns 404 when server slug does not exist', async () => {
+  it("returns 404 when server slug does not exist", async () => {
     mockAuth.mockResolvedValue({
-      user: { id: 'user-1', role: 'DEVELOPER', name: 'Dev', email: 'dev@example.com' },
-      expires: '2099-01-01',
+      user: {
+        id: "user-1",
+        role: "DEVELOPER",
+        name: "Dev",
+        email: "dev@example.com",
+      },
+      expires: "2099-01-01",
     } as any);
     mockFindUnique.mockResolvedValue(null);
 
-    const req = new Request('http://localhost/api/servers/ghost-server', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'Ghost' }),
+    const req = new Request("http://localhost/api/servers/ghost-server", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Ghost" }),
     }) as any;
 
-    const res = await PUT(req, makeSlugContext('ghost-server') as any);
+    const res = await PUT(req, makeSlugContext("ghost-server") as any);
     expect(res.status).toBe(404);
   });
 });

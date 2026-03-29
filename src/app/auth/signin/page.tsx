@@ -1,38 +1,38 @@
-'use client'
+"use client";
 
-import { signIn } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 const ERROR_MESSAGES: Record<string, string> = {
-  OAuthSignin: 'Could not start the sign-in flow. Please try again.',
-  OAuthCallback: 'Could not complete sign-in. Please try again.',
-  OAuthCreateAccount: 'Could not create account. Please try again.',
-  EmailCreateAccount: 'Could not create account. Please try again.',
-  Callback: 'An error occurred during sign-in. Please try again.',
+  OAuthSignin: "Could not start the sign-in flow. Please try again.",
+  OAuthCallback: "Could not complete sign-in. Please try again.",
+  OAuthCreateAccount: "Could not create account. Please try again.",
+  EmailCreateAccount: "Could not create account. Please try again.",
+  Callback: "An error occurred during sign-in. Please try again.",
   OAuthAccountNotLinked:
-    'This email is already linked to another provider. Sign in using the original provider.',
-  SessionRequired: 'Please sign in to access this page.',
-  Default: 'An error occurred during sign-in. Please try again.',
-}
+    "This email is already linked to another provider. Sign in using the original provider.",
+  SessionRequired: "Please sign in to access this page.",
+  Default: "An error occurred during sign-in. Please try again.",
+};
 
 function SignInError({ error }: { error: string | null }) {
-  if (!error) return null
-  const message = ERROR_MESSAGES[error] ?? ERROR_MESSAGES.Default
+  if (!error) return null;
+  const message = ERROR_MESSAGES[error] ?? ERROR_MESSAGES.Default;
   return (
     <div className="rounded-md bg-destructive/10 border border-destructive/30 px-4 py-3 text-sm text-destructive">
       {message}
     </div>
-  )
+  );
 }
 
 function SignInForm() {
-  const searchParams = useSearchParams()
-  const error = searchParams.get('error')
-  const callbackUrl = searchParams.get('callbackUrl') ?? '/dashboard'
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -48,7 +48,7 @@ function SignInForm() {
           <SignInError error={error} />
           <Button
             className="w-full"
-            onClick={() => signIn('github', { callbackUrl })}
+            onClick={() => signIn("github", { callbackUrl })}
           >
             <svg
               className="mr-2 h-4 w-4"
@@ -67,7 +67,7 @@ function SignInForm() {
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => signIn('google', { callbackUrl })}
+            onClick={() => signIn("google", { callbackUrl })}
           >
             <svg
               className="mr-2 h-4 w-4"
@@ -101,7 +101,7 @@ function SignInForm() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 export default function SignInPage() {
@@ -109,5 +109,5 @@ export default function SignInPage() {
     <Suspense>
       <SignInForm />
     </Suspense>
-  )
+  );
 }

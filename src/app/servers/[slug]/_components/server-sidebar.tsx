@@ -25,7 +25,9 @@ function PricingInfo({ server }: { server: McpServer }) {
       </p>
     );
   }
-  const usageDollars = server.usagePrice ? (server.usagePrice / 100).toFixed(4) : "0";
+  const usageDollars = server.usagePrice
+    ? (server.usagePrice / 100).toFixed(4)
+    : "0";
   return (
     <div>
       <p className="text-2xl font-bold">${usageDollars}</p>
@@ -101,16 +103,22 @@ export function ServerSidebar({
         <CardContent className="flex flex-col gap-2 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Subscribers</span>
-            <span className="font-medium">{server._count.subscriptions.toLocaleString()}</span>
+            <span className="font-medium">
+              {server._count.subscriptions.toLocaleString()}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Views</span>
-            <span className="font-medium">{server.viewCount.toLocaleString()}</span>
+            <span className="font-medium">
+              {server.viewCount.toLocaleString()}
+            </span>
           </div>
           {server.avgRating != null && (
             <div className="flex justify-between">
               <span className="text-muted-foreground">Avg Rating</span>
-              <span className="font-medium">{server.avgRating.toFixed(1)} / 5</span>
+              <span className="font-medium">
+                {server.avgRating.toFixed(1)} / 5
+              </span>
             </div>
           )}
           <div className="flex justify-between">

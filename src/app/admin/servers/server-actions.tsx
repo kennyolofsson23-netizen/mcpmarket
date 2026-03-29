@@ -95,17 +95,16 @@ export function ServerActions({ serverId, status }: ServerActionsProps) {
     <>
       {error && <p className="text-xs text-destructive mb-1">{error}</p>}
       <div className="flex gap-2">
-        <Button
-          size="sm"
-          onClick={handleApprove}
-          loading={approving}
-        >
+        <Button size="sm" onClick={handleApprove} loading={approving}>
           Approve
         </Button>
         <Button
           variant="destructive"
           size="sm"
-          onClick={() => { setError(null); setShowRejectDialog(true); }}
+          onClick={() => {
+            setError(null);
+            setShowRejectDialog(true);
+          }}
         >
           Reject
         </Button>

@@ -27,9 +27,14 @@ export function StarRating({
 
   return (
     <div
-      className={cn("flex items-center gap-0.5", interactive && "cursor-pointer")}
+      className={cn(
+        "flex items-center gap-0.5",
+        interactive && "cursor-pointer",
+      )}
       role={interactive ? "radiogroup" : undefined}
-      aria-label={interactive ? "Star rating" : `${rating} out of ${maxRating} stars`}
+      aria-label={
+        interactive ? "Star rating" : `${rating} out of ${maxRating} stars`
+      }
     >
       {Array.from({ length: maxRating }, (_, i) => i + 1).map((star) => (
         <Star
@@ -47,7 +52,9 @@ export function StarRating({
           onMouseLeave={interactive ? () => setHovered(0) : undefined}
           role={interactive ? "radio" : undefined}
           aria-checked={interactive ? star === rating : undefined}
-          aria-label={interactive ? `${star} star${star !== 1 ? "s" : ""}` : undefined}
+          aria-label={
+            interactive ? `${star} star${star !== 1 ? "s" : ""}` : undefined
+          }
           tabIndex={interactive ? 0 : undefined}
           onKeyDown={
             interactive

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 type RouteContext = { params: Promise<{ slug: string }> };
 
@@ -14,17 +14,20 @@ export async function GET(req: NextRequest, context: RouteContext) {
     const slug = await resolveSlug(context);
     const server = await prisma.mcpServer.findUnique({ where: { slug } });
     if (!server) {
-      return NextResponse.json({ error: 'Server not found' }, { status: 404 });
+      return NextResponse.json({ error: "Server not found" }, { status: 404 });
     }
 
     const versions = await prisma.serverVersion.findMany({
       where: { serverId: server.id },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     return NextResponse.json({ versions });
   } catch {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -32,18 +35,18 @@ export async function POST(req: NextRequest, context: RouteContext) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const slug = await resolveSlug(context);
     const server = await prisma.mcpServer.findUnique({ where: { slug } });
     if (!server) {
-      return NextResponse.json({ error: 'Server not found' }, { status: 404 });
+      return NextResponse.json({ error: "Server not found" }, { status: 404 });
     }
 
-    const role = session.user.role ?? 'USER';
-    if (server.ownerId !== session.user.id && role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const role = session.user.role ?? "USER";
+    if (server.ownerId !== session.user.id && role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -54,7 +57,10 @@ export async function POST(req: NextRequest, context: RouteContext) {
     };
 
     if (!version) {
-      return NextResponse.json({ error: 'version is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: "version is required" },
+        { status: 400 },
+      );
     }
 
     await prisma.serverVersion.updateMany({
@@ -74,6 +80,9 @@ export async function POST(req: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ version: newVersion }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }

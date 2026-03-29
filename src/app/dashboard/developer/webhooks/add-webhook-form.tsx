@@ -22,7 +22,7 @@ export function AddWebhookForm() {
 
   function toggleEvent(event: string) {
     setEvents((prev) =>
-      prev.includes(event) ? prev.filter((e) => e !== event) : [...prev, event]
+      prev.includes(event) ? prev.filter((e) => e !== event) : [...prev, event],
     );
   }
 
@@ -38,7 +38,9 @@ export function AddWebhookForm() {
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error((body as { error?: string }).error ?? "Failed to add webhook");
+        throw new Error(
+          (body as { error?: string }).error ?? "Failed to add webhook",
+        );
       }
       setUrl("");
       setDescription("");
@@ -70,21 +72,30 @@ export function AddWebhookForm() {
         <label className="block text-sm font-medium mb-2">Events</label>
         <div className="space-y-2">
           {ALL_EVENTS.map((event) => (
-            <label key={event} className="flex items-center gap-2 text-sm cursor-pointer">
+            <label
+              key={event}
+              className="flex items-center gap-2 text-sm cursor-pointer"
+            >
               <input
                 type="checkbox"
                 checked={events.includes(event)}
                 onChange={() => toggleEvent(event)}
                 className="rounded"
               />
-              <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">{event}</span>
+              <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">
+                {event}
+              </span>
             </label>
           ))}
         </div>
       </div>
       <div>
-        <label htmlFor="webhook-desc" className="block text-sm font-medium mb-1">
-          Description <span className="text-muted-foreground font-normal">(optional)</span>
+        <label
+          htmlFor="webhook-desc"
+          className="block text-sm font-medium mb-1"
+        >
+          Description{" "}
+          <span className="text-muted-foreground font-normal">(optional)</span>
         </label>
         <Textarea
           id="webhook-desc"
@@ -95,7 +106,10 @@ export function AddWebhookForm() {
         />
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}
-      <Button type="submit" disabled={loading || !url.trim() || events.length === 0}>
+      <Button
+        type="submit"
+        disabled={loading || !url.trim() || events.length === 0}
+      >
         {loading ? "Adding..." : "Add Webhook"}
       </Button>
     </form>

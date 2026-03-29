@@ -52,7 +52,10 @@ export default async function ApiKeysPage() {
           title="No API keys yet"
           description="Generate an API key to start authenticating with your subscribed MCP servers."
           icon={<Key className="h-8 w-8 text-muted-foreground" />}
-          action={{ label: "Generate New Key", href: "/dashboard/api-keys/new" }}
+          action={{
+            label: "Generate New Key",
+            href: "/dashboard/api-keys/new",
+          }}
         />
       ) : (
         <div className="border rounded-lg divide-y">

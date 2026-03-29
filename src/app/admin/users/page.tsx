@@ -55,7 +55,11 @@ export default async function AdminUsersPage({
                   </td>
                   <td className="p-3 text-muted-foreground">{user.email}</td>
                   <td className="p-3">
-                    <RoleBadge role={(user as typeof user & { role?: string }).role ?? "USER"} />
+                    <RoleBadge
+                      role={
+                        (user as typeof user & { role?: string }).role ?? "USER"
+                      }
+                    />
                   </td>
                   <td className="p-3 text-center">{user._count.servers}</td>
                   <td className="p-3 text-center">

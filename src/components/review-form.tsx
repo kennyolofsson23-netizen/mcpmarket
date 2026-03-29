@@ -43,7 +43,9 @@ export function ReviewForm({ serverSlug, existingReview }: ReviewFormProps) {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error((data as { error?: string }).error ?? "Failed to submit review");
+        throw new Error(
+          (data as { error?: string }).error ?? "Failed to submit review",
+        );
       }
       setSuccess(true);
     } catch (err) {
@@ -56,7 +58,9 @@ export function ReviewForm({ serverSlug, existingReview }: ReviewFormProps) {
   if (success) {
     return (
       <div className="rounded-md bg-green-50 border border-green-200 p-4 text-sm text-green-800">
-        {existingReview ? "Review updated successfully." : "Review submitted successfully. Thank you!"}
+        {existingReview
+          ? "Review updated successfully."
+          : "Review submitted successfully. Thank you!"}
       </div>
     );
   }
@@ -79,9 +83,7 @@ export function ReviewForm({ serverSlug, existingReview }: ReviewFormProps) {
         onChange={(e) => setComment(e.target.value)}
         rows={4}
       />
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" loading={loading} disabled={loading}>
         {existingReview ? "Update Review" : "Submit Review"}
       </Button>

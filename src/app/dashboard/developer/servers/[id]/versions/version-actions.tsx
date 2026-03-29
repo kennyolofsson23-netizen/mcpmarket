@@ -11,7 +11,12 @@ interface VersionActionsProps {
   deprecated: boolean;
 }
 
-export function VersionActions({ versionId, serverId, isLatest, deprecated }: VersionActionsProps) {
+export function VersionActions({
+  versionId,
+  serverId,
+  isLatest,
+  deprecated,
+}: VersionActionsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

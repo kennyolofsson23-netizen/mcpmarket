@@ -1,9 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { extractBearerToken } from '@/lib/api-keys';
-import { recordApiCall } from '@/lib/metering';
-import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { extractBearerToken } from "@/lib/api-keys";
+import { recordApiCall } from "@/lib/metering";
+import { prisma } from "@/lib/prisma";
 
-async function isFreeLimitExceeded(userId: string, serverId: string, freeCallLimit: number) {
+async function isFreeLimitExceeded(
+  userId: string,
+  serverId: string,
+  freeCallLimit: number,
+) {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const count = await prisma.usageRecord.count({
@@ -14,10 +18,13 @@ async function isFreeLimitExceeded(userId: string, serverId: string, freeCallLim
 
 export async function POST(req: NextRequest) {
   try {
-    const authHeader = req.headers.get('Authorization');
+    const authHeader = req.headers.get("Authorization");
     const apiKey = extractBearerToken(authHeader);
     if (!apiKey) {
-      return NextResponse.json({ error: 'Missing or invalid API key' }, { status: 401 });
+      return NextResponse.json(
+        { error: "Missing or invalid API key" },
+        { status: 401 },
+      );
     }
 
     const body = await req.json();
@@ -31,7 +38,7 @@ export async function POST(req: NextRequest) {
     try {
       result = await recordApiCall({ apiKey, serverId, endpoint, statusCode });
     } catch {
-      return NextResponse.json({ error: 'Invalid API key' }, { status: 401 });
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
     }
 
     const { key, server } = result;
@@ -39,16 +46,26 @@ export async function POST(req: NextRequest) {
       server &&
       server.freeCallLimit &&
       server.freeCallLimit > 0 &&
-      server.pricingModel === 'USAGE_BASED'
+      server.pricingModel === "USAGE_BASED"
     ) {
-      const exceeded = await isFreeLimitExceeded(key.userId, serverId, server.freeCallLimit);
+      const exceeded = await isFreeLimitExceeded(
+        key.userId,
+        serverId,
+        server.freeCallLimit,
+      );
       if (exceeded) {
-        return NextResponse.json({ error: 'Free tier limit exceeded' }, { status: 429 });
+        return NextResponse.json(
+          { error: "Free tier limit exceeded" },
+          { status: 429 },
+        );
       }
     }
 
     return NextResponse.json({ recorded: true });
   } catch {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }

@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { hashApiKey, extractBearerToken } from '@/lib/api-keys';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { hashApiKey, extractBearerToken } from "@/lib/api-keys";
 
 function resolveKey(req: NextRequest, body: { key?: string }): string | null {
   if (body.key) return body.key;
-  return extractBearerToken(req.headers.get('Authorization'));
+  return extractBearerToken(req.headers.get("Authorization"));
 }
 
 export async function POST(req: NextRequest) {
@@ -12,7 +12,10 @@ export async function POST(req: NextRequest) {
   const rawKey = resolveKey(req, body);
 
   if (!rawKey) {
-    return NextResponse.json({ error: 'Invalid or revoked key' }, { status: 401 });
+    return NextResponse.json(
+      { error: "Invalid or revoked key" },
+      { status: 401 },
+    );
   }
 
   const keyHash = hashApiKey(rawKey);
@@ -20,7 +23,10 @@ export async function POST(req: NextRequest) {
   const apiKey = await prisma.apiKey.findUnique({ where: { keyHash } });
 
   if (!apiKey || !apiKey.isActive) {
-    return NextResponse.json({ error: 'Invalid or revoked key' }, { status: 401 });
+    return NextResponse.json(
+      { error: "Invalid or revoked key" },
+      { status: 401 },
+    );
   }
 
   await prisma.apiKey.update({

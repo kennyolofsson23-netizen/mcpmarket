@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 function buildDailySlots() {
   const slots: Array<{ date: string; installs: number; revenue: number }> = [];
@@ -42,17 +42,17 @@ export async function GET(
 ) {
   const session = await auth();
   if (!session?.user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id } = await params;
   const server = await prisma.mcpServer.findUnique({ where: { id } });
   if (!server) {
-    return NextResponse.json({ error: 'Server not found' }, { status: 404 });
+    return NextResponse.json({ error: "Server not found" }, { status: 404 });
   }
 
-  if (server.ownerId !== session.user.id && session.user.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  if (server.ownerId !== session.user.id && session.user.role !== "ADMIN") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const since = new Date();
@@ -64,7 +64,7 @@ export async function GET(
   });
 
   const transactions = await prisma.transaction.findMany({
-    where: { serverId: id, status: 'COMPLETED', createdAt: { gte: since } },
+    where: { serverId: id, status: "COMPLETED", createdAt: { gte: since } },
     select: { amount: true, createdAt: true },
   });
 

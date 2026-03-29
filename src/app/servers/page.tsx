@@ -22,7 +22,11 @@ async function fetchServers(params: {
   sort?: string;
   search?: string;
   page?: string;
-}): Promise<{ servers: McpServerWithOwner[]; total: number; totalPages: number }> {
+}): Promise<{
+  servers: McpServerWithOwner[];
+  total: number;
+  totalPages: number;
+}> {
   const query = new URLSearchParams();
   if (params.category) query.set("category", params.category);
   if (params.pricingModel) query.set("pricingModel", params.pricingModel);
@@ -48,13 +52,16 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
     <div className="container mx-auto max-w-6xl px-4 py-8">
       <h1 className="text-3xl font-bold mb-2">Browse MCP Servers</h1>
       <p className="text-muted-foreground mb-8">
-        MCPmarket is a free AI marketplace tool that lets you discover and subscribe to premium MCP
-        servers from independent developers.
+        MCPmarket is a free AI marketplace tool that lets you discover and
+        subscribe to premium MCP servers from independent developers.
       </p>
 
       <div className="space-y-4 mb-8">
         <Suspense>
-          <SearchBar defaultValue={params.search} placeholder="Search servers..." />
+          <SearchBar
+            defaultValue={params.search}
+            placeholder="Search servers..."
+          />
         </Suspense>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Suspense>
@@ -100,7 +107,8 @@ function PaginationBar({
   function buildUrl(page: number) {
     const q = new URLSearchParams();
     if (searchParams.category) q.set("category", searchParams.category);
-    if (searchParams.pricingModel) q.set("pricingModel", searchParams.pricingModel);
+    if (searchParams.pricingModel)
+      q.set("pricingModel", searchParams.pricingModel);
     if (searchParams.sort) q.set("sort", searchParams.sort);
     if (searchParams.search) q.set("search", searchParams.search);
     q.set("page", String(page));

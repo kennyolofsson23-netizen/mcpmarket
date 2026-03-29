@@ -1,4 +1,7 @@
-export const metadata = { title: 'Privacy Policy', description: 'MCPmarket Privacy Policy' }
+export const metadata = {
+  title: "Privacy Policy",
+  description: "MCPmarket Privacy Policy",
+};
 
 export default function PrivacyPage() {
   return (
@@ -8,15 +11,30 @@ export default function PrivacyPage() {
       <div className="prose max-w-none space-y-6">
         <section>
           <h2 className="text-xl font-semibold mb-3">Information We Collect</h2>
-          <p>MCPmarket collects information you provide when creating an account, listing a server, or subscribing to services. This includes your name, email address, and payment information processed securely through Stripe.</p>
+          <p>
+            MCPmarket collects information you provide when creating an account,
+            listing a server, or subscribing to services. This includes your
+            name, email address, and payment information processed securely
+            through Stripe.
+          </p>
         </section>
         <section>
-          <h2 className="text-xl font-semibold mb-3">How We Use Your Information</h2>
-          <p>We use collected information to provide, maintain, and improve MCPmarket services, process payments, send notifications about your subscriptions, and communicate platform updates.</p>
+          <h2 className="text-xl font-semibold mb-3">
+            How We Use Your Information
+          </h2>
+          <p>
+            We use collected information to provide, maintain, and improve
+            MCPmarket services, process payments, send notifications about your
+            subscriptions, and communicate platform updates.
+          </p>
         </section>
         <section>
           <h2 className="text-xl font-semibold mb-3">Data Sharing</h2>
-          <p>We share developer payout information with Stripe for payment processing. We do not sell your personal information to third parties.</p>
+          <p>
+            We share developer payout information with Stripe for payment
+            processing. We do not sell your personal information to third
+            parties.
+          </p>
         </section>
         <section>
           <h2 className="text-xl font-semibold mb-3">Contact</h2>
@@ -24,5 +42,5 @@ export default function PrivacyPage() {
         </section>
       </div>
     </div>
-  )
+  );
 }

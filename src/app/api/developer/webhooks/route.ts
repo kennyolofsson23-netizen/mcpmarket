@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import { generateWebhookSecret } from '@/lib/webhooks';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { generateWebhookSecret } from "@/lib/webhooks";
 
 export async function GET(_req: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const webhooks = await prisma.developerWebhook.findMany({
@@ -25,7 +25,10 @@ export async function GET(_req: NextRequest) {
 
     return NextResponse.json({ webhooks });
   } catch {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -33,12 +36,12 @@ export async function POST(req: NextRequest) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const role = session.user.role ?? 'USER';
-    if (role !== 'DEVELOPER' && role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const role = session.user.role ?? "USER";
+    if (role !== "DEVELOPER" && role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -48,12 +51,18 @@ export async function POST(req: NextRequest) {
       description?: string;
     };
 
-    if (!url || !url.startsWith('https://')) {
-      return NextResponse.json({ error: 'URL must use HTTPS' }, { status: 400 });
+    if (!url || !url.startsWith("https://")) {
+      return NextResponse.json(
+        { error: "URL must use HTTPS" },
+        { status: 400 },
+      );
     }
 
     if (!events || !Array.isArray(events) || events.length === 0) {
-      return NextResponse.json({ error: 'events array is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: "events array is required" },
+        { status: 400 },
+      );
     }
 
     const { secret, secretHash, secretPrefix } = generateWebhookSecret();
@@ -72,6 +81,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ webhook, secret }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }

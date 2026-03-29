@@ -1,40 +1,39 @@
-'use client'
+"use client";
 
-import { useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
-import Link from 'next/link'
-import { AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import Link from "next/link";
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-const ERROR_DESCRIPTIONS: Record<string, { title: string; message: string }> =
-  {
-    Configuration: {
-      title: 'Server Configuration Error',
-      message:
-        'There is a problem with the server configuration. Please contact support.',
-    },
-    AccessDenied: {
-      title: 'Access Denied',
-      message:
-        'You do not have permission to sign in. Your account may have been suspended.',
-    },
-    Verification: {
-      title: 'Verification Failed',
-      message:
-        'The sign-in link is no longer valid. It may have been used already or it may have expired.',
-    },
-    Default: {
-      title: 'Authentication Error',
-      message:
-        'An unexpected error occurred during authentication. Please try again.',
-    },
-  }
+const ERROR_DESCRIPTIONS: Record<string, { title: string; message: string }> = {
+  Configuration: {
+    title: "Server Configuration Error",
+    message:
+      "There is a problem with the server configuration. Please contact support.",
+  },
+  AccessDenied: {
+    title: "Access Denied",
+    message:
+      "You do not have permission to sign in. Your account may have been suspended.",
+  },
+  Verification: {
+    title: "Verification Failed",
+    message:
+      "The sign-in link is no longer valid. It may have been used already or it may have expired.",
+  },
+  Default: {
+    title: "Authentication Error",
+    message:
+      "An unexpected error occurred during authentication. Please try again.",
+  },
+};
 
 function AuthErrorContent() {
-  const searchParams = useSearchParams()
-  const error = searchParams.get('error') ?? 'Default'
-  const info = ERROR_DESCRIPTIONS[error] ?? ERROR_DESCRIPTIONS.Default
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error") ?? "Default";
+  const info = ERROR_DESCRIPTIONS[error] ?? ERROR_DESCRIPTIONS.Default;
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -52,7 +51,7 @@ function AuthErrorContent() {
           <p className="text-center text-sm text-muted-foreground">
             {info.message}
           </p>
-          {error !== 'Default' && (
+          {error !== "Default" && (
             <div className="rounded-md bg-muted px-4 py-2 text-center text-xs text-muted-foreground">
               Error code: <span className="font-mono">{error}</span>
             </div>
@@ -63,7 +62,7 @@ function AuthErrorContent() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 export default function AuthErrorPage() {
@@ -71,5 +70,5 @@ export default function AuthErrorPage() {
     <Suspense>
       <AuthErrorContent />
     </Suspense>
-  )
+  );
 }

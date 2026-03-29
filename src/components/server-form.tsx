@@ -2,7 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createServerSchema, type CreateServerInput } from "@/lib/validations/server";
+import {
+  createServerSchema,
+  type CreateServerInput,
+} from "@/lib/validations/server";
 import { CATEGORIES, PRICING_MODELS } from "@/lib/constants";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -155,19 +158,31 @@ export function ServerForm({
         {...register("tags", {
           setValueAs: (v: string | string[]) => {
             if (Array.isArray(v)) return v;
-            return v ? v.split(",").map((t: string) => t.trim()).filter(Boolean) : [];
+            return v
+              ? v
+                  .split(",")
+                  .map((t: string) => t.trim())
+                  .filter(Boolean)
+              : [];
           },
         })}
       />
 
       <Select
         label="Pricing Model"
-        options={PRICING_MODELS.map((p) => ({ value: p.value, label: p.label }))}
+        options={PRICING_MODELS.map((p) => ({
+          value: p.value,
+          label: p.label,
+        }))}
         error={errors.pricingModel?.message}
         {...register("pricingModel")}
       />
 
-      <PricingFields pricingModel={pricingModel} register={register} errors={errors} />
+      <PricingFields
+        pricingModel={pricingModel}
+        register={register}
+        errors={errors}
+      />
 
       <div className="flex items-center gap-2">
         <input
@@ -217,7 +232,11 @@ export function ServerForm({
         {...register("websiteUrl")}
       />
 
-      <Button type="submit" loading={isLoading} className="w-full bg-blue-600 hover:bg-blue-700">
+      <Button
+        type="submit"
+        loading={isLoading}
+        className="w-full bg-blue-600 hover:bg-blue-700"
+      >
         {submitLabel}
       </Button>
     </form>

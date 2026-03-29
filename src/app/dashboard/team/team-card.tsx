@@ -53,7 +53,9 @@ function InviteMemberForm({ teamId }: { teamId: string }) {
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error((body as { error?: string }).error ?? "Failed to invite member");
+        throw new Error(
+          (body as { error?: string }).error ?? "Failed to invite member",
+        );
       }
       setEmail("");
       setOpen(false);
@@ -88,21 +90,34 @@ function InviteMemberForm({ teamId }: { teamId: string }) {
       <Button type="submit" size="sm" disabled={loading}>
         {loading ? "Sending..." : "Send Invite"}
       </Button>
-      <Button type="button" variant="outline" size="sm" onClick={() => setOpen(false)}>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={() => setOpen(false)}
+      >
         Cancel
       </Button>
     </form>
   );
 }
 
-function RemoveMemberButton({ teamId, memberId }: { teamId: string; memberId: string }) {
+function RemoveMemberButton({
+  teamId,
+  memberId,
+}: {
+  teamId: string;
+  memberId: string;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   async function handleRemove() {
     setLoading(true);
     try {
-      await fetch(`/api/teams/${teamId}/members/${memberId}`, { method: "DELETE" });
+      await fetch(`/api/teams/${teamId}/members/${memberId}`, {
+        method: "DELETE",
+      });
       router.refresh();
     } finally {
       setLoading(false);
@@ -110,7 +125,12 @@ function RemoveMemberButton({ teamId, memberId }: { teamId: string; memberId: st
   }
 
   return (
-    <Button variant="destructive" size="sm" onClick={handleRemove} disabled={loading}>
+    <Button
+      variant="destructive"
+      size="sm"
+      onClick={handleRemove}
+      disabled={loading}
+    >
       {loading ? "Removing..." : "Remove"}
     </Button>
   );
@@ -135,7 +155,10 @@ export function TeamCard({ team, currentUserId }: TeamCardProps) {
       <CardContent>
         <div className="divide-y">
           {team.members.map((member) => (
-            <div key={member.id} className="flex items-center justify-between py-3">
+            <div
+              key={member.id}
+              className="flex items-center justify-between py-3"
+            >
               <div className="flex items-center gap-3">
                 {member.user.image ? (
                   <Image
@@ -147,16 +170,24 @@ export function TeamCard({ team, currentUserId }: TeamCardProps) {
                   />
                 ) : (
                   <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
-                    {(member.user.name ?? member.user.email ?? "?")[0].toUpperCase()}
+                    {(member.user.name ??
+                      member.user.email ??
+                      "?")[0].toUpperCase()}
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-medium">{member.user.name ?? "Unknown"}</p>
-                  <p className="text-xs text-muted-foreground">{member.user.email}</p>
+                  <p className="text-sm font-medium">
+                    {member.user.name ?? "Unknown"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {member.user.email}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant={member.role === "OWNER" ? "default" : "secondary"}>
+                <Badge
+                  variant={member.role === "OWNER" ? "default" : "secondary"}
+                >
                   {member.role}
                 </Badge>
                 {isOwner && member.userId !== currentUserId && (

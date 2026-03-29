@@ -13,7 +13,9 @@ type PageProps = { params: Promise<{ slug: string }> };
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://mcpmarket.dev";
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const server = await prisma.mcpServer.findUnique({ where: { slug } });
   if (!server) return { title: "Server Not Found" };
@@ -115,10 +117,9 @@ export default async function ServerDetailPage({ params }: PageProps) {
     userId ? fetchApiKeyForUser(userId, server.id) : Promise.resolve(null),
   ]);
 
-  const existingReview =
-    userId
-      ? (server.reviews.find((r) => r.userId === userId) ?? null)
-      : null;
+  const existingReview = userId
+    ? (server.reviews.find((r) => r.userId === userId) ?? null)
+    : null;
 
   const tags = parseTags(server.tags);
   const jsonLd = buildJsonLd(server);
@@ -148,7 +149,9 @@ export default async function ServerDetailPage({ params }: PageProps) {
           )}
           <div className="flex flex-col gap-2 min-w-0">
             <h1 className="text-3xl font-bold tracking-tight">{server.name}</h1>
-            <p className="text-muted-foreground leading-relaxed">{server.description}</p>
+            <p className="text-muted-foreground leading-relaxed">
+              {server.description}
+            </p>
             <div className="flex flex-wrap items-center gap-2 mt-1">
               {server.owner.name && (
                 <span className="text-sm text-muted-foreground">

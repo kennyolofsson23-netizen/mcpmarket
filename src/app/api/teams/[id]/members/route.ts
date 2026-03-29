@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -13,29 +13,32 @@ export async function POST(req: NextRequest, context: RouteContext) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const teamId = await resolveId(context);
     const team = await prisma.team.findUnique({ where: { id: teamId } });
     if (!team) {
-      return NextResponse.json({ error: 'Team not found' }, { status: 404 });
+      return NextResponse.json({ error: "Team not found" }, { status: 404 });
     }
 
     if (team.ownerId !== session.user.id) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const body = await req.json();
-    const { email, role = 'MEMBER' } = body as { email: string; role?: 'MEMBER' | 'ADMIN' };
+    const { email, role = "MEMBER" } = body as {
+      email: string;
+      role?: "MEMBER" | "ADMIN";
+    };
 
     if (!email) {
-      return NextResponse.json({ error: 'email is required' }, { status: 400 });
+      return NextResponse.json({ error: "email is required" }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const member = await prisma.teamMember.create({
@@ -48,6 +51,9 @@ export async function POST(req: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ member }, { status: 201 });
   } catch {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }

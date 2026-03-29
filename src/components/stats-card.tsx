@@ -1,13 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface StatsCardProps {
-  title: string
-  value: string | number
-  change?: string
-  icon?: React.ReactNode
-  description?: string
-  variant?: 'default' | 'revenue' | 'subscribers'
+  title: string;
+  value: string | number;
+  change?: string;
+  icon?: React.ReactNode;
+  description?: string;
+  variant?: "default" | "revenue" | "subscribers";
 }
 
 export function StatsCard({
@@ -16,16 +16,21 @@ export function StatsCard({
   change,
   icon,
   description,
-  variant = 'default',
+  variant = "default",
 }: StatsCardProps) {
-  const isPositiveChange = change && (change.startsWith('+') || (!change.startsWith('-') && !change.startsWith('0')))
-  const isNegativeChange = change && change.startsWith('-')
+  const isPositiveChange =
+    change &&
+    (change.startsWith("+") ||
+      (!change.startsWith("-") && !change.startsWith("0")));
+  const isNegativeChange = change && change.startsWith("-");
 
   return (
     <Card
       className={cn(
-        variant === 'revenue' && 'border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/20',
-        variant === 'subscribers' && 'border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20',
+        variant === "revenue" &&
+          "border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/20",
+        variant === "subscribers" &&
+          "border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20",
       )}
     >
       <CardHeader className="pb-2">
@@ -33,9 +38,7 @@ export function StatsCard({
           <CardTitle className="text-sm font-medium text-muted-foreground">
             {title}
           </CardTitle>
-          {icon && (
-            <div className="text-muted-foreground">{icon}</div>
-          )}
+          {icon && <div className="text-muted-foreground">{icon}</div>}
         </div>
       </CardHeader>
       <CardContent>
@@ -43,10 +46,10 @@ export function StatsCard({
         {change && (
           <p
             className={cn(
-              'mt-1 text-xs font-medium',
-              isPositiveChange && 'text-green-600 dark:text-green-400',
-              isNegativeChange && 'text-red-600 dark:text-red-400',
-              !isPositiveChange && !isNegativeChange && 'text-muted-foreground',
+              "mt-1 text-xs font-medium",
+              isPositiveChange && "text-green-600 dark:text-green-400",
+              isNegativeChange && "text-red-600 dark:text-red-400",
+              !isPositiveChange && !isNegativeChange && "text-muted-foreground",
             )}
           >
             {change}
@@ -57,5 +60,5 @@ export function StatsCard({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

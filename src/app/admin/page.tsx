@@ -31,8 +31,13 @@ async function getAdminStats() {
 }
 
 export default async function AdminDashboardPage() {
-  const { pendingCount, totalUsers, recentPending, totalRevenue, platformFeeEarned } =
-    await getAdminStats();
+  const {
+    pendingCount,
+    totalUsers,
+    recentPending,
+    totalRevenue,
+    platformFeeEarned,
+  } = await getAdminStats();
 
   return (
     <div>

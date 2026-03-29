@@ -23,7 +23,9 @@ export function CreateTeamForm() {
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error((body as { error?: string }).error ?? "Failed to create team");
+        throw new Error(
+          (body as { error?: string }).error ?? "Failed to create team",
+        );
       }
       setName("");
       router.refresh();

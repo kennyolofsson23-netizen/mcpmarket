@@ -18,7 +18,12 @@ function parseTagsField(tags: unknown): string[] {
       const parsed = JSON.parse(tags);
       if (Array.isArray(parsed)) return parsed;
     } catch {
-      return tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
+      return tags
+        ? tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [];
     }
   }
   return [];
@@ -41,7 +46,7 @@ export default function EditServerPage({ params }: EditServerPageProps) {
           setFetchError("Server not found or you do not have permission.");
           return;
         }
-        const data = await res.json() as McpServer;
+        const data = (await res.json()) as McpServer;
         setServer(data);
       } catch {
         setFetchError("Failed to load server data.");
@@ -63,7 +68,8 @@ export default function EditServerPage({ params }: EditServerPageProps) {
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        const message = (body as { error?: string }).error ?? "Failed to update server";
+        const message =
+          (body as { error?: string }).error ?? "Failed to update server";
         addToast(message, "error");
         throw new Error(message);
       }
@@ -80,7 +86,9 @@ export default function EditServerPage({ params }: EditServerPageProps) {
   }
 
   if (fetchError || !server) {
-    return <p className="text-destructive">{fetchError ?? "Server not found."}</p>;
+    return (
+      <p className="text-destructive">{fetchError ?? "Server not found."}</p>
+    );
   }
 
   const defaultValues: Partial<CreateServerInput> = {

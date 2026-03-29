@@ -1,9 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import { createCheckoutSession, createStripeCustomer } from '@/lib/stripe';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { createCheckoutSession, createStripeCustomer } from "@/lib/stripe";
 
-async function getOrCreateCustomer(userId: string, email: string, name?: string | null) {
+async function getOrCreateCustomer(
+  userId: string,
+  email: string,
+  name?: string | null,
+) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (user?.stripeCustomerId) {
     return user.stripeCustomerId;
@@ -19,20 +23,26 @@ async function getOrCreateCustomer(userId: string, email: string, name?: string 
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const body = await req.json();
   const { serverId, priceId } = body as { serverId: string; priceId?: string };
 
   const server = await prisma.mcpServer.findUnique({ where: { id: serverId } });
-  if (!server || server.status !== 'APPROVED') {
-    return NextResponse.json({ error: 'Server not found or not approved' }, { status: 404 });
+  if (!server || server.status !== "APPROVED") {
+    return NextResponse.json(
+      { error: "Server not found or not approved" },
+      { status: 404 },
+    );
   }
 
   const resolvedPriceId = priceId ?? server.priceId;
   if (!resolvedPriceId) {
-    return NextResponse.json({ error: 'No price configured for this server' }, { status: 400 });
+    return NextResponse.json(
+      { error: "No price configured for this server" },
+      { status: 400 },
+    );
   }
 
   const customerId = await getOrCreateCustomer(
